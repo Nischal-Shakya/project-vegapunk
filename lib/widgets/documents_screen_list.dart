@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/all_data.dart';
+import '../providers/all_data.dart';
 
 import '../screens/national_id_screen.dart';
 import '../screens/error_screen.dart';

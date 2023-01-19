@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/preferences.dart';
 import '../widgets/settings_listview_helper.dart';
-import '../models/all_data.dart';
+import '../providers/all_data.dart';
 
 import './settings_screen.dart';
 import './login_screen.dart';

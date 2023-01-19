@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../models/all_data.dart';
+import '../providers/all_data.dart';
 
 import '../screens/qr_scan_screen.dart';
 

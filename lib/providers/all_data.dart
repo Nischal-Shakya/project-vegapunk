@@ -57,4 +57,8 @@ class AllData {
   String get fullName {
     return "${json.decode(thisBox.get("data"))["documents"][0]["document_details"]["NID_first_name"]} ${json.decode(thisBox.get("data"))["documents"][0]["document_details"]["NID_last_name"]}";
   }
+
+  String get token {
+    return thisBox.get("token");
+  }
 }

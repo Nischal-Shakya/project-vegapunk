@@ -7,7 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'providers/global_theme.dart';
 import '../providers/preferences.dart';
-import 'models/all_data.dart';
+import 'providers/all_data.dart';
 
 import './screens/homescreen.dart';
 import './screens/error_screen.dart';

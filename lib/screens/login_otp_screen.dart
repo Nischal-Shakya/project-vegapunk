@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:parichaya_frontend/models/all_data.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:hive/hive.dart';
+
+import 'package:parichaya_frontend/providers/all_data.dart';
 import '../url.dart';
 import '../providers/preferences.dart';
 import 'homescreen.dart';
@@ -102,6 +104,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                       final String token = json.decode(response.body)["token"];
                       prefs.setJwtToken(token);
                       log("token : $token");
+                      Hive.box("allData").put("token", token);
                       // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
