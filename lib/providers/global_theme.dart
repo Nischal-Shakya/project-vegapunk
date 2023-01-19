@@ -9,9 +9,11 @@ const Color customShadow = Color.fromRGBO(26, 20, 20, 10);
 class GlobalTheme {
   final globalTheme = ThemeData(
     colorScheme: _customColorScheme,
-    snackBarTheme: const SnackBarThemeData(
+    snackBarTheme: SnackBarThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       backgroundColor: customErrorRed,
-      contentTextStyle: TextStyle(color: Colors.white),
+      contentTextStyle: const TextStyle(color: Colors.white),
+      behavior: SnackBarBehavior.floating,
     ),
     textTheme: const TextTheme(
       headline1: TextStyle(

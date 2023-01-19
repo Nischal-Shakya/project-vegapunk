@@ -56,7 +56,7 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Permanent District",
   },
-  "NID_permanent_local_level": {
+  "NID_permanent_municipality": {
     "category": "National Identity",
     "fieldName": "Permanent Local Level"
   },
@@ -76,7 +76,7 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Temporary District",
   },
-  "NID_temporary_local_level": {
+  "NID_temporary_municipality": {
     "category": "National Identity",
     "fieldName": "Temporary Local Level",
   },
@@ -144,6 +144,11 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Grandfather's National Identity Number",
   },
+  "NID_grandfather_nationality": {
+    "category": "National Identity",
+    "fieldName": "Grandfather's Nationality",
+  },
+
   "NID_grandmother_first_name": {
     "category": "National Identity",
     "fieldName": "Grandmother's First Name",
@@ -159,6 +164,10 @@ const Map<String, Map> fieldMapping = {
   "NID_grandmother_NIN": {
     "category": "National Identity",
     "fieldName": "Grandmother's National Identity Number",
+  },
+  "NID_grandmother_nationality": {
+    "category": "National Identity",
+    "fieldName": "Grandmother's Nationality",
   },
   "NID_spouse_first_name": {
     "category": "National Identity",
@@ -323,5 +332,13 @@ Map<String, String> convertedField(String codeName) {
     };
   } catch (e) {
     return {"category": "", "fieldName": codeName};
+  }
+}
+
+String convertedFieldName(String codeName) {
+  try {
+    return fieldMapping[codeName]!["fieldName"];
+  } catch (e) {
+    return "";
   }
 }

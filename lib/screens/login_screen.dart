@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import './login_mobile_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -13,9 +14,14 @@ class LoginScreen extends StatelessWidget {
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
 
+    var maskFormatter = MaskTextInputFormatter(
+        mask: '###-###-###-#',
+        filter: {"#": RegExp(r'[0-9]')},
+        type: MaskAutoCompletionType.lazy);
+
     void submitData() {
       if (ninNumbercontroller.text.isEmpty ||
-          ninNumbercontroller.text.length != 10) {
+          ninNumbercontroller.text.length != 13) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Invalid National Identity Number"),
           duration: Duration(seconds: 2),
@@ -76,10 +82,7 @@ class LoginScreen extends StatelessWidget {
               keyboardType: TextInputType.number,
               // autofocus: true,
               textAlign: TextAlign.center,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(10),
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
-              ],
+              inputFormatters: [maskFormatter],
             ),
             SizedBox(
               height: customHeight * 0.025,

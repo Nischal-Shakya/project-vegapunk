@@ -3,24 +3,24 @@ import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
 import 'package:parichaya_frontend/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'providers/global_theme.dart';
-import 'providers/documents.dart';
-import '../providers/driving_license.dart';
-import '../providers/national_id.dart';
 import '../providers/preferences.dart';
+import 'models/all_data.dart';
 
 import './screens/homescreen.dart';
-import './screens/national_identity_screen.dart';
-import './screens/driving_license_screen.dart';
 import './screens/error_screen.dart';
 import './screens/login_screen.dart';
 import './screens/login_mobile_screen.dart';
 import './screens/login_otp_screen.dart';
 import './screens/data_transfer_permission_screen.dart';
+import './screens/national_id_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('allData');
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   final prefs = Preferences.noSync();
@@ -28,15 +28,12 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<Preferences>(create: (context) => prefs),
-    ChangeNotifierProvider<Documents>(
-      create: (context) => Documents(),
+    Provider<AllData>(
+      create: (context) => AllData(),
     ),
     Provider<GlobalTheme>(
       create: (context) => GlobalTheme(),
     ),
-    ChangeNotifierProvider<NationalId>(create: (context) => NationalId()),
-    ChangeNotifierProvider<DrivingLicense>(
-        create: (context) => DrivingLicense()),
   ], child: const MyApp()));
 }
 
@@ -53,10 +50,6 @@ class MyApp extends StatelessWidget {
           initialRoute: prefs.jwtToken.isEmpty ? LoginScreen.routeName : '/',
           routes: {
             '/': (ctx) => const HomeScreen(),
-            NationalIdentityScreen.routeName: (ctx) =>
-                const NationalIdentityScreen(),
-            DrivingLicenseScreen.routeName: (ctx) =>
-                const DrivingLicenseScreen(),
             ErrorScreen.routeName: (ctx) => const ErrorScreen(),
             SettingsScreen.routeName: (ctx) => const SettingsScreen(),
             LoginScreen.routeName: (ctx) => LoginScreen(),
@@ -65,6 +58,8 @@ class MyApp extends StatelessWidget {
             DataPermissionScreen.routeName: (ctx) =>
                 const DataPermissionScreen(),
             QrScanScreen.routeName: (ctx) => const QrScanScreen(),
+            NationalIdentityScreen.routeName: (ctx) =>
+                const NationalIdentityScreen(),
           });
     });
   }

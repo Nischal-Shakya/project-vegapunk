@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:parichaya_frontend/models/all_data.dart';
 import 'package:provider/provider.dart';
-
+import 'package:http/http.dart' as http;
+import '../url.dart';
 import '../providers/preferences.dart';
-
 import 'homescreen.dart';
 
 class LoginOtpScreen extends StatefulWidget {
@@ -18,14 +22,13 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   final TextEditingController _fieldTwo = TextEditingController();
   final TextEditingController _fieldThree = TextEditingController();
   final TextEditingController _fieldFour = TextEditingController();
-  final TextEditingController _fieldFive = TextEditingController();
-  final TextEditingController _fieldSix = TextEditingController();
 
   String? _otp;
 
   @override
   Widget build(BuildContext context) {
     final prefs = Provider.of<Preferences>(context, listen: false);
+    final data = Provider.of<AllData>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
 
@@ -69,8 +72,6 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                 OtpInput(_fieldTwo, false),
                 OtpInput(_fieldThree, false),
                 OtpInput(_fieldFour, false),
-                OtpInput(_fieldFive, false),
-                OtpInput(_fieldSix, false)
               ],
             ),
             const SizedBox(
@@ -83,20 +84,49 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: ListTile(
-                  onTap: () {
+                  onTap: () async {
                     setState(() {
                       _otp = _fieldOne.text +
                           _fieldTwo.text +
                           _fieldThree.text +
-                          _fieldFour.text +
-                          _fieldFive.text +
-                          _fieldSix.text;
+                          _fieldFour.text;
                     });
-                    prefs.setJwtToken(_otp.toString());
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeScreen()));
+                    try {
+                      var response = await http
+                          .post(Uri.parse('$url/api/v1/auth/verify/'), body: {
+                        "NIN": resendOtp[0],
+                        "mobile_number": "+977${resendOtp[1]}",
+                        "otp": _otp
+                      });
+
+                      final String token = json.decode(response.body)["token"];
+                      prefs.setJwtToken(token);
+                      log("token : $token");
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Fetching Data...",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.grey,
+                        ),
+                      );
+                      data.storeDataInBox(token).then((_) {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()));
+                      });
+                    } catch (err) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Invalid OTP"),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
@@ -118,14 +148,18 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
               child: SizedBox(
                 child: ListTile(
                   onTap: () {
+                    http.post(Uri.parse('$url/api/v1/auth/'), body: {
+                      "NIN": resendOtp[0],
+                      "mobile_number": "+977${resendOtp[1]}"
+                    });
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          "Resent to NIN: ${resendOtp[0]} and Mobile No: ${resendOtp[1]}",
+                          "Resent OTP to ${resendOtp[1]}",
                           style: const TextStyle(color: Colors.white),
                         ),
                         duration: const Duration(seconds: 2),
-                        backgroundColor: Colors.black54,
+                        backgroundColor: Colors.grey,
                       ),
                     );
                   },

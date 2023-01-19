@@ -13,10 +13,6 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Settings')),
       body: Column(
         children: [
-          Text(
-            'Nischal Shakya',
-            style: Theme.of(context).textTheme.headline2,
-          ),
           const SizedBox(
             height: 50,
           ),

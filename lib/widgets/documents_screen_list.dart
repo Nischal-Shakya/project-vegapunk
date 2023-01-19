@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/documents.dart';
 
-import '../screens/driving_license_screen.dart';
-import '../screens/national_identity_screen.dart';
+import '../models/all_data.dart';
+
+import '../screens/national_id_screen.dart';
 import '../screens/error_screen.dart';
 
 class DocumentsScreenList extends StatelessWidget {
@@ -11,62 +11,66 @@ class DocumentsScreenList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final docData = Provider.of<Documents>(context, listen: false).allDocuments;
+    final allData =
+        Provider.of<AllData>(context, listen: false).getDataFromBox();
     final double customWidth = MediaQuery.of(context).size.width;
     final List<String> chooseScreen = [
       NationalIdentityScreen.routeName,
-      DrivingLicenseScreen.routeName,
     ];
-    return Expanded(
-        child: GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 5 / 2,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 5,
-      ),
-      itemCount: docData.length,
-      padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
-      itemBuilder: (BuildContext ctx, index) {
-        return Card(
-          elevation: 2,
-          shadowColor: Theme.of(context).colorScheme.shadow,
-          child: InkWell(
-            onTap: () {
-              Navigator.pushNamed(
-                  context,
-                  index > (chooseScreen.length - 1)
-                      ? ErrorScreen.routeName
-                      : chooseScreen[index]);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    width: 50,
-                    height: 50,
-                    child: Image.network(
-                      docData[index].docUrl,
-                      fit: BoxFit.cover,
+    if (allData["NIN"] != "error") {
+      return Expanded(
+          child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 5 / 2,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
+        ),
+        itemCount: allData["documents"].length,
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
+        itemBuilder: (BuildContext ctx, index) {
+          return Card(
+            elevation: 2,
+            shadowColor: Theme.of(context).colorScheme.shadow,
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(
+                    context,
+                    index > (chooseScreen.length - 1)
+                        ? ErrorScreen.routeName
+                        : chooseScreen[index]);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      width: 50,
+                      height: 50,
+                      child: Image.network(
+                        'https://i0.wp.com/www.tipsnepal.com/wp-content/uploads/2021/10/smart-driving-license_20200111094935.jpg?fit=960%2C589&quality=100&strip=all&ssl=1',
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      docData[index].docName,
-                      style: Theme.of(context).textTheme.subtitle1,
-                      softWrap: false,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                ],
+                    Expanded(
+                      child: Text(
+                        "National Identity",
+                        style: Theme.of(context).textTheme.subtitle1,
+                        softWrap: false,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-    ));
+          );
+        },
+      ));
+    } else {
+      return const CircularProgressIndicator();
+    }
   }
 }

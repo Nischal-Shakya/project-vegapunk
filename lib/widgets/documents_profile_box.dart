@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-import '../providers/national_id.dart';
+import '../models/all_data.dart';
+
 import '../screens/qr_scan_screen.dart';
 
 class DocumentsProfileBox extends StatelessWidget {
@@ -10,8 +11,11 @@ class DocumentsProfileBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nIddata = Provider.of<NationalId>(context, listen: false).nIdData;
+    final nIN = Provider.of<AllData>(context, listen: false).nIN;
+    final fullName = Provider.of<AllData>(context, listen: false).fullName;
+
     final double customWidth = MediaQuery.of(context).size.width;
+
     return Stack(
       children: [
         const Positioned(
@@ -34,12 +38,12 @@ class DocumentsProfileBox extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      nIddata.name,
+                      fullName,
                       style: Theme.of(context).textTheme.headline1,
                     ),
                     Container(
                       height: 80,
-                      width: customWidth * 0.5,
+                      width: customWidth * 0.57,
                       margin: const EdgeInsets.only(top: 10),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
@@ -55,9 +59,9 @@ class DocumentsProfileBox extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  nIddata.nationalID.length > 10
-                                      ? '${nIddata.nationalID.substring(0, 7)}...'
-                                      : nIddata.nationalID,
+                                  nIN.length > 13
+                                      ? "${nIN.substring(0, 10)}..."
+                                      : nIN,
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                                 Text(
@@ -70,13 +74,13 @@ class DocumentsProfileBox extends StatelessWidget {
                             IconButton(
                                 onPressed: () async {
                                   await Clipboard.setData(
-                                      ClipboardData(text: nIddata.nationalID));
+                                      ClipboardData(text: nIN));
                                   // ignore: use_build_context_synchronously
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(const SnackBar(
                                     content: Text('Copied to clipboard.'),
                                     duration: Duration(seconds: 2),
-                                    backgroundColor: Colors.black54,
+                                    backgroundColor: Colors.grey,
                                   ));
                                 },
                                 icon: Icon(
@@ -92,7 +96,6 @@ class DocumentsProfileBox extends StatelessWidget {
               )),
         ),
         Positioned(
-          // scan8cY (160:620)
           left: customWidth * 0.725,
           top: 150,
           child: InkWell(

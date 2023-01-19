@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:developer';
+
+import '../url.dart';
 
 import './login_otp_screen.dart';
 
@@ -25,6 +29,11 @@ class LoginMobileScreen extends StatelessWidget {
         ));
         return;
       }
+      log("sending data");
+      http.post(Uri.parse('$url/api/v1/auth/'), body: {
+        "NIN": ninNumber,
+        "mobile_number": "+977${mobileNumbercontroller.text}"
+      });
       Navigator.pushReplacementNamed(context, LoginOtpScreen.routeName,
           arguments: [ninNumber, mobileNumbercontroller.text]);
     }

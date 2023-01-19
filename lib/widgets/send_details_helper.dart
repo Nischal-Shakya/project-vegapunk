@@ -11,7 +11,6 @@ class SendDetailsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final double customHeight = MediaQuery.of(context).size.height;
     final double customWidth = MediaQuery.of(context).size.width;
-    final String id = result["id"];
     final String requester = result["requester"];
     final List requestedFields = result["requested_fields"];
     final List<Map<String, String>> purifiedFields = [

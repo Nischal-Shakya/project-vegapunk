@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../providers/preferences.dart';
 import '../widgets/settings_listview_helper.dart';
+import '../models/all_data.dart';
+
 import './settings_screen.dart';
 import './login_screen.dart';
 
@@ -15,10 +17,6 @@ class MoreScreen extends StatelessWidget {
     final double customWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        Text(
-          'Nischal Shakya',
-          style: Theme.of(context).textTheme.headline2,
-        ),
         const SizedBox(
           height: 50,
         ),
@@ -57,6 +55,7 @@ class MoreScreen extends StatelessWidget {
                 child: const SettingsListViewHelper(option: 'Logout'),
                 onTap: () {
                   prefs.setJwtToken('');
+                  AllData().deleteDataFromBox();
                   Navigator.pushReplacementNamed(
                       context, LoginScreen.routeName);
                 },
