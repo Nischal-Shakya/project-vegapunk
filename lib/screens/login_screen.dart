@@ -28,6 +28,7 @@ class LoginScreen extends StatelessWidget {
         ));
         return;
       }
+      // log(ninNumbercontroller.text);
       Navigator.pushReplacementNamed(context, LoginMobileScreen.routeName,
           arguments: ninNumbercontroller.text);
     }

@@ -25,6 +25,7 @@ class _DataPermissionScreenState extends State<DataPermissionScreen> {
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
     final result = ModalRoute.of(context)!.settings.arguments as Map;
+    final String requestId = result["request_id"];
 
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -54,7 +55,9 @@ class _DataPermissionScreenState extends State<DataPermissionScreen> {
             SendDetailsWidget(result: result),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
-              child: const SendDetailsButtons(),
+              child: SendDetailsButtons(
+                requestId: requestId,
+              ),
             )
           ],
         ),
