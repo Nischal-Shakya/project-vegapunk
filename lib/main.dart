@@ -16,6 +16,9 @@ import './screens/login_mobile_screen.dart';
 import './screens/login_otp_screen.dart';
 import './screens/data_transfer_permission_screen.dart';
 import './screens/national_id_screen.dart';
+import './screens/mobile_pin_screen.dart';
+import './screens/setup_pin_screen.dart';
+import './screens/change_pin_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,9 +50,11 @@ class MyApp extends StatelessWidget {
           title: 'Parichaya',
           theme: globalTheme,
           debugShowCheckedModeBanner: false,
-          initialRoute: prefs.jwtToken.isEmpty ? LoginScreen.routeName : '/',
+          initialRoute: prefs.jwtToken.isEmpty
+              ? LoginScreen.routeName
+              : MobilePinScreen.routeName,
           routes: {
-            '/': (ctx) => const HomeScreen(),
+            HomeScreen.routeName: (ctx) => const HomeScreen(),
             ErrorScreen.routeName: (ctx) => const ErrorScreen(),
             SettingsScreen.routeName: (ctx) => const SettingsScreen(),
             LoginScreen.routeName: (ctx) => LoginScreen(),
@@ -60,6 +65,9 @@ class MyApp extends StatelessWidget {
             QrScanScreen.routeName: (ctx) => const QrScanScreen(),
             NationalIdentityScreen.routeName: (ctx) =>
                 const NationalIdentityScreen(),
+            MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
+            SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
+            ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
           });
     });
   }

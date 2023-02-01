@@ -16,9 +16,17 @@ class AllData {
     thisBox.put("data", response.body);
   }
 
+  void putData(String dataKey, String data) {
+    thisBox.put(dataKey, data);
+  }
+
+  void getData(String dataKey) {
+    thisBox.get(dataKey);
+  }
+
   void deleteDataFromBox() {
     log("Deleting Data");
-    thisBox.delete('data');
+    thisBox.delete("data");
   }
 
   Map<String, dynamic> getDataFromBox() {
@@ -60,5 +68,9 @@ class AllData {
 
   String get token {
     return thisBox.get("token");
+  }
+
+  String get mpin {
+    return thisBox.get("mpin");
   }
 }

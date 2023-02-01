@@ -31,6 +31,7 @@ class CustomIcons {
   CustomIcons._();
 
   static const _kFontFam = 'CustomIcons';
+  // static const idCardIconFontFam = 'CustomIdCardIcon';
   static const String? _kFontPkg = null;
 
   static const IconData note =

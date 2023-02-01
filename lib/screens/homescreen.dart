@@ -10,6 +10,8 @@ import 'history_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  static const routeName = "homescreen/";
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -32,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const inactiveColor = Colors.black;
+    const inactiveColor = Colors.black45;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -58,9 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBody: true,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(30),
-          ),
           color: Theme.of(context).colorScheme.primary,
         ),
         child: BottomNavyBar(
@@ -69,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
           onItemSelected: (index) => setState(() {
             _currentIndex = index;
             _pageController.animateToPage(index,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.ease);
+                duration: const Duration(milliseconds: 10),
+                curve: Curves.easeIn);
           }),
           items: [
             BottomNavyBarItem(
@@ -81,9 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
               activeColor: Colors.white,
             ),
             BottomNavyBarItem(
-              icon: const Icon(
-                Icons.qr_code_scanner,
-              ),
+              icon: const Icon(Icons.qr_code_scanner),
               title: const Text('Scan'),
               textAlign: TextAlign.center,
               inactiveColor: inactiveColor,
@@ -107,7 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
               activeColor: Colors.white,
             ),
           ],
+          itemCornerRadius: 10,
           backgroundColor: Colors.transparent,
+          animationDuration: const Duration(milliseconds: 500),
         ),
       ),
     );

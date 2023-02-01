@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.parichaya_frontend">
+   <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
    <application
-        android:label="parichaya_frontend"
+        android:label="Parichaya"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

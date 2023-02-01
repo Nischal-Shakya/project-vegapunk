@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:parichaya_frontend/screens/setup_pin_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:hive/hive.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'package:parichaya_frontend/providers/all_data.dart';
 import '../url.dart';
 import '../providers/preferences.dart';
-import 'homescreen.dart';
 
 class LoginOtpScreen extends StatefulWidget {
   const LoginOtpScreen({Key? key}) : super(key: key);
@@ -20,12 +20,10 @@ class LoginOtpScreen extends StatefulWidget {
 }
 
 class _LoginOtpScreenState extends State<LoginOtpScreen> {
-  final TextEditingController _fieldOne = TextEditingController();
-  final TextEditingController _fieldTwo = TextEditingController();
-  final TextEditingController _fieldThree = TextEditingController();
-  final TextEditingController _fieldFour = TextEditingController();
-
-  String? _otp;
+  TextEditingController textEditingController = TextEditingController();
+  late String otp;
+  String currentText = "";
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,73 +36,149 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
         ModalRoute.of(context)!.settings.arguments as List<String>;
 
     return Scaffold(
-      body: SizedBox(
-        width: customWidth,
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 100,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.blue,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.transparent,
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'VERIFICATION',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+              'Verification Code',
+              style: Theme.of(context).textTheme.headline4,
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
-              'Type in the OTP Number\nsent via SMS to\n${resendOtp[1]}',
-              style: const TextStyle(
-                color: Colors.blue,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-              textAlign: TextAlign.center,
+              'Enter the verification code sent via SMS to +977*******${resendOtp[1].substring(7)}',
+              style: Theme.of(context).textTheme.caption,
             ),
             SizedBox(
-              height: customHeight * 0.2,
+              height: customHeight * 0.05,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                OtpInput(_fieldOne, true),
-                OtpInput(_fieldTwo, false),
-                OtpInput(_fieldThree, false),
-                OtpInput(_fieldFour, false),
-              ],
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            SizedBox(
-              width: customWidth * 0.7,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: ListTile(
-                  onTap: () async {
-                    setState(() {
-                      _otp = _fieldOne.text +
-                          _fieldTwo.text +
-                          _fieldThree.text +
-                          _fieldFour.text;
-                    });
-                    try {
-                      var response = await http
-                          .post(Uri.parse('$url/api/v1/auth/verify/'), body: {
-                        "NIN": resendOtp[0],
-                        "mobile_number": "+977${resendOtp[1]}",
-                        "otp": _otp
-                      });
+            Form(
+              key: formKey,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
+                child: PinCodeTextField(
+                  appContext: context,
+                  length: 4,
+                  // obscureText: true,
+                  // obscuringCharacter: '*',
+                  // blinkWhenObscuring: true,
 
+                  autoDisposeControllers: false,
+                  animationType: AnimationType.slide,
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(5),
+                    fieldHeight: 50,
+                    fieldWidth: 50,
+                    inactiveColor: Colors.black45,
+                    activeColor: Colors.black45,
+                    selectedColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  showCursor: false,
+                  controller: textEditingController,
+                  keyboardType: TextInputType.number,
+                  onCompleted: (v) {
+                    otp = v;
+                    debugPrint(otp);
+                    Navigator.of(context).pushNamed(SetupPinScreen.routeName);
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      currentText = value;
+                    });
+                  },
+                  autoFocus: true,
+                  autoDismissKeyboard: false,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: 50,
+              width: 150,
+              child: ListTile(
+                onTap: () {
+                  http.post(Uri.parse('$url/api/v1/auth/'), body: {
+                    "NIN": resendOtp[0],
+                    "mobile_number": "+977${resendOtp[1]}"
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "OTP has been resent",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.grey,
+                    ),
+                  );
+                },
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary, width: 1),
+                    borderRadius: BorderRadius.circular(5)),
+                title: const Text(
+                  'Resend',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 150,
+              height: 50,
+              child: ListTile(
+                onTap: () async {
+                  try {
+                    debugPrint("Sending Otp");
+                    var response = await http
+                        .post(Uri.parse('$url/api/v1/auth/verify/'), body: {
+                      "NIN": resendOtp[0],
+                      "mobile_number": "+977${resendOtp[1]}",
+                      "otp": otp
+                    });
+
+                    if (response.statusCode >= 400) {
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Invalid OTP"),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else {
                       final String token = json.decode(response.body)["token"];
                       prefs.setJwtToken(token);
                       log("token : $token");
-                      Hive.box("allData").put("token", token);
+                      data.putData(token, token);
+                      data.putData("ninNumber", resendOtp[0]);
+                      data.putData("mobileNumber", resendOtp[1]);
                       // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -120,96 +194,34 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const HomeScreen()));
+                                builder: (context) => const SetupPinScreen()));
                       });
-                    } catch (err) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Invalid OTP"),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
                     }
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  title: const Text(
-                    'SUBMIT',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  tileColor: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 150,
-              child: SizedBox(
-                child: ListTile(
-                  onTap: () {
-                    http.post(Uri.parse('$url/api/v1/auth/'), body: {
-                      "NIN": resendOtp[0],
-                      "mobile_number": "+977${resendOtp[1]}"
-                    });
+                  } catch (err) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          "Resent OTP to ${resendOtp[1]}",
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        duration: const Duration(seconds: 2),
-                        backgroundColor: Colors.grey,
+                      const SnackBar(
+                        content: Text("Invalid OTP"),
+                        duration: Duration(seconds: 2),
                       ),
                     );
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  title: const Icon(Icons.restore_rounded),
-                  trailing: const Text("Resend OTP"),
+                  }
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
+                title: const Text(
+                  'Confirm',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                tileColor: Theme.of(context).colorScheme.primary,
               ),
-            )
+            ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class OtpInput extends StatelessWidget {
-  final TextEditingController controller;
-  final bool autoFocus;
-  const OtpInput(this.controller, this.autoFocus, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 60,
-      width: 50,
-      child: TextField(
-        autofocus: autoFocus,
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.number,
-        controller: controller,
-        maxLength: 1,
-        cursorColor: Theme.of(context).primaryColor,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-            color: Colors.blue,
-          )),
-          counterText: '',
-        ),
-        onChanged: (value) {
-          if (value.length == 1) {
-            FocusScope.of(context).nextFocus();
-          }
-        },
       ),
     );
   }

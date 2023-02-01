@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parichaya_frontend/screens/mobile_pin_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/preferences.dart';
@@ -27,7 +28,9 @@ class MoreScreen extends StatelessWidget {
                   horizontal: customWidth * 0.05, vertical: 10),
               child: InkWell(
                 child: const SettingsListViewHelper(option: 'Verify Your Age'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, MobilePinScreen.routeName);
+                },
               ),
             ),
             Padding(

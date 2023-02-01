@@ -10,7 +10,7 @@ class GlobalTheme {
   final globalTheme = ThemeData(
     colorScheme: _customColorScheme,
     snackBarTheme: SnackBarThemeData(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       backgroundColor: customErrorRed,
       contentTextStyle: const TextStyle(color: Colors.white),
       behavior: SnackBarBehavior.floating,
@@ -31,6 +31,11 @@ class GlobalTheme {
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
+      headline4: TextStyle(
+        color: customBlue,
+        fontSize: 40,
+        fontWeight: FontWeight.bold,
+      ),
       bodyText1: TextStyle(
         fontSize: 22,
         color: customBlue,
@@ -49,8 +54,9 @@ class GlobalTheme {
         color: Colors.black26,
       ),
       caption: TextStyle(
-        fontSize: 11,
-        color: customBlue,
+        color: Colors.grey,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
       ),
     ),
   );

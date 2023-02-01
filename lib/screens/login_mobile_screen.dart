@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'dart:developer';
 
 import '../url.dart';
 
@@ -29,97 +28,109 @@ class LoginMobileScreen extends StatelessWidget {
         ));
         return;
       }
-      log("sending data");
+      debugPrint("sending mobile and nin");
       http.post(Uri.parse('$url/api/v1/auth/'), body: {
         "NIN": ninNumber,
         "mobile_number": "+977${mobileNumbercontroller.text}"
       });
-      Navigator.pushReplacementNamed(context, LoginOtpScreen.routeName,
+      Navigator.pushNamed(context, LoginOtpScreen.routeName,
           arguments: [ninNumber, mobileNumbercontroller.text]);
     }
 
     return Scaffold(
-      body: SizedBox(
-        width: customWidth,
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 100,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.blue,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.transparent,
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               'Moblie Number',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline4,
             ),
             const SizedBox(
               height: 10,
             ),
+            Text(
+              'Enter the mobile number associated with your National Identity Card',
+              style: Theme.of(context).textTheme.caption,
+            ),
+            SizedBox(
+              height: customHeight * 0.05,
+            ),
             const Text(
-              'Type in your Mobile Number\nassociated with your \nNational Identity Card',
+              "Registered Mobile Number",
               style: TextStyle(
-                color: Colors.blue,
+                color: Colors.black54,
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
-              textAlign: TextAlign.center,
             ),
-            SizedBox(
-              height: customHeight * 0.2,
+            const SizedBox(
+              height: 10,
             ),
             TextField(
               controller: mobileNumbercontroller,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(5),
                       borderSide: const BorderSide(color: Colors.blue)),
                   enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(5),
                       borderSide: const BorderSide(color: Colors.blue)),
-                  constraints: BoxConstraints(
-                      maxHeight: 50, maxWidth: customWidth * 0.68),
-                  hintText: "Mobile Number",
-                  hintStyle: TextStyle(
+                  constraints: const BoxConstraints(maxHeight: 50),
+                  prefixIcon: const Icon(Icons.phone_android),
+                  prefixText: "+977 ",
+                  hintStyle: const TextStyle(
                     fontSize: 16,
-                    color: Colors.blue.shade300,
+                    color: Colors.grey,
                   )),
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 16, color: Colors.black),
               keyboardType: TextInputType.number,
               autofocus: true,
-              textAlign: TextAlign.center,
+              // textAlign: TextAlign.center,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(10),
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
               ],
             ),
-            SizedBox(
-              height: customHeight * 0.025,
-            ),
-            SizedBox(
-              width: customWidth * 0.7,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: ListTile(
-                  onTap: submitMobileNumber,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  title: const Text(
-                    'NEXT',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  tileColor: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ),
           ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+        child: SizedBox(
+          height: 50,
+          child: ListTile(
+            onTap: submitMobileNumber,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            title: const Text(
+              'Next',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+            tileColor: Theme.of(context).colorScheme.primary,
+          ),
         ),
       ),
     );

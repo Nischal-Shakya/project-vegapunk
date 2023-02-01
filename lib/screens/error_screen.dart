@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'homescreen.dart';
+
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({super.key});
 
@@ -21,7 +23,7 @@ class ErrorScreen extends StatelessWidget {
             ),
             TextButton(
                 onPressed: () {
-                  Navigator.of(context).popAndPushNamed('/');
+                  Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
                 },
                 child: const Text("Go back to homescreen."))
           ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../widgets/settings_listview_helper.dart';
+import './change_pin_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -24,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
                 child: InkWell(
                   child:
                       const SettingsListViewHelper(option: 'Setup Biometrics'),
-                  onTap: () {},
+                  onTap: () async {},
                 ),
               ),
               Padding(
@@ -32,7 +34,9 @@ class SettingsScreen extends StatelessWidget {
                     horizontal: customWidth * 0.05, vertical: 10),
                 child: InkWell(
                   child: const SettingsListViewHelper(option: 'Change Mpin'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, ChangePinScreen.routeName);
+                  },
                 ),
               ),
             ]),
