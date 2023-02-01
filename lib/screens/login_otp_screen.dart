@@ -116,112 +116,116 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          InkWell(
+            onTap: () {
+              http.post(Uri.parse('$url/api/v1/auth/'), body: {
+                "NIN": resendOtp[0],
+                "mobile_number": "+977${resendOtp[1]}"
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    "OTP has been resent",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  duration: Duration(seconds: 2),
+                  backgroundColor: Colors.grey,
+                ),
+              );
+            },
+            child: Container(
               height: 50,
               width: 150,
-              child: ListTile(
-                onTap: () {
-                  http.post(Uri.parse('$url/api/v1/auth/'), body: {
-                    "NIN": resendOtp[0],
-                    "mobile_number": "+977${resendOtp[1]}"
-                  });
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  border: Border.all(color: Colors.blue)),
+              child: const Center(
+                child: Text(
+                  'Resend',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () async {
+              try {
+                debugPrint("Sending Otp");
+                var response = await http
+                    .post(Uri.parse('$url/api/v1/auth/verify/'), body: {
+                  "NIN": resendOtp[0],
+                  "mobile_number": "+977${resendOtp[1]}",
+                  "otp": otp
+                });
+
+                if (response.statusCode >= 400) {
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Invalid OTP"),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                } else {
+                  final String token = json.decode(response.body)["token"];
+                  prefs.setJwtToken(token);
+                  log("token : $token");
+                  data.putData(token, token);
+                  data.putData("ninNumber", resendOtp[0]);
+                  data.putData("mobileNumber", resendOtp[1]);
+                  // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
-                        "OTP has been resent",
+                        "Fetching Data...",
                         style: TextStyle(color: Colors.white),
                       ),
                       duration: Duration(seconds: 2),
                       backgroundColor: Colors.grey,
                     ),
                   );
-                },
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary, width: 1),
-                    borderRadius: BorderRadius.circular(5)),
-                title: const Text(
-                  'Resend',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 150,
+                  data.storeDataInBox(token).then((_) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SetupPinScreen()));
+                  });
+                }
+              } catch (err) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Invalid OTP"),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+            child: Container(
               height: 50,
-              child: ListTile(
-                onTap: () async {
-                  try {
-                    debugPrint("Sending Otp");
-                    var response = await http
-                        .post(Uri.parse('$url/api/v1/auth/verify/'), body: {
-                      "NIN": resendOtp[0],
-                      "mobile_number": "+977${resendOtp[1]}",
-                      "otp": otp
-                    });
-
-                    if (response.statusCode >= 400) {
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Invalid OTP"),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    } else {
-                      final String token = json.decode(response.body)["token"];
-                      prefs.setJwtToken(token);
-                      log("token : $token");
-                      data.putData(token, token);
-                      data.putData("ninNumber", resendOtp[0]);
-                      data.putData("mobileNumber", resendOtp[1]);
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Fetching Data...",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          duration: Duration(seconds: 2),
-                          backgroundColor: Colors.grey,
-                        ),
-                      );
-                      data.storeDataInBox(token).then((_) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SetupPinScreen()));
-                      });
-                    }
-                  } catch (err) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Invalid OTP"),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  }
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                title: const Text(
+              width: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              child: const Center(
+                child: Text(
                   'Confirm',
-                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
-                tileColor: Theme.of(context).colorScheme.primary,
               ),
             ),
-          ],
-        ),
+          ),
+        ]),
       ),
     );
   }

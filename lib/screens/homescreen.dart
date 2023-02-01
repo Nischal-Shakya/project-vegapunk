@@ -58,56 +58,52 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       extendBody: true,
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        child: BottomNavyBar(
-          selectedIndex: _currentIndex,
-          showElevation: true,
-          onItemSelected: (index) => setState(() {
-            _currentIndex = index;
-            _pageController.animateToPage(index,
-                duration: const Duration(milliseconds: 10),
-                curve: Curves.easeIn);
-          }),
-          items: [
-            BottomNavyBarItem(
-              icon: const Icon(CustomIcons.note, size: 20),
-              title: const Text('My ID'),
-              textAlign: TextAlign.center,
-              inactiveColor: inactiveColor,
-              activeColor: Colors.white,
+      bottomNavigationBar: BottomNavyBar(
+        selectedIndex: _currentIndex,
+        showElevation: true,
+        curve: Curves.easeInBack,
+        onItemSelected: (index) => setState(() {
+          _currentIndex = index;
+          _pageController.animateToPage(index,
+              duration: const Duration(milliseconds: 10), curve: Curves.easeIn);
+        }),
+        items: [
+          BottomNavyBarItem(
+            icon: const Icon(CustomIcons.note, size: 20),
+            title: const Text('My ID'),
+            textAlign: TextAlign.center,
+            inactiveColor: inactiveColor,
+            activeColor: Colors.white,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(Icons.qr_code_scanner),
+            title: const Text('Scan'),
+            textAlign: TextAlign.center,
+            inactiveColor: inactiveColor,
+            activeColor: Colors.white,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(Icons.history_edu_outlined),
+            title: const Text('History'),
+            textAlign: TextAlign.center,
+            inactiveColor: inactiveColor,
+            activeColor: Colors.white,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(
+              CustomIcons.more,
+              size: 20,
             ),
-            BottomNavyBarItem(
-              icon: const Icon(Icons.qr_code_scanner),
-              title: const Text('Scan'),
-              textAlign: TextAlign.center,
-              inactiveColor: inactiveColor,
-              activeColor: Colors.white,
-            ),
-            BottomNavyBarItem(
-              icon: const Icon(Icons.history_edu_outlined),
-              title: const Text('History'),
-              textAlign: TextAlign.center,
-              inactiveColor: inactiveColor,
-              activeColor: Colors.white,
-            ),
-            BottomNavyBarItem(
-              icon: const Icon(
-                CustomIcons.more,
-                size: 20,
-              ),
-              title: const Text('More'),
-              textAlign: TextAlign.center,
-              inactiveColor: inactiveColor,
-              activeColor: Colors.white,
-            ),
-          ],
-          itemCornerRadius: 10,
-          backgroundColor: Colors.transparent,
-          animationDuration: const Duration(milliseconds: 500),
-        ),
+            title: const Text('More'),
+            textAlign: TextAlign.center,
+            inactiveColor: inactiveColor,
+            activeColor: Colors.white,
+          ),
+        ],
+        itemCornerRadius: 5,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        animationDuration: const Duration(milliseconds: 500),
+        containerHeight: 60,
       ),
     );
   }

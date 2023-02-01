@@ -223,44 +223,46 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
-        child: SizedBox(
-          height: 50,
-          child: ListTile(
-            onTap: () {
-              if (pin.length == 4 && confirmPin.length == 4) {
-                if (pin == confirmPin) {
-                  data.putData("mpin", pin);
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      HomeScreen.routeName, (Route<dynamic> route) => false);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Pin codes do not match"),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                }
+        child: InkWell(
+          onTap: () {
+            if (pin.length == 4 && confirmPin.length == 4) {
+              if (pin == confirmPin) {
+                data.putData("mpin", pin);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    HomeScreen.routeName, (Route<dynamic> route) => false);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text("Invalid pin code length"),
+                    content: Text("Pin codes do not match"),
                     duration: Duration(seconds: 2),
                   ),
                 );
               }
-            },
-            shape: RoundedRectangleBorder(
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Invalid pin code length"),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            }
+          },
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
+              color: Theme.of(context).colorScheme.primary,
             ),
-            title: const Text(
-              'Next',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+            child: const Center(
+              child: Text(
+                'Next',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
-            tileColor: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),

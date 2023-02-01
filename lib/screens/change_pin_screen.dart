@@ -302,36 +302,26 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
-        child: SizedBox(
-          height: 50,
-          child: ListTile(
-            onTap: () {
-              final String getOldPin = data.mpin;
-              if (newPin.length == 4 &&
-                  confirmPin.length == 4 &&
-                  oldPin.length == 4) {
-                if (oldPin == getOldPin) {
-                  if (newPin != oldPin) {
-                    if (newPin == confirmPin) {
-                      data.putData("mpin", newPin);
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('MPIN has been changed'),
-                        duration: Duration(seconds: 2),
-                        backgroundColor: Colors.grey,
-                      ));
-                      Navigator.of(context).pop();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Pin codes do not match"),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    }
+        child: InkWell(
+          onTap: () {
+            final String getOldPin = data.mpin;
+            if (newPin.length == 4 &&
+                confirmPin.length == 4 &&
+                oldPin.length == 4) {
+              if (oldPin == getOldPin) {
+                if (newPin != oldPin) {
+                  if (newPin == confirmPin) {
+                    data.putData("mpin", newPin);
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('MPIN has been changed'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.grey,
+                    ));
+                    Navigator.of(context).pop();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("New pin can not be the same as old pin"),
+                        content: Text("Pin codes do not match"),
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -339,7 +329,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("Invalid old pin"),
+                      content: Text("New pin can not be the same as old pin"),
                       duration: Duration(seconds: 2),
                     ),
                   );
@@ -347,24 +337,36 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text("Invalid pin code length"),
+                    content: Text("Invalid old pin"),
                     duration: Duration(seconds: 2),
                   ),
                 );
               }
-            },
-            shape: RoundedRectangleBorder(
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Invalid pin code length"),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            }
+          },
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
+              color: Theme.of(context).colorScheme.primary,
             ),
-            title: const Text(
-              'Next',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+            child: const Center(
+              child: Text(
+                'Next',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
-            tileColor: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),

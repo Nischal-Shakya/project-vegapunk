@@ -117,7 +117,7 @@ class _QrScanScreenState extends State<QrScanScreen>
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
         ? 240.0
-        : 360.0;
+        : 400.0;
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,

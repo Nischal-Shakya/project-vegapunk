@@ -114,22 +114,24 @@ class LoginMobileScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
-        child: SizedBox(
-          height: 50,
-          child: ListTile(
-            onTap: submitMobileNumber,
-            shape: RoundedRectangleBorder(
+        child: InkWell(
+          onTap: submitMobileNumber,
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
+              color: Theme.of(context).colorScheme.primary,
             ),
-            title: const Text(
-              'Next',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+            child: const Center(
+              child: Text(
+                'Next',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
-            tileColor: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),

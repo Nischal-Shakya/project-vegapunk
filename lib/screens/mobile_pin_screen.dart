@@ -25,6 +25,17 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
   final pinFocusNode = FocusNode();
 
   @override
+  void didChangeDependencies() async {
+    final isAuthenticated = await LocalAuthApi.authenticate();
+    if (isAuthenticated) {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          HomeScreen.routeName, (Route<dynamic> route) => false);
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     textEditingController.dispose();
     pinFocusNode.dispose();
@@ -127,7 +138,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
             const SizedBox(
               height: 10,
             ),
-            ListTile(
+            InkWell(
               onTap: () {
                 if (pin == data.mpin) {
                   Navigator.of(context).pushNamedAndRemoveUntil(
@@ -141,18 +152,23 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                   );
                 }
               },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                child: const Center(
+                  child: Text(
+                    'Log In',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
-              title: const Text(
-                'LOGIN',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              tileColor: Theme.of(context).colorScheme.primary,
             ),
             SizedBox(
               height: customHeight * 0.025,

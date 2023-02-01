@@ -100,22 +100,24 @@ class LoginScreen extends StatelessWidget {
             SizedBox(
               height: customHeight * 0.025,
             ),
-            SizedBox(
-              height: 50,
-              child: ListTile(
-                onTap: submitData,
-                shape: RoundedRectangleBorder(
+            InkWell(
+              onTap: submitData,
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-                title: const Text(
-                  'LOG IN',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
+                child: const Center(
+                  child: Text(
+                    'Log In',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                tileColor: Theme.of(context).colorScheme.primary,
               ),
             ),
           ],
