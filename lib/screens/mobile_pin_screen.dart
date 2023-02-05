@@ -18,6 +18,7 @@ class MobilePinScreen extends StatefulWidget {
 
 class _MobilePinScreenState extends State<MobilePinScreen> {
   TextEditingController textEditingController = TextEditingController();
+  bool firstTime = true;
   String pin = "";
   bool pinObscure = true;
   final formKey = const Key("1");
@@ -26,12 +27,16 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
 
   @override
   void didChangeDependencies() async {
-    final isAuthenticated = await LocalAuthApi.authenticate();
-    if (isAuthenticated) {
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          HomeScreen.routeName, (Route<dynamic> route) => false);
+    if (firstTime) {
+      final isAuthenticated = await LocalAuthApi.authenticate();
+      if (isAuthenticated) {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            HomeScreen.routeName, (Route<dynamic> route) => false);
+      }
+      firstTime = false;
     }
+
     super.didChangeDependencies();
   }
 

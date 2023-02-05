@@ -42,12 +42,16 @@ class _QrScanScreenState extends State<QrScanScreen>
     final double customHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       body: Stack(
         alignment: Alignment.topCenter,
         children: <Widget>[
           _buildQrView(context),
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: EdgeInsets.only(
+                top: AppBar().preferredSize.height * 1.5,
+                left: 20.0,
+                right: 20.0),
             child: Container(
               height: 40,
               decoration: BoxDecoration(
@@ -86,7 +90,7 @@ class _QrScanScreenState extends State<QrScanScreen>
             ),
           ),
           Positioned(
-            top: customHeight / 6,
+            top: customHeight / 5,
             child: Text(
               'Scan to ${isShareScanScreen ? 'share your ID details' : 'view shared ID details'}',
               style: const TextStyle(
