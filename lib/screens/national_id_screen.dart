@@ -23,7 +23,7 @@ class _NationalIdentityScreenState extends State<NationalIdentityScreen> {
   Widget build(BuildContext context) {
     final allNidData =
         Provider.of<AllData>(context, listen: false).getNidData();
-    final faceImage = Provider.of<AllData>(context, listen: false).faceImage;
+    final faceImage = Provider.of<AllData>(context, listen: false).nidFaceImage;
     final faceImageBase64 = const Base64Decoder().convert(faceImage);
     if (allNidData["NID_NIN"] != "error") {
       final List fieldNames = allNidData.keys.toList();

@@ -28,8 +28,7 @@ class SendDetailsButtons extends StatelessWidget {
               onTap: () async {
                 await http
                     .post(
-                      Uri.parse(
-                          '$url/api/v1/scan-request/$requestId/approval/'),
+                      Uri.parse('$scanRequestApprovalUrl/$requestId/approval/'),
                       headers: {
                         "Authorization": "Token $token",
                         "Content-Type": "application/json",
@@ -65,8 +64,7 @@ class SendDetailsButtons extends StatelessWidget {
               onTap: () async {
                 await http
                     .post(
-                      Uri.parse(
-                          '$url/api/v1/scan-request/$requestId/approval/'),
+                      Uri.parse('$scanRequestApprovalUrl/$requestId/approval/'),
                       headers: {
                         "Authorization": "Token $token",
                         "Content-Type": "application/json",

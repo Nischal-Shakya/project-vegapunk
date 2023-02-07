@@ -11,8 +11,10 @@ class DocumentsProfileBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nIN = Provider.of<AllData>(context, listen: false).nIN;
-    final fullName = Provider.of<AllData>(context, listen: false).fullName;
+    // final nIN = Provider.of<AllData>(context, listen: false).nIN;
+    // final fullName = Provider.of<AllData>(context, listen: false).fullName;
+    const nIN = "118-461-296-5";
+    const fullName = "Nischal Shakya";
 
     final double customWidth = MediaQuery.of(context).size.width;
 
@@ -26,14 +28,14 @@ class DocumentsProfileBox extends StatelessWidget {
           child: Container(
               margin: EdgeInsets.fromLTRB(
                   customWidth * 0.05, 24, customWidth * 0.05, 0),
-              height: 160,
+              height: 140,
               width: customWidth * 0.9,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Container(
-                margin: const EdgeInsets.fromLTRB(15, 20, 0, 10),
+                margin: const EdgeInsets.fromLTRB(20, 20, 0, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -41,68 +43,55 @@ class DocumentsProfileBox extends StatelessWidget {
                       fullName,
                       style: Theme.of(context).textTheme.headline1,
                     ),
-                    Container(
-                      height: 80,
-                      width: customWidth * 0.57,
-                      margin: const EdgeInsets.only(top: 10),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(customWidth * 0.04),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  nIN.length > 13
-                                      ? "${nIN.substring(0, 10)}..."
-                                      : nIN,
-                                  style: Theme.of(context).textTheme.headline2,
-                                ),
-                                Text(
-                                  'Parichaya Number',
-                                  style: Theme.of(context).textTheme.subtitle1,
-                                ),
-                              ],
+                            Text(
+                              nIN.length > 13
+                                  ? "${nIN.substring(0, 10)}..."
+                                  : nIN,
+                              style: Theme.of(context).textTheme.headline2,
                             ),
-                            const Spacer(),
-                            IconButton(
-                                onPressed: () async {
-                                  await Clipboard.setData(
-                                      ClipboardData(text: nIN));
-                                  // ignore: use_build_context_synchronously
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text('Copied to clipboard.'),
-                                    duration: Duration(seconds: 2),
-                                    backgroundColor: Colors.grey,
-                                  ));
-                                },
-                                icon: Icon(
-                                  Icons.copy,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )),
+                            Text(
+                              'National Identity Number',
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
                           ],
                         ),
-                      ),
-                    )
+                        IconButton(
+                            onPressed: () async {
+                              await Clipboard.setData(ClipboardData(text: nIN));
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Copied to clipboard.'),
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Colors.grey,
+                              ));
+                            },
+                            icon: const Icon(
+                              Icons.copy,
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
                   ],
                 ),
               )),
         ),
         Positioned(
           left: customWidth * 0.725,
-          top: 150,
+          top: 130,
           child: InkWell(
+            borderRadius: BorderRadius.circular(100),
             onTap: () {
               Navigator.pushNamed(context, QrScanScreen.routeName);
             },
-            borderRadius: BorderRadius.circular(100),
             child: Container(
               width: 64,
               height: 64,

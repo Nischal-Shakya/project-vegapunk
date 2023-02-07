@@ -29,7 +29,7 @@ class LoginMobileScreen extends StatelessWidget {
         return;
       }
       debugPrint("sending mobile and nin");
-      http.post(Uri.parse('$url/api/v1/auth/'), body: {
+      http.post(Uri.parse(postMobileAndNinUrl), body: {
         "NIN": ninNumber,
         "mobile_number": "+977${mobileNumbercontroller.text}"
       });

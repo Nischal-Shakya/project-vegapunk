@@ -11,6 +11,8 @@ import 'package:parichaya_frontend/providers/all_data.dart';
 import '../url.dart';
 import '../providers/preferences.dart';
 
+import 'package:hive/hive.dart';
+
 class LoginOtpScreen extends StatefulWidget {
   const LoginOtpScreen({Key? key}) : super(key: key);
   static const routeName = '/login_otp_screen';
@@ -98,7 +100,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                   onCompleted: (v) {
                     otp = v;
                     debugPrint(otp);
-                    Navigator.of(context).pushNamed(SetupPinScreen.routeName);
+                    // Navigator.of(context).pushNamed(SetupPinScreen.routeName);
                   },
                   onChanged: (value) {
                     setState(() {
@@ -120,7 +122,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           InkWell(
             onTap: () {
-              http.post(Uri.parse('$url/api/v1/auth/'), body: {
+              http.post(Uri.parse(postMobileAndNinUrl), body: {
                 "NIN": resendOtp[0],
                 "mobile_number": "+977${resendOtp[1]}"
               });
@@ -157,8 +159,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
             onTap: () async {
               try {
                 debugPrint("Sending Otp");
-                var response = await http
-                    .post(Uri.parse('$url/api/v1/auth/verify/'), body: {
+                var response = await http.post(Uri.parse(postOtp), body: {
                   "NIN": resendOtp[0],
                   "mobile_number": "+977${resendOtp[1]}",
                   "otp": otp
@@ -176,7 +177,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                   final String token = json.decode(response.body)["token"];
                   prefs.setJwtToken(token);
                   log("token : $token");
-                  data.putData(token, token);
+                  Hive.box("allData").put("token", token);
                   data.putData("ninNumber", resendOtp[0]);
                   data.putData("mobileNumber", resendOtp[1]);
                   // ignore: use_build_context_synchronously
@@ -190,7 +191,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                       backgroundColor: Colors.grey,
                     ),
                   );
-                  data.storeDataInBox(token).then((_) {
+                  data.storeAllDataInBox(token).then((_) {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

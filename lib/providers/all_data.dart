@@ -8,10 +8,9 @@ import '../url.dart';
 class AllData {
   final thisBox = Hive.box("allData");
 
-  Future<void> storeDataInBox(String token) async {
-    var response = await http.get(
-        Uri.parse('$url/api/v1/digital-identity/documents/'),
-        headers: {"Authorization": "Token $token"});
+  Future<void> storeAllDataInBox(String token) async {
+    var response = await http
+        .get(Uri.parse(getDataUrl), headers: {"Authorization": "Token $token"});
     log("Storing Data");
     thisBox.put("data", response.body);
   }
@@ -26,36 +25,68 @@ class AllData {
 
   void deleteDataFromBox() {
     log("Deleting Data");
-    thisBox.delete("data");
+    thisBox.deleteAll(["data", "token", "mpin", "ninNumber", "mobileNumber"]);
   }
 
-  Map<String, dynamic> getDataFromBox() {
-    try {
-      return json.decode(thisBox.get("data"));
-    } catch (e) {
-      return {"NIN": "error"};
-    }
+  int get allDatalength {
+    return (json.decode(thisBox.get("data")) as Map).length;
   }
 
-  Map<String, dynamic> getNidData() {
+  Map<String, dynamic> getCtzData() {
     try {
       Map<String, dynamic> allNidData =
-          json.decode(thisBox.get("data"))["documents"][0]["document_details"];
-      allNidData.remove("NID_face_image");
-      allNidData.removeWhere((key, value) => value == "" || key == "docType");
+          json.decode(thisBox.get("data"))["documents"]["CTZ"];
+      allNidData.remove("face_image");
+      // allNidData.removeWhere((key, value) => value == "" || key == "docType");
+      allNidData.update("dob", (value) => value.toString().substring(0, 10));
       allNidData.update(
-          "NID_dob", (value) => value.toString().substring(0, 10));
+          "CTZ_issued_date", (value) => value.toString().substring(0, 10));
       return allNidData;
     } catch (e) {
       return {"NID_NIN": "error"};
     }
   }
 
-  String get faceImage {
-    return json
-        .decode(thisBox.get("data"))["documents"][0]["document_details"]
-            ['NID_face_image']
-        .split(',')[1];
+  Map<String, dynamic> getDvlData() {
+    try {
+      Map<String, dynamic> allNidData =
+          json.decode(thisBox.get("data"))["documents"]["DVL"];
+      allNidData.remove("face_image");
+      // allNidData.removeWhere((key, value) => value == "" || key == "docType");
+      allNidData.update("dob", (value) => value.toString().substring(0, 10));
+      allNidData.update(
+          "DVL_data_of_issue", (value) => value.toString().substring(0, 10));
+      allNidData.update(
+          "DVL_date_of_expiry", (value) => value.toString().substring(0, 10));
+      return allNidData;
+    } catch (e) {
+      return {"NID_NIN": "error"};
+    }
+  }
+
+  Map<String, dynamic> getNidData() {
+    try {
+      Map<String, dynamic> allNidData =
+          json.decode(thisBox.get("data"))["documents"]["NID"];
+      allNidData.remove("face_image");
+      // allNidData.removeWhere((key, value) => value == "" || key == "docType");
+      allNidData.update("dob", (value) => value.toString().substring(0, 10));
+      return allNidData;
+    } catch (e) {
+      return {"NID_NIN": "error"};
+    }
+  }
+
+  String get ctzFaceImage {
+    return json.decode(thisBox.get("data"))["documents"]["NID"]['face_image'];
+  }
+
+  String get dvlFaceImage {
+    return json.decode(thisBox.get("data"))["documents"]["NID"]['face_image'];
+  }
+
+  String get nidFaceImage {
+    return json.decode(thisBox.get("data"))["documents"]["NID"]['face_image'];
   }
 
   String get nIN {
@@ -63,7 +94,7 @@ class AllData {
   }
 
   String get fullName {
-    return "${json.decode(thisBox.get("data"))["documents"][0]["document_details"]["NID_first_name"]} ${json.decode(thisBox.get("data"))["documents"][0]["document_details"]["NID_last_name"]}";
+    return "${json.decode(thisBox.get("data"))["documents"]["NID"]["first_name"]} ${json.decode(thisBox.get("data"))["documents"]["NID"]["last_name"]}";
   }
 
   String get token {
