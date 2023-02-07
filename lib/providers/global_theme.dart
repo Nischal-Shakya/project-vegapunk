@@ -22,12 +22,12 @@ class GlobalTheme {
         fontWeight: FontWeight.bold,
       ),
       headline2: TextStyle(
-        color: customBlue,
-        fontSize: 20,
+        color: customBackgroundWhite,
+        fontSize: 24,
         fontWeight: FontWeight.bold,
       ),
       headline3: TextStyle(
-        color: customBackgroundWhite,
+        color: customBlue,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
@@ -46,8 +46,8 @@ class GlobalTheme {
         fontWeight: FontWeight.bold,
       ),
       subtitle1: TextStyle(
-        fontSize: 12,
-        color: customBlue,
+        fontSize: 14,
+        color: Colors.grey,
       ),
       subtitle2: TextStyle(
         fontSize: 12,

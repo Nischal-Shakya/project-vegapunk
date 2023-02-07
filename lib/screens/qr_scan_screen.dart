@@ -20,6 +20,7 @@ class _QrScanScreenState extends State<QrScanScreen>
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
+
   bool isShareScanScreen = true;
 
   TabController? _tabController;
@@ -27,6 +28,7 @@ class _QrScanScreenState extends State<QrScanScreen>
   @override
   void initState() {
     super.initState();
+
     _tabController = TabController(vsync: this, length: 2);
   }
 
@@ -137,8 +139,8 @@ class _QrScanScreenState extends State<QrScanScreen>
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
     controller.resumeCamera();
+    this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
       controller.pauseCamera();
       // ignore: prefer_typing_uninitialized_variables
@@ -150,8 +152,7 @@ class _QrScanScreenState extends State<QrScanScreen>
         String requestId = scanData.code.toString();
 
         if (requestId.isNotEmpty) {
-          var response =
-              await http.get(Uri.parse('$url/api/v1/scan-request/$requestId/'));
+          var response = await http.get(Uri.parse('$getDataQrUrl/$requestId/'));
           Map decodedData = json.decode(response.body);
           if (decodedData.containsKey('request_id') &&
               decodedData['request_id'].toString().isNotEmpty &&

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,11 +10,15 @@ class Test extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final y = Provider.of<AllData>(context, listen: false).faceImage;
+    final y = Provider.of<AllData>(context, listen: false);
+
+    // log(y.getDataFromBox().toString());
+    log(y.getDvlData().toString());
 
     return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(child: Text(y.split(',')[1].toString())),
-    );
+        appBar: AppBar(),
+        body: SingleChildScrollView(
+          child: Text(y.getCtzData().toString()),
+        ));
   }
 }
