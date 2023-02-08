@@ -11,10 +11,8 @@ class DocumentsProfileBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final nIN = Provider.of<AllData>(context, listen: false).nIN;
-    // final fullName = Provider.of<AllData>(context, listen: false).fullName;
-    const nIN = "118-461-296-5";
-    const fullName = "Nischal Shakya";
+    final nIN = Provider.of<AllData>(context, listen: false).nIN;
+    final fullName = Provider.of<AllData>(context, listen: false).fullName;
 
     final double customWidth = MediaQuery.of(context).size.width;
 
