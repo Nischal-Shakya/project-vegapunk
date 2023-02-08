@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:parichaya_frontend/models/conversion.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/all_data.dart';
 
-import '../screens/national_id_screen.dart';
 import '../screens/error_screen.dart';
 
 class DocumentsScreenList extends StatelessWidget {
@@ -11,12 +11,10 @@ class DocumentsScreenList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final allDatalength =
-        Provider.of<AllData>(context, listen: false).allDatalength;
+    final allDocumentTypes =
+        Provider.of<AllData>(context, listen: false).allDocumentTypes;
     final double customWidth = MediaQuery.of(context).size.width;
-    final List<String> chooseScreen = [
-      NationalIdentityScreen.routeName,
-    ];
+
     return Expanded(
         child: GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -25,7 +23,7 @@ class DocumentsScreenList extends StatelessWidget {
         crossAxisSpacing: 5,
         mainAxisSpacing: 5,
       ),
-      itemCount: allDatalength,
+      itemCount: allDocumentTypes.length,
       padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
       itemBuilder: (BuildContext ctx, index) {
         return Card(
@@ -35,9 +33,9 @@ class DocumentsScreenList extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(
                   context,
-                  index > (chooseScreen.length - 1)
+                  index > (allDocumentTypes.length - 1)
                       ? ErrorScreen.routeName
-                      : chooseScreen[index]);
+                      : allDocumentTypes[index]);
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -54,7 +52,7 @@ class DocumentsScreenList extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      "National Identity",
+                      convertedFieldName(allDocumentTypes[index]),
                       style: Theme.of(context).textTheme.subtitle1,
                       softWrap: false,
                       maxLines: 2,

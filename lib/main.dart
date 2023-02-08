@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:parichaya_frontend/screens/citizenship_screen.dart';
+import 'package:parichaya_frontend/screens/driving_license_screen.dart';
 import 'package:parichaya_frontend/screens/history_screen.dart';
 import 'package:parichaya_frontend/screens/more_screen.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
@@ -69,6 +71,9 @@ class MyApp extends StatelessWidget {
             QrScanScreen.routeName: (ctx) => const QrScanScreen(),
             NationalIdentityScreen.routeName: (ctx) =>
                 const NationalIdentityScreen(),
+            DrivingLicenseScreen.routeName: (ctx) =>
+                const DrivingLicenseScreen(),
+            CitizenshipScreen.routeName: (ctx) => const CitizenshipScreen(),
             MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
             SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
             ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),

@@ -67,18 +67,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.qr_code_scanner),
-            label: 'My Id',
+            label: 'Scan',
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.history_edu_outlined),
-            label: 'My Id',
+            label: 'History',
           ),
           const BottomNavigationBarItem(
             icon: Icon(
               CustomIcons.more,
               size: 20,
             ),
-            label: 'My Id',
+            label: 'More',
           ),
         ],
         unselectedItemColor: Colors.grey,

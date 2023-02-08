@@ -100,7 +100,6 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                   onCompleted: (v) {
                     otp = v;
                     debugPrint(otp);
-                    Navigator.of(context).pushNamed(SetupPinScreen.routeName);
                   },
                   onChanged: (value) {
                     setState(() {

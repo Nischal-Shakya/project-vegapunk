@@ -7,28 +7,28 @@ import 'package:provider/provider.dart';
 import '../providers/all_data.dart';
 import '../widgets/document_detail_list.dart';
 
-class NationalIdentityScreen extends StatefulWidget {
-  const NationalIdentityScreen({super.key});
+class CitizenshipScreen extends StatefulWidget {
+  const CitizenshipScreen({super.key});
 
-  static const routeName = 'NID';
+  static const routeName = 'CTZ';
 
   @override
-  State<NationalIdentityScreen> createState() => _NationalIdentityScreenState();
+  State<CitizenshipScreen> createState() => _CitizenshipScreenState();
 }
 
-class _NationalIdentityScreenState extends State<NationalIdentityScreen> {
+class _CitizenshipScreenState extends State<CitizenshipScreen> {
   bool isSelectedImage = true;
   double angle = 0;
   @override
   Widget build(BuildContext context) {
-    final allNidData =
-        Provider.of<AllData>(context, listen: false).getNidData();
+    final allCtzData =
+        Provider.of<AllData>(context, listen: false).getDvlData();
     final faceImageBase64 =
         Provider.of<AllData>(context, listen: false).nidFaceImage;
     final faceImage = const Base64Decoder().convert(faceImageBase64);
 
-    final List fieldNames = allNidData.keys.toList();
-    final List fieldValues = allNidData.values.toList();
+    final List fieldNames = allCtzData.keys.toList();
+    final List fieldValues = allCtzData.values.toList();
 
     return Scaffold(
       appBar: AppBar(

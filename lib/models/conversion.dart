@@ -1,5 +1,15 @@
 const Map<String, Map> fieldMapping = {
   //National Identity Card
+  "NID": {
+    "fieldName": "National Identity",
+  },
+  "CTZ": {
+    "fieldName": "Citizenship",
+  },
+  "DVL": {
+    "fieldName": "Driving License",
+  },
+
   "NIN": {
     "category": "National Identity",
     "fieldName": "National Identity Number",
