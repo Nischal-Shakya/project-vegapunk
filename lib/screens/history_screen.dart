@@ -12,23 +12,20 @@ import 'package:http/http.dart' as http;
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
 
-  static const routeName = '/history_screen';
-
   @override
   Widget build(BuildContext context) {
     final String token = Provider.of<AllData>(context, listen: false).token;
     late WebSocketChannel webSocketChannel;
-    late String permitId;
+    String? permitId;
 
     return Scaffold(
-      appBar: AppBar(),
       body: Column(
         children: [
           Center(
               child: TextButton(
             onPressed: () {
               webSocketChannel = WebSocketChannel.connect(
-                Uri.parse('$getPermitIdUrl$token'),
+                Uri.parse('$getPermitIdUrl/?token=$token'),
               );
 
               debugPrint(token);
@@ -47,9 +44,9 @@ class HistoryScreen extends StatelessWidget {
               debugPrint(token);
               debugPrint("Sending Data Via Web Socket");
               webSocketChannel.stream.listen((message) {
-                debugPrint(message);
+                debugPrint("message$message");
                 permitId = jsonDecode(message)["data"]["permit_id"];
-                debugPrint(permitId);
+                debugPrint("permitID${permitId!}");
               });
             },
             child: const Text("send data"),

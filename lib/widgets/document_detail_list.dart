@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../models/conversion.dart';
 
@@ -27,7 +29,9 @@ class DocumentDetailList extends StatelessWidget {
                     fontWeight: FontWeight.normal),
               ),
               Text(
-                fieldValues[index],
+                fieldNames[index].toString().contains("devanagari")
+                    ? utf8.decode(fieldValues[index].toString().codeUnits)
+                    : fieldValues[index].toString(),
                 style: const TextStyle(
                     fontSize: 18,
                     color: Colors.black,

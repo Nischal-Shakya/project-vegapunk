@@ -6,12 +6,24 @@ import '../url.dart';
 
 import './login_otp_screen.dart';
 
-class LoginMobileScreen extends StatelessWidget {
-  LoginMobileScreen({super.key});
+class LoginMobileScreen extends StatefulWidget {
+  const LoginMobileScreen({super.key});
 
   static const routeName = '/login_mobile_screen';
 
+  @override
+  State<LoginMobileScreen> createState() => _LoginMobileScreenState();
+}
+
+class _LoginMobileScreenState extends State<LoginMobileScreen> {
   final mobileNumbercontroller = TextEditingController();
+
+  @override
+  void dispose() {
+    mobileNumbercontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
