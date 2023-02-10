@@ -20,48 +20,50 @@ class DocumentsProfileBox extends StatelessWidget {
       children: [
         const Positioned(
             child: SizedBox(
-          height: 240,
+          height: 225,
         )),
         Positioned(
           child: Container(
-              margin: EdgeInsets.fromLTRB(
-                  customWidth * 0.05, 24, customWidth * 0.05, 0),
-              height: 140,
-              width: customWidth * 0.9,
-              decoration: BoxDecoration(
+            height: 140,
+            width: customWidth * 0.9,
+            margin: EdgeInsets.fromLTRB(
+                customWidth * 0.05, 24, customWidth * 0.05, 0),
+            child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
                 color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(20, 20, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      fullName,
-                      style: Theme.of(context).textTheme.headline1,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              nIN.length > 13
-                                  ? "${nIN.substring(0, 10)}..."
-                                  : nIN,
-                              style: Theme.of(context).textTheme.headline2,
-                            ),
-                            Text(
-                              'National Identity Number',
-                              style: Theme.of(context).textTheme.subtitle1,
-                            ),
-                          ],
-                        ),
-                        IconButton(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        fullName,
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                nIN.length > 13
+                                    ? "${nIN.substring(0, 10)}..."
+                                    : nIN,
+                                style: Theme.of(context).textTheme.headline2,
+                              ),
+                              Text(
+                                'National Identity Number',
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            splashRadius: 25,
                             onPressed: () async {
                               await Clipboard.setData(ClipboardData(text: nIN));
                               // ignore: use_build_context_synchronously
@@ -75,12 +77,14 @@ class DocumentsProfileBox extends StatelessWidget {
                             icon: const Icon(
                               Icons.copy,
                               color: Colors.white,
-                            )),
-                      ],
-                    ),
-                  ],
-                ),
-              )),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+          ),
         ),
         Positioned(
           left: customWidth * 0.725,

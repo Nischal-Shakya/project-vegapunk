@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +23,7 @@ class _DrivingLicenseScreenState extends State<DrivingLicenseScreen> {
   Widget build(BuildContext context) {
     final allDvlData =
         Provider.of<AllData>(context, listen: false).getDvlData();
+    debugPrint(allDvlData.toString());
     final faceImageBase64 =
         Provider.of<AllData>(context, listen: false).nidFaceImage;
     final faceImage = const Base64Decoder().convert(faceImageBase64);
@@ -49,44 +50,46 @@ class _DrivingLicenseScreenState extends State<DrivingLicenseScreen> {
                 });
               },
               child: TweenAnimationBuilder(
-                  tween: Tween<double>(begin: 0, end: angle),
-                  duration: const Duration(seconds: 1),
-                  builder: (context, value, _) {
-                    if (value >= (pi / 2)) {
-                      isSelectedImage = false;
-                    } else {
-                      isSelectedImage = true;
-                    }
-                    return Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001)
-                        ..rotateY(value),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        width: 150,
-                        height: 150,
-                        // color: Theme.of(context).colorScheme.primary,
-                        decoration: BoxDecoration(
-                            border: Border.all(
+                tween: Tween<double>(begin: 0, end: angle),
+                duration: const Duration(seconds: 1),
+                builder: (context, value, _) {
+                  if (value >= (pi / 2)) {
+                    isSelectedImage = false;
+                  } else {
+                    isSelectedImage = true;
+                  }
+                  return Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()
+                      ..setEntry(3, 2, 0.001)
+                      ..rotateY(value),
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      width: 150,
+                      height: 150,
+                      // color: Theme.of(context).colorScheme.primary,
+                      decoration: BoxDecoration(
+                        border: Border.all(
                           color: Theme.of(context).colorScheme.primary,
-                        )),
-                        child: isSelectedImage
-                            ? Image.memory(
-                                faceImage,
-                                fit: BoxFit.cover,
-                              )
-                            : Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.identity()..rotateY(pi),
-                                child: Image.network(
-                                  'https://www.hellotech.com/guide/wp-content/uploads/2020/05/HelloTech-qr-code-1024x1024.jpg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                        ),
                       ),
-                    );
-                  }),
+                      child: isSelectedImage
+                          ? Image.memory(
+                              faceImage,
+                              fit: BoxFit.cover,
+                            )
+                          : Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.identity()..rotateY(pi),
+                              child: Image.network(
+                                'https://www.hellotech.com/guide/wp-content/uploads/2020/05/HelloTech-qr-code-1024x1024.jpg',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                    ),
+                  );
+                },
+              ),
             ),
             const Divider(
               height: 20,

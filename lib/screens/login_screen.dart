@@ -4,12 +4,25 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:parichaya_frontend/custom_icons/custom_id_card_icon.dart';
 import './login_mobile_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   static const routeName = '/login_screen';
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController ninNumbercontroller = TextEditingController();
+  final FocusScopeNode currentFocus = FocusScopeNode();
+
+  @override
+  void dispose() {
+    ninNumbercontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
@@ -73,6 +86,7 @@ class LoginScreen extends StatelessWidget {
             ),
             TextField(
               controller: ninNumbercontroller,
+              focusNode: currentFocus,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5),
@@ -96,6 +110,7 @@ class LoginScreen extends StatelessWidget {
               keyboardType: TextInputType.number,
               textAlignVertical: TextAlignVertical.bottom,
               inputFormatters: [maskFormatter],
+              autofocus: true,
             ),
             SizedBox(
               height: customHeight * 0.025,

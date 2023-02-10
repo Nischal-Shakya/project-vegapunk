@@ -238,7 +238,7 @@ const Map<String, Map> fieldMapping = {
   //DRIVING LICENSE
   "DVL_DLN": {
     "category": "Driving License",
-    "fieldName": "D.L.Number",
+    "fieldName": "Driving License Number",
   },
   "DVL_blood_group": {
     "category": "Driving License",
@@ -248,7 +248,7 @@ const Map<String, Map> fieldMapping = {
     "category": "Driving License",
     "fieldName": "Categories",
   },
-  "DVL_date_of_issue": {
+  "DVL_data_of_issue": {
     "category": "Driving License",
     "fieldName": "Date of Issue",
   },
@@ -267,7 +267,7 @@ const Map<String, Map> fieldMapping = {
     "category": "Citizenship",
     "fieldName": "Citizenship Certificate Number",
   },
-  "CTZ_issued_disrict": {
+  "CTZ_issued_district": {
     "category": "Citizenship",
     "fieldName": "Issued District",
   },

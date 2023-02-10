@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parichaya_frontend/screens/mobile_pin_screen.dart';
+import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/preferences.dart';
@@ -11,8 +11,6 @@ import './login_screen.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
-
-  static const routeName = '/more_screen';
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +31,7 @@ class MoreScreen extends StatelessWidget {
                   child:
                       const SettingsListViewHelper(option: 'Verify Your Age'),
                   onTap: () {
-                    Navigator.pushNamed(context, MobilePinScreen.routeName);
+                    Navigator.pushNamed(context, QrShareScreen.routeName);
                   },
                 ),
               ),
@@ -64,8 +62,11 @@ class MoreScreen extends StatelessWidget {
                   onTap: () {
                     prefs.setJwtToken('');
                     AllData().deleteDataFromBox();
-                    Navigator.pushReplacementNamed(
-                        context, LoginScreen.routeName);
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      LoginScreen.routeName,
+                      (route) => false,
+                    );
                   },
                 ),
               ),

@@ -196,6 +196,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                         }
                       },
                       focusNode: confirmPinFocusNode,
+                      autoDismissKeyboard: false,
                     ),
                   ),
                 ),

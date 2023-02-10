@@ -47,11 +47,12 @@ class GlobalTheme {
       ),
       subtitle1: TextStyle(
         fontSize: 14,
-        color: Colors.grey,
+        color: Colors.white54,
       ),
       subtitle2: TextStyle(
         fontSize: 12,
-        color: Colors.black26,
+        color: Colors.black,
+        fontWeight: FontWeight.w500,
       ),
       caption: TextStyle(
         color: Colors.grey,

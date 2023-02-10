@@ -22,7 +22,7 @@ class _CitizenshipScreenState extends State<CitizenshipScreen> {
   @override
   Widget build(BuildContext context) {
     final allCtzData =
-        Provider.of<AllData>(context, listen: false).getDvlData();
+        Provider.of<AllData>(context, listen: false).getCtzData();
     final faceImageBase64 =
         Provider.of<AllData>(context, listen: false).nidFaceImage;
     final faceImage = const Base64Decoder().convert(faceImageBase64);

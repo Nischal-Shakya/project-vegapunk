@@ -37,7 +37,8 @@ class AllData {
       Map<String, dynamic> allNidData =
           json.decode(thisBox.get("data"))["documents"]["CTZ"];
       allNidData.remove("face_image");
-      allNidData.removeWhere((key, value) => value == "" || key == "docType");
+      allNidData.removeWhere(
+          (key, value) => value == null || key == "docType" || key == "NIN");
       allNidData.update("dob", (value) => value.toString().substring(0, 10));
       allNidData.update(
           "CTZ_issued_date", (value) => value.toString().substring(0, 10));
@@ -52,8 +53,10 @@ class AllData {
       Map<String, dynamic> allNidData =
           json.decode(thisBox.get("data"))["documents"]["DVL"];
       allNidData.remove("face_image");
-      allNidData.removeWhere((key, value) => value == "" || key == "docType");
+      allNidData.removeWhere(
+          (key, value) => value == null || key == "docType" || key == "NIN");
       allNidData.update("dob", (value) => value.toString().substring(0, 10));
+      allNidData.update("DVL_blood_group", (value) => value.toString());
       allNidData.update(
           "DVL_data_of_issue", (value) => value.toString().substring(0, 10));
       allNidData.update(
@@ -69,7 +72,7 @@ class AllData {
       Map<String, dynamic> allNidData =
           json.decode(thisBox.get("data"))["documents"]["NID"];
       allNidData.remove("face_image");
-      allNidData.removeWhere((key, value) => value == "" || key == "docType");
+      allNidData.removeWhere((key, value) => value == null || key == "docType");
       allNidData.update("dob", (value) => value.toString().substring(0, 10));
       return allNidData;
     } catch (e) {
@@ -86,7 +89,10 @@ class AllData {
   }
 
   String get nidFaceImage {
-    return json.decode(thisBox.get("data"))["documents"]["NID"]['face_image'];
+    return json
+        .decode(thisBox.get("data"))["documents"]["NID"]['face_image']
+        .toString()
+        .split(',')[1];
   }
 
   String get nIN {

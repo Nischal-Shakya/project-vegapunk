@@ -28,6 +28,12 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final prefs = Provider.of<Preferences>(context, listen: false);
     final data = Provider.of<AllData>(context, listen: false);
@@ -101,6 +107,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                     otp = v;
                     debugPrint(otp);
                   },
+
                   onChanged: (value) {
                     setState(() {
                       currentText = value;
@@ -186,7 +193,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                         "Fetching Data...",
                         style: TextStyle(color: Colors.white),
                       ),
-                      duration: Duration(seconds: 2),
+                      // duration: Duration(seconds: 2),
                       backgroundColor: Colors.grey,
                     ),
                   );

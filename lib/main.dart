@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/screens/citizenship_screen.dart';
 import 'package:parichaya_frontend/screens/driving_license_screen.dart';
-import 'package:parichaya_frontend/screens/history_screen.dart';
-import 'package:parichaya_frontend/screens/more_screen.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
+import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:parichaya_frontend/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -59,16 +58,15 @@ class MyApp extends StatelessWidget {
               : MobilePinScreen.routeName,
           routes: {
             HomeScreen.routeName: (ctx) => const HomeScreen(),
-            HistoryScreen.routeName: (ctx) => const HistoryScreen(),
-            MoreScreen.routeName: (ctx) => const MoreScreen(),
             ErrorScreen.routeName: (ctx) => const ErrorScreen(),
             SettingsScreen.routeName: (ctx) => const SettingsScreen(),
-            LoginScreen.routeName: (ctx) => LoginScreen(),
-            LoginMobileScreen.routeName: (ctx) => LoginMobileScreen(),
+            LoginScreen.routeName: (ctx) => const LoginScreen(),
+            LoginMobileScreen.routeName: (ctx) => const LoginMobileScreen(),
             LoginOtpScreen.routeName: (ctx) => const LoginOtpScreen(),
             DataPermissionScreen.routeName: (ctx) =>
                 const DataPermissionScreen(),
             QrScanScreen.routeName: (ctx) => const QrScanScreen(),
+            QrShareScreen.routeName: (ctx) => const QrShareScreen(),
             NationalIdentityScreen.routeName: (ctx) =>
                 const NationalIdentityScreen(),
             DrivingLicenseScreen.routeName: (ctx) =>
