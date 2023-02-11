@@ -15,6 +15,7 @@ class MoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prefs = Provider.of<Preferences>(context, listen: false);
+
     final double customWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Column(
@@ -31,7 +32,8 @@ class MoreScreen extends StatelessWidget {
                   child:
                       const SettingsListViewHelper(option: 'Verify Your Age'),
                   onTap: () {
-                    Navigator.pushNamed(context, QrShareScreen.routeName);
+                    Navigator.pushNamed(context, QrShareScreen.routeName,
+                        arguments: "AGE");
                   },
                 ),
               ),
@@ -51,7 +53,18 @@ class MoreScreen extends StatelessWidget {
                 child: InkWell(
                   child:
                       const SettingsListViewHelper(option: 'About Parichaya'),
-                  onTap: () {},
+                  onTap: () {
+                    showLicensePage(
+                      context: context,
+                      applicationIcon: const Icon(
+                        Icons.fingerprint,
+                        color: Colors.blue,
+                      ),
+                      applicationLegalese: "View all open source licenses.",
+                      useRootNavigator: true,
+                      applicationVersion: "v2.15",
+                    );
+                  },
                 ),
               ),
               Padding(
