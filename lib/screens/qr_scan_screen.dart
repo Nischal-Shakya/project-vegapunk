@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:parichaya_frontend/screens/age_verification_screen.dart';
 import 'dart:convert';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -50,7 +53,7 @@ class _QrScanScreenState extends State<QrScanScreen>
       extendBodyBehindAppBar: true,
       body: TweenAnimationBuilder(
         tween: Tween(begin: 0.0, end: 1.0),
-        duration: Duration(milliseconds: 600),
+        duration: const Duration(milliseconds: 600),
         builder: (context, value, child) {
           return ShaderMask(
             shaderCallback: ((bounds) {
@@ -166,46 +169,63 @@ class _QrScanScreenState extends State<QrScanScreen>
   void _onQRViewCreated(QRViewController controller) {
     controller.resumeCamera();
     this.controller = controller;
-    // controller.scannedDataStream.listen(
-    //   (scanData) async {
-    //     controller.pauseCamera();
-    //     const snackBar = SnackBar(
-    //       content: Text('Invalid Qr Code'),
-    //       duration: Duration(seconds: 2),
-    //     );
-    // try {
-    //   String requestId = scanData.code.toString();
+    const snackBar = SnackBar(
+      content: Text('Invalid Qr Code'),
+      duration: Duration(seconds: 2),
+    );
+    controller.scannedDataStream.listen(
+      (scanData) async {
+        controller.pauseCamera();
+        try {
+          String requestId = scanData.code.toString();
 
-    //   if (requestId.isNotEmpty) {
-    //     var response = await http.get(Uri.parse('$getDataQrUrl/$requestId/'));
-    //     Map decodedData = json.decode(response.body);
-    //     if (decodedData.containsKey('request_id') &&
-    //         decodedData['request_id'].toString().isNotEmpty &&
-    //         decodedData.containsKey('requested_fields') &&
-    //         // decodedData['reuested_fields'] is List &&
-    //         decodedData['requested_fields'].length > 0 &&
-    //         decodedData.containsKey('requester') &&
-    //         decodedData['requester'].toString().isNotEmpty) {
-    //       // ignore: use_build_context_synchronously
-    //       Navigator.pushNamed(context, DataPermissionScreen.routeName,
-    //           arguments: decodedData);
-    //     } else {
-    //       // ignore: use_build_context_synchronously
-    //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //         content: Text('Invalid'),
-    //         duration: Duration(seconds: 2),
-    //       ));
-    //       controller.resumeCamera();
-    //     }
-    //   } else {
-    //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    //     controller.resumeCamera();
-    //   }
-    // } catch (error) {
-    //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    //   controller.resumeCamera();
-    // }
-    // },
-    // );
+          if (requestId.isNotEmpty) {
+            // var response =
+            //     await http.get(Uri.parse('$getDataQrUrl/$requestId/'));
+            // Map decodedData = json.decode(response.body);
+            Map decodedData = json.decode(requestId);
+            log(decodedData['permit_id'].toString());
+
+            if (isShareScanScreen) {
+              if (decodedData.containsKey('request_id') &&
+                  decodedData['request_id'].toString().isNotEmpty &&
+                  decodedData.containsKey('requested_fields') &&
+                  // decodedData['reuested_fields'] is List &&
+                  decodedData['requested_fields'].length > 0 &&
+                  decodedData.containsKey('requester') &&
+                  decodedData['requester'].toString().isNotEmpty) {
+                // ignore: use_build_context_synchronously
+                Navigator.pushNamed(context, DataPermissionScreen.routeName,
+                    arguments: decodedData);
+              } else {
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Invalid data'),
+                  duration: Duration(seconds: 2),
+                ));
+                controller.resumeCamera();
+              }
+            } else {
+              if (decodedData.containsKey('permit_id')) {
+                Navigator.pushNamed(context, AgeVerificationScreen.routeName);
+              } else {
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Invalid data'),
+                  duration: Duration(seconds: 2),
+                ));
+                controller.resumeCamera();
+              }
+            }
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            controller.resumeCamera();
+          }
+        } catch (error) {
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          controller.resumeCamera();
+        }
+      },
+    );
   }
 }

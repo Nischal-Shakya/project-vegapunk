@@ -91,7 +91,10 @@ class SendDetailsWidget extends StatelessWidget {
                         ),
                         const Spacer(),
                         Text(
-                          purifiedFields[index]["category"].toString(),
+                          purifiedFields[index]["category"].toString() !=
+                                  "National Identity"
+                              ? purifiedFields[index]["category"].toString()
+                              : "",
                           style: TextStyle(
                               color: Colors.blueAccent.shade200, fontSize: 12),
                         ),

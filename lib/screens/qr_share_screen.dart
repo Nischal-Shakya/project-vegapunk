@@ -1,46 +1,104 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:provider/provider.dart';
+import '../providers/all_data.dart';
+import '../url.dart';
+import 'dart:convert';
 
-class QrShareScreen extends StatelessWidget {
-  const QrShareScreen({super.key});
+class QrShareScreen extends StatefulWidget {
+  const QrShareScreen({
+    super.key,
+  });
 
   static const routeName = '/qr_share_screen';
 
   @override
+  State<QrShareScreen> createState() => _QrShareScreenState();
+}
+
+class _QrShareScreenState extends State<QrShareScreen> {
+  bool isLoading = true;
+  late String permitId;
+  late WebSocketChannel webSocketChannel;
+
+  @override
+  void didChangeDependencies() {
+    final String token = Provider.of<AllData>(context, listen: false).token;
+    final String docType = ModalRoute.of(context)!.settings.arguments as String;
+
+    webSocketChannel = WebSocketChannel.connect(
+      Uri.parse('$getPermitIdUrl/?token=$token'),
+    );
+    debugPrint("initializing web socket connection");
+    webSocketChannel.sink.add(jsonEncode({
+      "type": "permit.create",
+      "data": {"permitted_document_code": docType}
+    }));
+    debugPrint("Sending Data Via Web Socket");
+
+    webSocketChannel.stream.listen((message) {
+      if (jsonDecode(message)["type"] == "permit.create.success") {
+        debugPrint("message$message");
+        setState(() {
+          permitId = jsonDecode(message)["data"]["permit_id"];
+          isLoading = false;
+        });
+        debugPrint(permitId.toString());
+      }
+    });
+
+    super.didChangeDependencies();
+  }
+
+  Future<bool> _onWillPop() async {
+    webSocketChannel.sink.close();
+    Navigator.pop(context);
+    return false;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      body: Column(
-        children: [
-          Center(
-            child: QrImage(
-              data: 'Dikshya is a dumbass',
-              version: QrVersions.auto,
-              size: 200.0,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemBuilder: ((context, index) {
-                return Container(
-                  height: 500,
-                  child: const Center(
-                    child: Text("123"),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          automaticallyImplyLeading: true,
+          // iconTheme: IconThemeData(color: Colors.black),
+        ),
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  QrImage(
+                    backgroundColor: Colors.white,
+                    data: json.encode({"permit_id": permitId}),
+                    version: QrVersions.auto,
+                    size: 200.0,
                   ),
-                );
-              }),
-              itemCount: 2,
-              physics: const ScrollPhysics(
-                parent: BouncingScrollPhysics(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: ((context, index) {
+                        return const SizedBox(
+                          height: 500,
+                          child: Center(
+                            child: Text("Ramlal is viewing your Age"),
+                          ),
+                        );
+                      }),
+                      itemCount: 2,
+                      physics: const ScrollPhysics(
+                        parent: BouncingScrollPhysics(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ),
-        ],
       ),
     );
   }
