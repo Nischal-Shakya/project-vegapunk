@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'providers/global_theme.dart';
-import '../providers/preferences.dart';
+import 'providers/preferences.dart';
 import 'providers/all_data.dart';
+import 'providers/internet_connectivity.dart';
 
 import './screens/homescreen.dart';
 import './screens/error_screen.dart';
@@ -32,6 +33,10 @@ void main() async {
   final prefs = Preferences.noSync();
   await prefs.syncToSharedPreferences();
 
+  ConnectionStatusSingleton connectionStatus =
+      ConnectionStatusSingleton.getInstance();
+  connectionStatus.initialize();
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<Preferences>(create: (context) => prefs),
     Provider<AllData>(
@@ -50,32 +55,31 @@ class MyApp extends StatelessWidget {
     final ThemeData globalTheme = Provider.of<GlobalTheme>(context).globalTheme;
     return Consumer<Preferences>(builder: (context, prefs, child) {
       return MaterialApp(
-          title: 'Parichaya',
-          theme: globalTheme,
-          debugShowCheckedModeBanner: false,
-          initialRoute: prefs.jwtToken.isEmpty
-              ? LoginScreen.routeName
-              : MobilePinScreen.routeName,
-          routes: {
-            HomeScreen.routeName: (ctx) => const HomeScreen(),
-            ErrorScreen.routeName: (ctx) => const ErrorScreen(),
-            SettingsScreen.routeName: (ctx) => const SettingsScreen(),
-            LoginScreen.routeName: (ctx) => const LoginScreen(),
-            LoginMobileScreen.routeName: (ctx) => const LoginMobileScreen(),
-            LoginOtpScreen.routeName: (ctx) => const LoginOtpScreen(),
-            DataPermissionScreen.routeName: (ctx) =>
-                const DataPermissionScreen(),
-            QrScanScreen.routeName: (ctx) => const QrScanScreen(),
-            QrShareScreen.routeName: (ctx) => const QrShareScreen(),
-            NationalIdentityScreen.routeName: (ctx) =>
-                const NationalIdentityScreen(),
-            DrivingLicenseScreen.routeName: (ctx) =>
-                const DrivingLicenseScreen(),
-            CitizenshipScreen.routeName: (ctx) => const CitizenshipScreen(),
-            MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
-            SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
-            ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
-          });
+        title: 'Parichaya',
+        theme: globalTheme,
+        debugShowCheckedModeBanner: false,
+        initialRoute: prefs.jwtToken.isEmpty
+            ? LoginScreen.routeName
+            : MobilePinScreen.routeName,
+        routes: {
+          HomeScreen.routeName: (ctx) => const HomeScreen(),
+          ErrorScreen.routeName: (ctx) => const ErrorScreen(),
+          SettingsScreen.routeName: (ctx) => const SettingsScreen(),
+          LoginScreen.routeName: (ctx) => const LoginScreen(),
+          LoginMobileScreen.routeName: (ctx) => const LoginMobileScreen(),
+          LoginOtpScreen.routeName: (ctx) => const LoginOtpScreen(),
+          DataPermissionScreen.routeName: (ctx) => const DataPermissionScreen(),
+          QrScanScreen.routeName: (ctx) => const QrScanScreen(),
+          QrShareScreen.routeName: (ctx) => const QrShareScreen(),
+          NationalIdentityScreen.routeName: (ctx) =>
+              const NationalIdentityScreen(),
+          DrivingLicenseScreen.routeName: (ctx) => const DrivingLicenseScreen(),
+          CitizenshipScreen.routeName: (ctx) => const CitizenshipScreen(),
+          MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
+          SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
+          ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
+        },
+      );
     });
   }
 }

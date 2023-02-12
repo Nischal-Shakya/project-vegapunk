@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -10,6 +12,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:parichaya_frontend/providers/all_data.dart';
 import '../url.dart';
 import '../providers/preferences.dart';
+import '../providers/internet_connectivity.dart';
 
 import 'package:hive/hive.dart';
 
@@ -26,6 +29,9 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   late String otp;
   String currentText = "";
   final formKey = GlobalKey<FormState>();
+
+  ConnectionStatusSingleton connectionStatus =
+      ConnectionStatusSingleton.getInstance();
 
   @override
   void dispose() {
@@ -127,21 +133,32 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           InkWell(
-            onTap: () {
-              http.post(Uri.parse(postMobileAndNinUrl), body: {
-                "NIN": resendOtp[0],
-                "mobile_number": "+977${resendOtp[1]}"
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    "OTP has been resent",
-                    style: TextStyle(color: Colors.white),
+            onTap: () async {
+              await connectionStatus.checkConnection();
+
+              if (connectionStatus.hasConnection) {
+                http.post(Uri.parse(postMobileAndNinUrl), body: {
+                  "NIN": resendOtp[0],
+                  "mobile_number": "+977${resendOtp[1]}"
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "OTP has been resent",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Colors.grey,
                   ),
-                  duration: Duration(seconds: 2),
-                  backgroundColor: Colors.grey,
-                ),
-              );
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("No Internet Connection"),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
             },
             child: Container(
               height: 50,
@@ -163,46 +180,41 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
           ),
           InkWell(
             onTap: () async {
-              try {
-                debugPrint("Sending Otp");
-                var response = await http.post(Uri.parse(postOtp), body: {
-                  "NIN": resendOtp[0],
-                  "mobile_number": "+977${resendOtp[1]}",
-                  "otp": otp
-                });
+              await connectionStatus.checkConnection();
 
-                if (response.statusCode >= 400) {
-                  // ignore: use_build_context_synchronously
+              try {
+                if (connectionStatus.hasConnection) {
+                  debugPrint("Sending Otp");
+                  var response = await http.post(Uri.parse(postOtp), body: {
+                    "NIN": resendOtp[0],
+                    "mobile_number": "+977${resendOtp[1]}",
+                    "otp": otp
+                  });
+
+                  if (response.statusCode >= 400) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Invalid OTP"),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  } else {
+                    final String token = json.decode(response.body)["token"];
+                    prefs.setJwtToken(token);
+                    log("token : $token");
+                    Hive.box("allData").put("token", token);
+                    data.putData("ninNumber", resendOtp[0]);
+                    data.putData("mobileNumber", resendOtp[1]);
+                    Navigator.pushReplacementNamed(
+                        context, SetupPinScreen.routeName);
+                  }
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("Invalid OTP"),
+                      content: Text("No Internet Connection"),
                       duration: Duration(seconds: 2),
                     ),
                   );
-                } else {
-                  final String token = json.decode(response.body)["token"];
-                  prefs.setJwtToken(token);
-                  log("token : $token");
-                  Hive.box("allData").put("token", token);
-                  data.putData("ninNumber", resendOtp[0]);
-                  data.putData("mobileNumber", resendOtp[1]);
-                  // ignore: use_build_context_synchronously
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Fetching Data...",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      // duration: Duration(seconds: 2),
-                      backgroundColor: Colors.grey,
-                    ),
-                  );
-                  data.storeAllDataInBox(token).then((_) {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SetupPinScreen()));
-                  });
                 }
               } catch (err) {
                 ScaffoldMessenger.of(context).showSnackBar(

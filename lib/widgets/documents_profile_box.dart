@@ -59,8 +59,7 @@ class DocumentsProfileBox extends StatelessWidget {
                               ),
                               Text(
                                 'National Identity Number',
-                                style:
-                                    Theme.of(context).textTheme.headlineLarge,
+                                style: Theme.of(context).textTheme.labelSmall,
                               ),
                             ],
                           ),
