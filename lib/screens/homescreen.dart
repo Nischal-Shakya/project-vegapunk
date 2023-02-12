@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     statusBarColor: Colors.transparent),
                 // automaticallyImplyLeading: false,
                 title: Text('PARICHAYA',
-                    style: Theme.of(context).textTheme.headline3),
+                    style: Theme.of(context).textTheme.headlineSmall),
                 titleSpacing: 0,
                 leading: Icon(
                   Icons.account_circle_sharp,
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 title: Text(_pageIndex.last == 2 ? 'History' : 'More',
-                    style: Theme.of(context).textTheme.headline3),
+                    style: Theme.of(context).textTheme.headlineSmall),
                 titleSpacing: 0,
                 elevation: 1,
                 backgroundColor: Colors.white,

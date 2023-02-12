@@ -16,45 +16,45 @@ class GlobalTheme {
       behavior: SnackBarBehavior.floating,
     ),
     textTheme: const TextTheme(
-      headline1: TextStyle(
+      headlineLarge: TextStyle(
         color: customBackgroundWhite,
         fontSize: 28,
         fontWeight: FontWeight.bold,
       ),
-      headline2: TextStyle(
+      headlineMedium: TextStyle(
         color: customBackgroundWhite,
         fontSize: 24,
         fontWeight: FontWeight.bold,
       ),
-      headline3: TextStyle(
+      headlineSmall: TextStyle(
         color: customBlue,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
-      headline4: TextStyle(
+      titleLarge: TextStyle(
         color: customBlue,
         fontSize: 40,
         fontWeight: FontWeight.bold,
       ),
-      bodyText1: TextStyle(
+      bodyLarge: TextStyle(
         fontSize: 22,
         color: customBlue,
       ),
-      bodyText2: TextStyle(
+      bodyMedium: TextStyle(
         color: customBlue,
         fontSize: 16,
         fontWeight: FontWeight.bold,
       ),
-      subtitle1: TextStyle(
+      labelLarge: TextStyle(
         fontSize: 14,
         color: Colors.white54,
       ),
-      subtitle2: TextStyle(
+      labelMedium: TextStyle(
         fontSize: 12,
         color: Colors.black,
         fontWeight: FontWeight.w500,
       ),
-      caption: TextStyle(
+      labelSmall: TextStyle(
         color: Colors.grey,
         fontSize: 16,
         fontWeight: FontWeight.w400,

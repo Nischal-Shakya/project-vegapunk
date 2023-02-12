@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Text(
               'PARICHAYA',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
             const SizedBox(
@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Text(
               'Enter your National Identity Number\nto get started.',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.labelSmall,
               textAlign: TextAlign.center,
             ),
             SizedBox(

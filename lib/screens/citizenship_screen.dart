@@ -34,7 +34,7 @@ class _CitizenshipScreenState extends State<CitizenshipScreen> {
       appBar: AppBar(
         title: Text(
           'National Identity',
-          style: Theme.of(context).textTheme.headline3,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
       body: Padding(

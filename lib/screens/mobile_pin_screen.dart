@@ -51,7 +51,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
             Center(
               child: Text(
                 'PARICHAYA',
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             SizedBox(
@@ -166,7 +166,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
               children: [
                 Text(
                   "Forgot MPIN? ",
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
                 GestureDetector(
                   child: const Text("Reset"),
@@ -190,7 +190,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
                     "OR",
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ),
                 const Expanded(child: Divider(color: Colors.grey)),
