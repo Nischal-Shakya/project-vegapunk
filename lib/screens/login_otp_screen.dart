@@ -66,14 +66,14 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
           children: [
             Text(
               'Verification Code',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
               'Enter the verification code sent via SMS to +977*******${resendOtp[1].substring(7)}',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.labelSmall,
             ),
             SizedBox(
               height: customHeight * 0.05,

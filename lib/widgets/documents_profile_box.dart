@@ -40,7 +40,7 @@ class DocumentsProfileBox extends StatelessWidget {
                     children: [
                       Text(
                         fullName,
-                        style: Theme.of(context).textTheme.headline1,
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
                       const SizedBox(
                         height: 10,
@@ -54,11 +54,13 @@ class DocumentsProfileBox extends StatelessWidget {
                                 nIN.length > 13
                                     ? "${nIN.substring(0, 10)}..."
                                     : nIN,
-                                style: Theme.of(context).textTheme.headline2,
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
                               ),
                               Text(
                                 'National Identity Number',
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style:
+                                    Theme.of(context).textTheme.headlineLarge,
                               ),
                             ],
                           ),
@@ -101,7 +103,7 @@ class DocumentsProfileBox extends StatelessWidget {
                 border: Border.all(
                     color: Theme.of(context).colorScheme.background,
                     width: 5,
-                    strokeAlign: StrokeAlign.outside),
+                    strokeAlign: BorderSide.strokeAlignOutside),
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(100),
               ),

@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/screens/age_verification_screen.dart';
 import 'dart:convert';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:http/http.dart' as http;
-
-import '../url.dart';
 
 import './data_transfer_permission_screen.dart';
 
@@ -184,7 +181,7 @@ class _QrScanScreenState extends State<QrScanScreen>
             //     await http.get(Uri.parse('$getDataQrUrl/$requestId/'));
             // Map decodedData = json.decode(response.body);
             Map decodedData = json.decode(requestId);
-            log(decodedData['permit_id'].toString());
+            log(decodedData.toString());
 
             if (isShareScanScreen) {
               if (decodedData.containsKey('request_id') &&

@@ -64,14 +64,14 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
           children: [
             Text(
               'Setup MPIN',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
               'Set up your account with a 4 digit MPIN',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.labelSmall,
             ),
             SizedBox(
               height: customHeight * 0.05,
