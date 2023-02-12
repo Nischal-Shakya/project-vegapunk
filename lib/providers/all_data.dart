@@ -13,19 +13,21 @@ class AllData {
         .get(Uri.parse(getDataUrl), headers: {"Authorization": "Token $token"});
     log("Storing Data");
     thisBox.put("data", response.body);
+    thisBox.put("firstLogin", "false");
   }
 
   void putData(String dataKey, String data) {
     thisBox.put(dataKey, data);
   }
 
-  void getData(String dataKey) {
-    thisBox.get(dataKey);
+  String getData(String dataKey) {
+    return thisBox.get(dataKey);
   }
 
   void deleteDataFromBox() {
     log("Deleting Data");
-    thisBox.deleteAll(["data", "token", "mpin", "ninNumber", "mobileNumber"]);
+    thisBox.deleteAll(
+        ["data", "token", "mpin", "ninNumber", "mobileNumber", "firstLogin"]);
   }
 
   List get allDocumentTypes {

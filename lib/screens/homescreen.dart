@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/screens/documents_screen.dart';
+import 'package:parichaya_frontend/screens/error_screen.dart';
+import 'package:provider/provider.dart';
+import '../providers/all_data.dart';
+import '../providers/internet_connectivity.dart';
 
 import '../custom_icons/custom_icons.dart';
 import 'qr_scan_screen.dart';
@@ -18,6 +22,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final List<int> _pageIndex = [0];
+  bool isFirstLoading = true;
+
+  ConnectionStatusSingleton connectionStatus =
+      ConnectionStatusSingleton.getInstance();
 
   static const List<Widget> homeScreenWidgets = [
     DocumentsScreen(),
@@ -25,6 +33,37 @@ class _HomeScreenState extends State<HomeScreen> {
     HistoryScreen(),
     MoreScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    final data = Provider.of<AllData>(context, listen: false);
+    final String token = Provider.of<AllData>(context, listen: false).token;
+    String firstLogin = data.getData("firstLogin");
+    await connectionStatus.checkConnection();
+
+    if (isFirstLoading && connectionStatus.hasConnection) {
+      data.storeAllDataInBox(token).then((_) {
+        setState(() {
+          isFirstLoading = false;
+          debugPrint("Internet Connection Found");
+        });
+      });
+    } else if (firstLogin == "true") {
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacementNamed(context, ErrorScreen.routeName);
+    } else {
+      setState(() {
+        isFirstLoading = false;
+        debugPrint("Internet Connection Not Found");
+      });
+    }
+    super.didChangeDependencies();
+  }
 
   Future<bool> _onWillPop() async {
     if (_pageIndex.last == 0) {
@@ -39,6 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final data = Provider.of<AllData>(context, listen: false);
+    final String token = Provider.of<AllData>(context, listen: false).token;
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -91,11 +133,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 elevation: 1,
                 backgroundColor: Colors.white,
               ),
-        body: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 550),
-          switchInCurve: Curves.easeInSine,
-          child: homeScreenWidgets[_pageIndex.last],
-        ),
+        body: isFirstLoading
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    CircularProgressIndicator(),
+                    Text("Fetching Data")
+                  ],
+                ),
+              )
+            : RefreshIndicator(
+                onRefresh: () {
+                  return data.storeAllDataInBox(token).then((_) {
+                    setState(() {});
+                  });
+                },
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 550),
+                  switchInCurve: Curves.easeInSine,
+                  child: homeScreenWidgets[_pageIndex.last],
+                ),
+              ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _pageIndex.last,
