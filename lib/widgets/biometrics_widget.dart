@@ -22,14 +22,19 @@ class LocalAuthApi {
 
   static Future<bool> authenticate() async {
     final isAvailable = await hasBiometrics();
-    if (!isAvailable) return false;
-
-    try {
-      return await _auth.authenticate(
-          localizedReason: 'Scan Fingerprint to Authenticate',
-          options: const AuthenticationOptions(biometricOnly: true));
-    } on PlatformException {
+    if (!isAvailable) {
       return false;
     }
+
+    return await _auth.authenticate(
+        localizedReason: 'Scan Fingerprint to Authenticate',
+        options: const AuthenticationOptions(
+          biometricOnly: true,
+          stickyAuth: true,
+        ));
+    // try {
+    // } on PlatformException {
+    //   return false;
+    // }
   }
 }

@@ -21,6 +21,9 @@ class ErrorScreen extends StatelessWidget {
                 color: Colors.red,
               ),
             ),
+            const SizedBox(
+              height: 50,
+            ),
             TextButton(
                 onPressed: () {
                   Navigator.of(context).popAndPushNamed(HomeScreen.routeName);

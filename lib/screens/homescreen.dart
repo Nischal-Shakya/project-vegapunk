@@ -139,6 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     CircularProgressIndicator(),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text("Fetching Data")
                   ],
                 ),

@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import './data_transfer_permission_screen.dart';
+import '../providers/internet_connectivity.dart';
 
 class QrScanScreen extends StatefulWidget {
   const QrScanScreen({super.key});
@@ -20,20 +21,26 @@ class _QrScanScreenState extends State<QrScanScreen>
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
+  ConnectionStatusSingleton connectionStatus =
+      ConnectionStatusSingleton.getInstance();
 
-  bool isShareScanScreen = true;
+  // TabController? _tabController;
 
-  TabController? _tabController;
+  // @override
+  // void initState() {
+  //   _tabController = TabController(vsync: this, length: 2);
+  //   super.initState();
+  // }
 
   @override
-  void initState() {
-    _tabController = TabController(vsync: this, length: 2);
-    super.initState();
+  void didChangeDependencies() async {
+    await connectionStatus.checkConnection();
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    _tabController!.dispose();
+    // _tabController!.dispose();
     controller?.dispose();
     super.dispose();
   }
@@ -73,53 +80,11 @@ class _QrScanScreenState extends State<QrScanScreen>
           alignment: Alignment.topCenter,
           children: <Widget>[
             _buildQrView(context),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: AppBar().preferredSize.height * 1.5,
-                  left: 20.0,
-                  right: 20.0),
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(
-                    5.0,
-                  ),
-                ),
-                child: TabBar(
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      5.0,
-                    ),
-                    color: Theme.of(context).colorScheme.primary,
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.black,
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(text: 'Share'),
-                    Tab(text: 'View'),
-                  ],
-                  onTap: (value) {
-                    if (_tabController!.index == 0) {
-                      setState(() {
-                        isShareScanScreen = true;
-                      });
-                    } else {
-                      setState(() {
-                        isShareScanScreen = false;
-                      });
-                    }
-                  },
-                ),
-              ),
-            ),
             Positioned(
               top: customHeight / 5,
-              child: Text(
-                'Scan to ${isShareScanScreen ? 'share your ID details' : 'view shared ID details'}',
-                style: const TextStyle(
+              child: const Text(
+                'Scan to share your  details',
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.normal,
                   color: Colors.white,
@@ -170,56 +135,53 @@ class _QrScanScreenState extends State<QrScanScreen>
       content: Text('Invalid Qr Code'),
       duration: Duration(seconds: 2),
     );
+
     controller.scannedDataStream.listen(
       (scanData) async {
         controller.pauseCamera();
-        try {
+        if (connectionStatus.hasConnection) {
+          // try {
           String requestId = scanData.code.toString();
+          // log(requestId);
+          // if (requestId.isNotEmpty) {
+          // var response =
+          //     await http.get(Uri.parse('$getDataQrUrl/$requestId/'));
+          // Map decodedData = json.decode(response.body);
+          Map decodedData = json.decode(requestId);
 
-          if (requestId.isNotEmpty) {
-            // var response =
-            //     await http.get(Uri.parse('$getDataQrUrl/$requestId/'));
-            // Map decodedData = json.decode(response.body);
-            Map decodedData = json.decode(requestId);
-            log(decodedData.toString());
-
-            if (isShareScanScreen) {
-              if (decodedData.containsKey('request_id') &&
-                  decodedData['request_id'].toString().isNotEmpty &&
-                  decodedData.containsKey('requested_fields') &&
-                  // decodedData['reuested_fields'] is List &&
-                  decodedData['requested_fields'].length > 0 &&
-                  decodedData.containsKey('requester') &&
-                  decodedData['requester'].toString().isNotEmpty) {
-                // ignore: use_build_context_synchronously
-                Navigator.pushNamed(context, DataPermissionScreen.routeName,
-                    arguments: decodedData);
-              } else {
-                // ignore: use_build_context_synchronously
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Invalid data'),
-                  duration: Duration(seconds: 2),
-                ));
-                controller.resumeCamera();
-              }
-            } else {
-              if (decodedData.containsKey('permit_id')) {
-                Navigator.pushNamed(context, AgeVerificationScreen.routeName);
-              } else {
-                // ignore: use_build_context_synchronously
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Invalid data'),
-                  duration: Duration(seconds: 2),
-                ));
-                controller.resumeCamera();
-              }
-            }
+          if (decodedData.containsKey('request_id') &&
+              decodedData['request_id'].toString().isNotEmpty &&
+              decodedData.containsKey('requested_fields') &&
+              decodedData['requested_fields'].length > 0 &&
+              decodedData.containsKey('requester') &&
+              decodedData['requester'].toString().isNotEmpty) {
+            Navigator.pushReplacementNamed(
+                context, DataPermissionScreen.routeName,
+                arguments: decodedData);
+          } else if (decodedData.containsKey('permit_id')) {
+            log(decodedData['permit_id'].toString());
+            Navigator.pushReplacementNamed(
+                context, AgeVerificationScreen.routeName);
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Invalid data'),
+              duration: Duration(seconds: 2),
+            ));
             controller.resumeCamera();
           }
-        } catch (error) {
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          // } else {
+          //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //   controller.resumeCamera();
+          // }
+          // } catch (error) {
+          //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //   controller.resumeCamera();
+          // }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('No Internet Access'),
+            duration: Duration(seconds: 2),
+          ));
           controller.resumeCamera();
         }
       },

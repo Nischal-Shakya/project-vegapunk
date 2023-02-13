@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:parichaya_frontend/screens/citizenship_screen.dart';
-import 'package:parichaya_frontend/screens/driving_license_screen.dart';
+import 'package:parichaya_frontend/screens/age_verification_screen.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:parichaya_frontend/screens/settings_screen.dart';
@@ -19,7 +18,7 @@ import './screens/login_screen.dart';
 import './screens/login_mobile_screen.dart';
 import './screens/login_otp_screen.dart';
 import './screens/data_transfer_permission_screen.dart';
-import './screens/national_id_screen.dart';
+import 'screens/document_detail_screen.dart';
 import './screens/mobile_pin_screen.dart';
 import './screens/setup_pin_screen.dart';
 import './screens/change_pin_screen.dart';
@@ -71,13 +70,12 @@ class MyApp extends StatelessWidget {
           DataPermissionScreen.routeName: (ctx) => const DataPermissionScreen(),
           QrScanScreen.routeName: (ctx) => const QrScanScreen(),
           QrShareScreen.routeName: (ctx) => const QrShareScreen(),
-          NationalIdentityScreen.routeName: (ctx) =>
-              const NationalIdentityScreen(),
-          DrivingLicenseScreen.routeName: (ctx) => const DrivingLicenseScreen(),
-          CitizenshipScreen.routeName: (ctx) => const CitizenshipScreen(),
+          DocumentDetailScreen.routeName: (ctx) => const DocumentDetailScreen(),
           MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
           SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
           ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
+          AgeVerificationScreen.routeName: (ctx) =>
+              const AgeVerificationScreen(),
         },
       );
     });

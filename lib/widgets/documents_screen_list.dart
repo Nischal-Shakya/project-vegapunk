@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/models/conversion.dart';
+import 'package:parichaya_frontend/screens/document_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/all_data.dart';
-
-import '../screens/error_screen.dart';
 
 class DocumentsScreenList extends StatelessWidget {
   const DocumentsScreenList({super.key});
@@ -31,11 +30,8 @@ class DocumentsScreenList extends StatelessWidget {
           shadowColor: Theme.of(context).colorScheme.shadow,
           child: InkWell(
             onTap: () {
-              Navigator.pushNamed(
-                  context,
-                  index > (allDocumentTypes.length - 1)
-                      ? ErrorScreen.routeName
-                      : allDocumentTypes[index]);
+              Navigator.pushNamed(context, DocumentDetailScreen.routeName,
+                  arguments: allDocumentTypes[index]);
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -45,9 +41,9 @@ class DocumentsScreenList extends StatelessWidget {
                     margin: const EdgeInsets.only(right: 10),
                     width: 50,
                     height: 50,
-                    child: Image.network(
-                      'https://i0.wp.com/www.tipsnepal.com/wp-content/uploads/2021/10/smart-driving-license_20200111094935.jpg?fit=960%2C589&quality=100&strip=all&ssl=1',
-                      fit: BoxFit.fill,
+                    child: Image.asset(
+                      'assets/images/${allDocumentTypes[index]}.png',
+                      fit: BoxFit.contain,
                     ),
                   ),
                   Expanded(

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:parichaya_frontend/providers/all_data.dart';
 import 'package:parichaya_frontend/screens/login_otp_screen.dart';
 import 'package:parichaya_frontend/screens/homescreen.dart';
+import '../providers/internet_connectivity.dart';
+import 'package:http/http.dart' as http;
+import '../url.dart';
 
 import '../widgets/biometrics_widget.dart';
 
@@ -21,6 +26,8 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
   String pin = "";
   bool pinObscure = true;
   final formKey = const Key("1");
+  ConnectionStatusSingleton connectionStatus =
+      ConnectionStatusSingleton.getInstance();
 
   final pinFocusNode = FocusNode();
 
@@ -36,6 +43,8 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
     final data = Provider.of<AllData>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
+    final String ninNumber = data.getData("ninNumber");
+    final String mobileNumber = data.getData("mobileNumber");
 
     return Scaffold(
       appBar: AppBar(
@@ -167,16 +176,26 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
               children: [
                 Text(
                   "Forgot MPIN? ",
-                  style: Theme.of(context).textTheme.labelSmall,
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
                 GestureDetector(
                   child: const Text("Reset"),
-                  onTap: () {
-                    Navigator.pushNamed(context, LoginOtpScreen.routeName,
-                        arguments: [
-                          data.getData("ninNumber"),
-                          data.getData("mobileNumber")
-                        ]);
+                  onTap: () async {
+                    await connectionStatus.checkConnection();
+                    if (connectionStatus.hasConnection) {
+                      debugPrint("sending mobile and nin");
+                      http.post(Uri.parse(postMobileAndNinUrl), body: {
+                        "NIN": ninNumber,
+                        "mobile_number": "+977$mobileNumber"
+                      });
+                      Navigator.pushNamed(context, LoginOtpScreen.routeName,
+                          arguments: [ninNumber, mobileNumber]);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("No Internet Access"),
+                        duration: Duration(seconds: 2),
+                      ));
+                    }
                   },
                 ),
               ],
@@ -219,8 +238,8 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                 ),
                 onTap: () async {
                   final isAuthenticated = await LocalAuthApi.authenticate();
+                  debugPrint(isAuthenticated.toString());
                   if (isAuthenticated) {
-                    // ignore: use_build_context_synchronously
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         HomeScreen.routeName, (Route<dynamic> route) => false);
                   }

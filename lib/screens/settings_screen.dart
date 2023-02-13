@@ -12,7 +12,11 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+          title: Text(
+        'Settings',
+        style: Theme.of(context).textTheme.headlineMedium,
+      )),
       body: Column(
         children: [
           const SizedBox(
@@ -20,15 +24,6 @@ class SettingsScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView(children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: customWidth * 0.05, vertical: 10),
-                child: InkWell(
-                  child:
-                      const SettingsListViewHelper(option: 'Setup Biometrics'),
-                  onTap: () async {},
-                ),
-              ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: customWidth * 0.05, vertical: 10),
