@@ -1,5 +1,5 @@
 {
-    "id": "3dae1646-b194-4830-8d90-aa5dcfd7e693",
+    "request_id": "3dae1646-b194-4830-8d90-aa5dcfd7e693",
     "requester": "NIC Asia Bank Ltd.",
     "requested_fields": [
         "first_name",
@@ -8,11 +8,14 @@
         "dob",
         "birthplace",
         "DVL_blood_group",
-        "CTZ_issuer"
+        "CTZ_issuer_name"
     ]
 }
 {
-    "id": "3dae1646-b194-4830-8d90-aa5dcfd7e693",
+    "permit_id": "asdasdasd"
+}
+{
+    "request_id": "3dae1646-b194-4830-8d90-aa5dcfd7e693",
     "requester": "NIC Asia Bank Ltd.",
     "requested_fields": [
         "first_name",

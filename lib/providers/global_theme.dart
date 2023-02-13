@@ -45,7 +45,7 @@ class GlobalTheme {
         fontSize: 16,
         fontWeight: FontWeight.bold,
       ),
-      labelLarge: TextStyle(
+      labelSmall: TextStyle(
         fontSize: 14,
         color: Colors.white54,
       ),
@@ -54,7 +54,7 @@ class GlobalTheme {
         color: Colors.black,
         fontWeight: FontWeight.w500,
       ),
-      labelSmall: TextStyle(
+      labelLarge: TextStyle(
         color: Colors.grey,
         fontSize: 16,
         fontWeight: FontWeight.w400,

@@ -75,6 +75,9 @@ class SendDetailsWidget extends StatelessWidget {
         SizedBox(
           height: customHeight * 0.6,
           child: ListView.builder(
+            physics: const ScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
             itemBuilder: ((context, index) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,45 +2,51 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:parichaya_frontend/models/conversion.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/all_data.dart';
 import '../widgets/document_detail_list.dart';
 
-class NationalIdentityScreen extends StatefulWidget {
-  const NationalIdentityScreen({super.key});
+class DocumentDetailScreen extends StatefulWidget {
+  const DocumentDetailScreen({super.key});
 
-  static const routeName = 'NID';
+  static const routeName = '/document_detail_screen';
 
   @override
-  State<NationalIdentityScreen> createState() => _NationalIdentityScreenState();
+  State<DocumentDetailScreen> createState() => _DocumentDetailScreenState();
 }
 
-class _NationalIdentityScreenState extends State<NationalIdentityScreen> {
+class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   bool isSelectedImage = true;
   double angle = 0;
   @override
   Widget build(BuildContext context) {
-    final allNidData =
-        Provider.of<AllData>(context, listen: false).getNidData();
-    final faceImageBase64 =
-        Provider.of<AllData>(context, listen: false).nidFaceImage;
+    final docType = ModalRoute.of(context)!.settings.arguments as String;
+    final allDocumentData =
+        Provider.of<AllData>(context, listen: false).getDocumentData(docType);
+    final faceImageBase64 = Provider.of<AllData>(context, listen: false)
+        .documentFrontImage(docType);
     final faceImage = const Base64Decoder().convert(faceImageBase64);
 
-    final List fieldNames = allNidData.keys.toList();
-    final List fieldValues = allNidData.values.toList();
+    final List fieldNames = allDocumentData.keys.toList();
+    final List fieldValues = allDocumentData.values.toList();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'National Identity',
+          convertedFieldName(docType),
           style: Theme.of(context).textTheme.headlineSmall,
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        automaticallyImplyLeading: true,
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
               onTap: () {
