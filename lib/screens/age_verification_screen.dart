@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +16,7 @@ class AgeVerificationScreen extends StatefulWidget {
 }
 
 class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
-  late Map<String, dynamic> ageVerificationData;
+  // late Map<String, dynamic> ageVerificationData;
   bool isLoading = true;
 
   @override
@@ -25,10 +25,12 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
     String token = Provider.of<AllData>(context).token;
 
     var response = await http.get(Uri.parse("$getPidDataUrl/$permitId/"),
-        headers: {"Authorization": "Token $token"}).then((_) {
+        headers: {"Authorization": "Token $token"}).then((value) {
+      log(value.toString());
       isLoading = false;
     });
-    ageVerificationData = json.decode(response.toString());
+    log("response =$response");
+    // ageVerificationData = json.decode(response.toString());
     super.didChangeDependencies();
   }
 
@@ -39,8 +41,8 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Center(
-              child: Text(ageVerificationData.toString()),
+          : const Center(
+              child: Text("ageVerificationData"),
             ),
     );
   }

@@ -15,4 +15,5 @@ const postOtp = '$url/api/v1/auth/verify/';
 const getDataQrUrl = '$url/api/v1/qr/request';
 const getPermitIdUrl = '$wsUrl/ws/qr/permit';
 const getPidDataUrl = '$url/api/v1/qr/permit';
+const getHistoryUrl = '$url/api/v1/history/';
 const scanRequestApprovalUrl = '$url/api/v1/scan-request';
