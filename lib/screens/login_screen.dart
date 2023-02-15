@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Text(
               'Enter your National Identity Number\nto get started.',
-              style: Theme.of(context).textTheme.labelSmall,
+              style: Theme.of(context).textTheme.labelLarge,
               textAlign: TextAlign.center,
             ),
             SizedBox(

@@ -47,6 +47,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
       debugPrint("Sending Data Via Web Socket");
 
       webSocketChannel.stream.listen((message) {
+        debugPrint("message$message");
         if (jsonDecode(message)["type"] == "permit.create.success") {
           debugPrint("message$message");
           setState(() {
@@ -78,7 +79,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        backgroundColor: Colors.black,
+        // backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -92,7 +93,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
             : Column(
                 children: [
                   QrImage(
-                    backgroundColor: Colors.white,
+                    // backgroundColor: Colors.white,
                     data: json.encode({"permit_id": permitId}),
                     version: QrVersions.auto,
                     size: 200.0,

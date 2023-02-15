@@ -79,7 +79,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
             ),
             Text(
               'Enter the verification code sent via SMS to +977*******${resendOtp[1].substring(7)}',
-              style: Theme.of(context).textTheme.labelSmall,
+              style: Theme.of(context).textTheme.labelLarge,
             ),
             SizedBox(
               height: customHeight * 0.05,

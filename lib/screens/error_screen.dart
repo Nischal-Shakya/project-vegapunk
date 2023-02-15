@@ -10,25 +10,40 @@ class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: null),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              "Page not found.",
+              "Internet Not Available",
               style: TextStyle(
                 fontSize: 32,
                 color: Colors.red,
               ),
             ),
             const SizedBox(
-              height: 50,
+              height: 10,
             ),
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
-                },
-                child: const Text("Go back to homescreen."))
+            const Text(
+              "Check your internet connection",
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
+                  },
+                  child: const Text(
+                    "Go back to homescreen",
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  )),
+            )
           ],
         ),
       ),
