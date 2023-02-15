@@ -95,7 +95,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
             ),
             Text(
               'Enter the mobile number associated with your National Identity Card',
-              style: Theme.of(context).textTheme.labelSmall,
+              style: Theme.of(context).textTheme.labelLarge,
             ),
             SizedBox(
               height: customHeight * 0.05,

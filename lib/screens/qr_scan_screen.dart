@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/screens/age_verification_screen.dart';
 import 'dart:convert';
@@ -16,21 +14,12 @@ class QrScanScreen extends StatefulWidget {
   State<QrScanScreen> createState() => _QrScanScreenState();
 }
 
-class _QrScanScreenState extends State<QrScanScreen>
-    with SingleTickerProviderStateMixin {
+class _QrScanScreenState extends State<QrScanScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
   ConnectionStatusSingleton connectionStatus =
       ConnectionStatusSingleton.getInstance();
-
-  // TabController? _tabController;
-
-  // @override
-  // void initState() {
-  //   _tabController = TabController(vsync: this, length: 2);
-  //   super.initState();
-  // }
 
   @override
   void didChangeDependencies() async {
@@ -40,7 +29,6 @@ class _QrScanScreenState extends State<QrScanScreen>
 
   @override
   void dispose() {
-    // _tabController!.dispose();
     controller?.dispose();
     super.dispose();
   }
@@ -159,9 +147,9 @@ class _QrScanScreenState extends State<QrScanScreen>
                 context, DataPermissionScreen.routeName,
                 arguments: decodedData);
           } else if (decodedData.containsKey('permit_id')) {
-            log(decodedData['permit_id'].toString());
             Navigator.pushReplacementNamed(
-                context, AgeVerificationScreen.routeName);
+                context, AgeVerificationScreen.routeName,
+                arguments: decodedData['permit_id']);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text('Invalid data'),

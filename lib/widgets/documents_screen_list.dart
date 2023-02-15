@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/models/conversion.dart';
 import 'package:parichaya_frontend/screens/document_detail_screen.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/all_data.dart';
 
 class DocumentsScreenList extends StatelessWidget {
@@ -10,7 +9,7 @@ class DocumentsScreenList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final allDocumentTypes =
+    final List allDocumentTypes =
         Provider.of<AllData>(context, listen: false).allDocumentTypes;
     final double customWidth = MediaQuery.of(context).size.width;
 

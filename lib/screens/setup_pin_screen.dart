@@ -71,7 +71,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
             ),
             Text(
               'Set up your account with a 4 digit MPIN',
-              style: Theme.of(context).textTheme.labelSmall,
+              style: Theme.of(context).textTheme.labelLarge,
             ),
             SizedBox(
               height: customHeight * 0.05,
