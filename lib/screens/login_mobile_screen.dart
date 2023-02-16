@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import '../providers/internet_connectivity.dart';
+import '../providers/connectivity_change_notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:hive/hive.dart';
 
 import '../url.dart';
@@ -22,9 +23,6 @@ class LoginMobileScreen extends StatefulWidget {
 class _LoginMobileScreenState extends State<LoginMobileScreen> {
   final mobileNumbercontroller = TextEditingController();
 
-  ConnectionStatusSingleton connectionStatus =
-      ConnectionStatusSingleton.getInstance();
-
   @override
   void dispose() {
     mobileNumbercontroller.dispose();
@@ -35,12 +33,13 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
+    bool connectionStatus =
+        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
     final String ninNumber =
         ModalRoute.of(context)!.settings.arguments as String;
 
-    void submitMobileNumber() async {
-      await connectionStatus.checkConnection();
+    void submitMobileNumber() {
       if (mobileNumbercontroller.text.isEmpty ||
           mobileNumbercontroller.text.length != 10) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -48,7 +47,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
           duration: Duration(seconds: 2),
         ));
         return;
-      } else if (!connectionStatus.hasConnection) {
+      } else if (!connectionStatus) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("No Internet Access"),
           duration: Duration(seconds: 2),

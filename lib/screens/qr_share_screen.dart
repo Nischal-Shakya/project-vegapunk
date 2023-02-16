@@ -8,7 +8,7 @@ import '../providers/all_data.dart';
 import '../url.dart';
 import 'dart:convert';
 
-import '../providers/internet_connectivity.dart';
+import '../providers/connectivity_change_notifier.dart';
 
 class QrShareScreen extends StatefulWidget {
   const QrShareScreen({
@@ -25,17 +25,16 @@ class _QrShareScreenState extends State<QrShareScreen> {
   bool isLoading = true;
   late String permitId;
   late WebSocketChannel webSocketChannel;
-  ConnectionStatusSingleton connectionStatus =
-      ConnectionStatusSingleton.getInstance();
+  List<String> viewers = [];
 
   @override
-  void didChangeDependencies() async {
+  void didChangeDependencies() {
     final String token = Provider.of<AllData>(context, listen: false).token;
     final String docType = ModalRoute.of(context)!.settings.arguments as String;
+    bool connectionStatus =
+        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
-    await connectionStatus.checkConnection();
-
-    if (connectionStatus.hasConnection) {
+    if (connectionStatus) {
       webSocketChannel = WebSocketChannel.connect(
         Uri.parse('$getPermitIdUrl/?token=$token'),
       );
@@ -47,14 +46,19 @@ class _QrShareScreenState extends State<QrShareScreen> {
       debugPrint("Sending Data Via Web Socket");
 
       webSocketChannel.stream.listen((message) {
+        Map<String, dynamic> decodedMessage = jsonDecode(message);
         debugPrint("message$message");
-        if (jsonDecode(message)["type"] == "permit.create.success") {
-          debugPrint("message$message");
+        if (decodedMessage["type"] == "permit.create.success") {
+          debugPrint("message:$message");
           setState(() {
-            permitId = jsonDecode(message)["data"]["permit_id"];
+            permitId = decodedMessage["data"]["permit_id"];
             isLoading = false;
           });
           debugPrint(permitId.toString());
+        } else if (decodedMessage["type"] == "permit.accessed") {
+          setState(() {
+            viewers.add(decodedMessage["data"]["viewer"]);
+          });
         }
       });
     } else {
@@ -101,14 +105,11 @@ class _QrShareScreenState extends State<QrShareScreen> {
                   Expanded(
                     child: ListView.builder(
                       itemBuilder: ((context, index) {
-                        return const SizedBox(
-                          height: 500,
-                          child: Center(
-                            child: Text("Ramlal is viewing your Age"),
-                          ),
-                        );
+                        return Center(
+                            child: Text(
+                                "${viewers[index]} is viewing your proof of age"));
                       }),
-                      itemCount: 2,
+                      itemCount: viewers.length,
                       physics: const ScrollPhysics(
                         parent: BouncingScrollPhysics(),
                       ),

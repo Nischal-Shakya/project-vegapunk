@@ -50,8 +50,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: isLoading
+<<<<<<< HEAD
             ? const Center(child: CircularProgressIndicator())
             : ListView.separated(
+=======
+            ? const CircularProgressIndicator()
+            : ListView.builder(
+>>>>>>> main
                 itemBuilder: (context, index) {
                   return Row(
                     children: [

@@ -12,7 +12,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:parichaya_frontend/providers/all_data.dart';
 import '../url.dart';
 import '../providers/preferences.dart';
-import '../providers/internet_connectivity.dart';
+import '../providers/connectivity_change_notifier.dart';
 
 import 'package:hive/hive.dart';
 
@@ -30,9 +30,6 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   String currentText = "";
   final formKey = GlobalKey<FormState>();
 
-  ConnectionStatusSingleton connectionStatus =
-      ConnectionStatusSingleton.getInstance();
-
   @override
   void dispose() {
     textEditingController.dispose();
@@ -45,6 +42,8 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
     final data = Provider.of<AllData>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
+    bool connectionStatus =
+        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
     final List<String> resendOtp =
         ModalRoute.of(context)!.settings.arguments as List<String>;
@@ -133,10 +132,8 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           InkWell(
-            onTap: () async {
-              await connectionStatus.checkConnection();
-
-              if (connectionStatus.hasConnection) {
+            onTap: () {
+              if (connectionStatus) {
                 http.post(Uri.parse(postMobileAndNinUrl), body: {
                   "NIN": resendOtp[0],
                   "mobile_number": "+977${resendOtp[1]}"
@@ -180,10 +177,8 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
           ),
           InkWell(
             onTap: () async {
-              await connectionStatus.checkConnection();
-
               try {
-                if (connectionStatus.hasConnection) {
+                if (connectionStatus) {
                   debugPrint("Sending Otp");
                   var response = await http.post(Uri.parse(postOtp), body: {
                     "NIN": resendOtp[0],

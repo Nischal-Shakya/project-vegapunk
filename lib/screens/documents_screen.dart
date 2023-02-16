@@ -18,24 +18,35 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
     final double customWidth = MediaQuery.of(context).size.width;
     final List allDocumentTypes =
         Provider.of<AllData>(context, listen: false).allDocumentTypes;
+    final data = Provider.of<AllData>(context, listen: false);
+    final String token = Provider.of<AllData>(context, listen: false).token;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const DocumentsProfileBox(),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: customWidth * 0.08),
-          child: Text(
-            allDocumentTypes.isEmpty ? "No Document Available" : "DOCUMENTS",
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w500, fontSize: 18),
+    return RefreshIndicator(
+      onRefresh: () {
+        return data.storeAllDataInBox(token).then((_) {
+          setState(() {});
+        });
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const DocumentsProfileBox(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: customWidth * 0.08),
+            child: Text(
+              allDocumentTypes.isEmpty ? "No Document Available" : "DOCUMENTS",
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18),
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        const DocumentsScreenList(),
-      ],
+          const SizedBox(
+            height: 20,
+          ),
+          const DocumentsScreenList(),
+        ],
+      ),
     );
   }
 }

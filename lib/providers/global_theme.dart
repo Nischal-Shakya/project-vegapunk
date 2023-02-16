@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 const Color customBlue = Color(0xff0a81ff);
 const Color customBlueFaded = Color.fromARGB(255, 37, 143, 255);
-const Color customErrorRed = Color(0xFFC5032B);
 const Color customBackgroundWhite = Color(0xFFFFFBFA);
 const Color customShadow = Color.fromRGBO(26, 20, 20, 10);
 
@@ -11,7 +10,7 @@ class GlobalTheme {
     colorScheme: _customColorScheme,
     snackBarTheme: SnackBarThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      backgroundColor: customErrorRed,
+      backgroundColor: Colors.redAccent,
       contentTextStyle: const TextStyle(color: Colors.white),
       behavior: SnackBarBehavior.floating,
     ),
@@ -74,7 +73,7 @@ const ColorScheme _customColorScheme = ColorScheme(
   onBackground: Colors.black,
   surface: Colors.white70,
   onSurface: Colors.black87,
-  error: customErrorRed,
+  error: Colors.redAccent,
   onError: Colors.white,
   shadow: Colors.black45,
   brightness: Brightness.light,

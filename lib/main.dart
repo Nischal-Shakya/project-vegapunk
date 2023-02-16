@@ -10,7 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'providers/global_theme.dart';
 import 'providers/preferences.dart';
 import 'providers/all_data.dart';
-import 'providers/internet_connectivity.dart';
+import 'providers/connectivity_change_notifier.dart';
 
 import './screens/homescreen.dart';
 import './screens/error_screen.dart';
@@ -32,10 +32,6 @@ void main() async {
   final prefs = Preferences.noSync();
   await prefs.syncToSharedPreferences();
 
-  ConnectionStatusSingleton connectionStatus =
-      ConnectionStatusSingleton.getInstance();
-  connectionStatus.initialize();
-
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<Preferences>(create: (context) => prefs),
     Provider<AllData>(
@@ -53,30 +49,42 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData globalTheme = Provider.of<GlobalTheme>(context).globalTheme;
     return Consumer<Preferences>(builder: (context, prefs, child) {
-      return MaterialApp(
-        title: 'Parichaya',
-        theme: globalTheme,
-        debugShowCheckedModeBanner: false,
-        initialRoute: prefs.jwtToken.isEmpty
-            ? LoginScreen.routeName
-            : MobilePinScreen.routeName,
-        routes: {
-          HomeScreen.routeName: (ctx) => const HomeScreen(),
-          ErrorScreen.routeName: (ctx) => const ErrorScreen(),
-          SettingsScreen.routeName: (ctx) => const SettingsScreen(),
-          LoginScreen.routeName: (ctx) => const LoginScreen(),
-          LoginMobileScreen.routeName: (ctx) => const LoginMobileScreen(),
-          LoginOtpScreen.routeName: (ctx) => const LoginOtpScreen(),
-          DataPermissionScreen.routeName: (ctx) => const DataPermissionScreen(),
-          QrScanScreen.routeName: (ctx) => const QrScanScreen(),
-          QrShareScreen.routeName: (ctx) => const QrShareScreen(),
-          DocumentDetailScreen.routeName: (ctx) => const DocumentDetailScreen(),
-          MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
-          SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
-          ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
-          AgeVerificationScreen.routeName: (ctx) =>
-              const AgeVerificationScreen(),
+      return ChangeNotifierProvider(
+        create: (context) {
+          ConnectivityChangeNotifier changeNotifier =
+              ConnectivityChangeNotifier();
+          //Inital load is an async function, can use FutureBuilder to show loading
+          //screen while this function running. This is not covered in this tutorial
+          changeNotifier.initialLoad();
+          return changeNotifier;
         },
+        child: MaterialApp(
+          title: 'Parichaya',
+          theme: globalTheme,
+          debugShowCheckedModeBanner: false,
+          initialRoute: prefs.jwtToken.isEmpty
+              ? LoginScreen.routeName
+              : MobilePinScreen.routeName,
+          routes: {
+            HomeScreen.routeName: (ctx) => const HomeScreen(),
+            ErrorScreen.routeName: (ctx) => const ErrorScreen(),
+            SettingsScreen.routeName: (ctx) => const SettingsScreen(),
+            LoginScreen.routeName: (ctx) => const LoginScreen(),
+            LoginMobileScreen.routeName: (ctx) => const LoginMobileScreen(),
+            LoginOtpScreen.routeName: (ctx) => const LoginOtpScreen(),
+            DataPermissionScreen.routeName: (ctx) =>
+                const DataPermissionScreen(),
+            QrScanScreen.routeName: (ctx) => const QrScanScreen(),
+            QrShareScreen.routeName: (ctx) => const QrShareScreen(),
+            DocumentDetailScreen.routeName: (ctx) =>
+                const DocumentDetailScreen(),
+            MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
+            SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
+            ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
+            AgeVerificationScreen.routeName: (ctx) =>
+                const AgeVerificationScreen(),
+          },
+        ),
       );
     });
   }
