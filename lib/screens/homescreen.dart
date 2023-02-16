@@ -4,7 +4,7 @@ import 'package:parichaya_frontend/screens/documents_screen.dart';
 import 'package:parichaya_frontend/screens/error_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/all_data.dart';
-import '../providers/internet_connectivity.dart';
+import '../providers/connectivity_change_notifier.dart';
 
 import '../custom_icons/custom_icons.dart';
 import 'qr_scan_screen.dart';
@@ -24,9 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<int> _pageIndex = [0];
   bool isFirstLoading = true;
 
-  ConnectionStatusSingleton connectionStatus =
-      ConnectionStatusSingleton.getInstance();
-
   static const List<Widget> homeScreenWidgets = [
     DocumentsScreen(),
     QrScanScreen(),
@@ -35,22 +32,29 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() async {
     final data = Provider.of<AllData>(context, listen: false);
     final String token = Provider.of<AllData>(context, listen: false).token;
+    bool connectionStatus =
+        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
     String firstLogin = data.getData("firstLogin");
-    await connectionStatus.checkConnection();
 
-    if (isFirstLoading && connectionStatus.hasConnection) {
+    if (!isFirstLoading && !connectionStatus) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('No Internet Access'),
+        duration: Duration(seconds: 2),
+      ));
+    } else if (!isFirstLoading && connectionStatus) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Internet Connection Restored'),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.grey,
+      ));
+    }
+    if (isFirstLoading && connectionStatus) {
       data.storeAllDataInBox(token).then((_) {
         setState(() {
           isFirstLoading = false;
-          debugPrint("Internet Connection Found");
         });
       });
     } else if (firstLogin == "true") {
@@ -59,9 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       setState(() {
         isFirstLoading = false;
-        debugPrint("Internet Connection Not Found");
       });
     }
+
     super.didChangeDependencies();
   }
 
@@ -78,9 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final data = Provider.of<AllData>(context, listen: false);
-    final String token = Provider.of<AllData>(context, listen: false).token;
-
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -146,17 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               )
-            : RefreshIndicator(
-                onRefresh: () {
-                  return data.storeAllDataInBox(token).then((_) {
-                    setState(() {});
-                  });
-                },
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 550),
-                  switchInCurve: Curves.easeInSine,
-                  child: homeScreenWidgets[_pageIndex.last],
-                ),
+            : AnimatedSwitcher(
+                duration: const Duration(milliseconds: 550),
+                switchInCurve: Curves.easeInSine,
+                child: homeScreenWidgets[_pageIndex.last],
               ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,

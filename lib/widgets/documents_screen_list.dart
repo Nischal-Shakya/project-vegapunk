@@ -38,8 +38,8 @@ class DocumentsScreenList extends StatelessWidget {
                 children: [
                   Container(
                     margin: const EdgeInsets.only(right: 10),
-                    width: 50,
-                    height: 50,
+                    width: 40,
+                    height: 40,
                     child: Image.asset(
                       'assets/images/${allDocumentTypes[index]}.png',
                       fit: BoxFit.contain,

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,8 +18,9 @@ class AgeVerificationScreen extends StatefulWidget {
 }
 
 class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
-  // late Map<String, dynamic> ageVerificationData;
   bool isLoading = true;
+  late List ageVerificationDataList;
+  late Uint8List faceImage;
 
   @override
   void didChangeDependencies() async {
@@ -25,24 +28,53 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
     String token = Provider.of<AllData>(context).token;
 
     var response = await http.get(Uri.parse("$getPidDataUrl/$permitId/"),
-        headers: {"Authorization": "Token $token"}).then((value) {
-      log(value.toString());
+        headers: {"Authorization": "Token $token"});
+
+    Map<String, dynamic> ageVerificationData =
+        json.decode(response.body)["permitted_document"];
+
+    faceImage = const Base64Decoder()
+        .convert(ageVerificationData["face_image"].split(',')[1]);
+
+    ageVerificationData
+        .removeWhere((key, value) => key == "face_image" || value == null);
+
+    ageVerificationDataList = ageVerificationData.values.toList();
+
+    setState(() {
       isLoading = false;
     });
-    log("response =$response");
-    // ageVerificationData = json.decode(response.toString());
+
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : const Center(
-              child: Text("ageVerificationData"),
+          : Column(
+              children: [
+                Image.memory(faceImage),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Text(ageVerificationDataList[index]),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    );
+                  },
+                  itemCount: ageVerificationDataList.length,
+                ),
+              ],
             ),
     );
   }

@@ -3,8 +3,13 @@ import 'package:parichaya_frontend/screens/age_verification_screen.dart';
 import 'dart:convert';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import 'package:provider/provider.dart';
+
 import './data_transfer_permission_screen.dart';
-import '../providers/internet_connectivity.dart';
+import '../providers/connectivity_change_notifier.dart';
+
+import 'dart:developer';
+import 'dart:io';
 
 class QrScanScreen extends StatefulWidget {
   const QrScanScreen({super.key});
@@ -18,12 +23,12 @@ class _QrScanScreenState extends State<QrScanScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
-  ConnectionStatusSingleton connectionStatus =
-      ConnectionStatusSingleton.getInstance();
+  late bool connectionStatus;
 
   @override
-  void didChangeDependencies() async {
-    await connectionStatus.checkConnection();
+  void didChangeDependencies() {
+    connectionStatus =
+        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
     super.didChangeDependencies();
   }
 
@@ -31,6 +36,24 @@ class _QrScanScreenState extends State<QrScanScreen> {
   void dispose() {
     controller?.dispose();
     super.dispose();
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    }
+    controller!.resumeCamera();
+  }
+
+  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
+    log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+    if (!p) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No Permission')),
+      );
+    }
   }
 
   @override
@@ -58,7 +81,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                   Colors.transparent
                 ],
                 stops: const [0, 0.55, 0.6, 1],
-                center: const FractionalOffset(0.4, 0.95),
+                // center: const FractionalOffset(0.4, 0.95),
               ).createShader(bounds);
             }),
             child: child,
@@ -103,17 +126,17 @@ class _QrScanScreenState extends State<QrScanScreen> {
         ? 240.0
         : 400.0;
     return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-        borderColor: Theme.of(context).colorScheme.primary,
-        borderRadius: 5,
-        borderLength: 20,
-        borderWidth: 5,
-        cutOutSize: scanArea,
-        overlayColor: Colors.black.withOpacity(0.8),
-      ),
-    );
+        key: qrKey,
+        onQRViewCreated: _onQRViewCreated,
+        overlay: QrScannerOverlayShape(
+          borderColor: Theme.of(context).colorScheme.primary,
+          borderRadius: 5,
+          borderLength: 20,
+          borderWidth: 5,
+          cutOutSize: scanArea,
+          overlayColor: Colors.black.withOpacity(0.8),
+        ),
+        onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p));
   }
 
   void _onQRViewCreated(QRViewController controller) {
@@ -127,7 +150,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
     controller.scannedDataStream.listen(
       (scanData) async {
         controller.pauseCamera();
-        if (connectionStatus.hasConnection) {
+        if (connectionStatus) {
           // try {
           String requestId = scanData.code.toString();
           // log(requestId);

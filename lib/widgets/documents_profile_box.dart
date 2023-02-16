@@ -93,7 +93,10 @@ class DocumentsProfileBox extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(100),
             onTap: () {
-              Navigator.pushNamed(context, QrScanScreen.routeName);
+              Navigator.of(context)
+                  .push(PageRouteBuilder(pageBuilder: (context, animation, _) {
+                return const QrScanScreen();
+              }));
             },
             child: Container(
               width: 64,
