@@ -5,10 +5,12 @@
 //pp number = 699-526-518-7
 //mob number =9851228881
 
-const url = 'http://192.168.100.54:8000';
-const wsUrl = 'ws://192.168.100.54:8000';
+// const url = 'http://192.168.100.54:8000';
+// const wsUrl = 'ws://192.168.100.54:8000';
 // const url = 'http://192.168.1.70:8000';
 // const wsUrl = 'ws://192.168.1.70:8000';
+const url = 'http://65.109.161.97:8000';
+const wsUrl = 'ws://65.109.161.97:8000';
 const getDataUrl = '$url/api/v1/identity/documents/';
 const postMobileAndNinUrl = '$url/api/v1/auth/';
 const postOtp = '$url/api/v1/auth/verify/';

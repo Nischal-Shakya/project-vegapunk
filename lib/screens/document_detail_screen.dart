@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/models/conversion.dart';
@@ -43,7 +44,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
         Provider.of<AllData>(context, listen: false).getDocumentData(docType);
     final faceImageBase64 = Provider.of<AllData>(context, listen: false)
         .documentFrontImage(docType);
-    final faceImage = const Base64Decoder().convert(faceImageBase64);
+    final Uint8List faceImage = const Base64Decoder().convert(faceImageBase64);
 
     final List fieldNames = allDocumentData.keys.toList();
     final List fieldValues = allDocumentData.values.toList();
@@ -135,7 +136,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                         },
                         child: TweenAnimationBuilder(
                             tween: Tween<double>(begin: 0, end: angle),
-                            duration: const Duration(seconds: 1),
+                            duration: const Duration(milliseconds: 600),
                             builder: (context, value, _) {
                               if (value >= (pi / 2)) {
                                 isSelectedImage = false;
@@ -151,7 +152,6 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                                   padding: const EdgeInsets.all(10),
                                   width: 150,
                                   height: 150,
-                                  // color: Theme.of(context).colorScheme.primary,
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                     color:

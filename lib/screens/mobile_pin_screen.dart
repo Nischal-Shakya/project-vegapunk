@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:parichaya_frontend/providers/all_data.dart';
 import 'package:parichaya_frontend/screens/login_otp_screen.dart';
 import 'package:parichaya_frontend/screens/homescreen.dart';
-import '../providers/internet_connectivity.dart';
+import '../providers/connectivity_change_notifier.dart';
 import 'package:http/http.dart' as http;
 import '../url.dart';
 
@@ -26,8 +26,6 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
   String pin = "";
   bool pinObscure = true;
   final formKey = const Key("1");
-  ConnectionStatusSingleton connectionStatus =
-      ConnectionStatusSingleton.getInstance();
 
   final pinFocusNode = FocusNode();
 
@@ -45,6 +43,8 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
     final double customHeight = MediaQuery.of(context).size.height;
     final String ninNumber = data.getData("ninNumber");
     final String mobileNumber = data.getData("mobileNumber");
+    bool connectionStatus =
+        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
     return Scaffold(
       appBar: AppBar(
@@ -180,9 +180,8 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                 ),
                 GestureDetector(
                   child: const Text("Reset"),
-                  onTap: () async {
-                    await connectionStatus.checkConnection();
-                    if (connectionStatus.hasConnection) {
+                  onTap: () {
+                    if (connectionStatus) {
                       debugPrint("sending mobile and nin");
                       http.post(Uri.parse(postMobileAndNinUrl), body: {
                         "NIN": ninNumber,
