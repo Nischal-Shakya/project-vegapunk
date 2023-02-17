@@ -131,31 +131,41 @@ class _QrShareScreenState extends State<QrShareScreen> {
                         version: QrVersions.auto,
                         size: 200.0,
                       ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemBuilder: ((context, index) {
-                            return viewers.isEmpty
-                                ? const Text(
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black),
-                                    "Scan this Qr Code to view User's Information.")
-                                : Text(
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black),
-                                    "${viewers[index]} is viewed your proof of age");
-                          }),
-                          itemCount: viewers.length,
-                          physics: const ScrollPhysics(
-                            parent: BouncingScrollPhysics(),
-                          ),
-                        ),
-                      ),
+                      viewers.isEmpty
+                          ? const Text(
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.black),
+                              "Scan this Qr Code to view User's Information.")
+                          : Expanded(
+                              child: ListView.builder(
+                                itemBuilder: ((context, index) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        weight: 10,
+                                        Icons.person,
+                                        color: Colors.blue,
+                                      ),
+                                      Text(
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.black),
+                                          "${viewers[index]} is viewed your proof of age"),
+                                    ],
+                                  );
+                                }),
+                                itemCount: viewers.length,
+                                physics: const ScrollPhysics(
+                                  parent: BouncingScrollPhysics(),
+                                ),
+                              ),
+                            ),
                     ],
                   ),
                 ),
