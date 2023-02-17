@@ -69,19 +69,21 @@ class MoreScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: customWidth * 0.05, vertical: 10),
-                child: InkWell(
-                  child: const SettingsListViewHelper(option: 'Logout'),
-                  onTap: () {
-                    AllData().deleteDataFromBox();
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      LoginScreen.routeName,
-                      (route) => false,
-                    );
-                  },
+              Card(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: customWidth * 0.05, vertical: 10),
+                  child: InkWell(
+                    child: const SettingsListViewHelper(option: 'Logout'),
+                    onTap: () {
+                      AllData().deleteDataFromBox();
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        LoginScreen.routeName,
+                        (route) => false,
+                      );
+                    },
+                  ),
                 ),
               ),
             ]),
