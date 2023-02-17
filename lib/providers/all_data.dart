@@ -30,7 +30,7 @@ class AllData {
   }
 
   String getData(String dataKey) {
-    return thisBox.get(dataKey);
+    return thisBox.get(dataKey) ?? "";
   }
 
   void deleteDataFromBox() {

@@ -146,11 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               )
-            : AnimatedSwitcher(
-                duration: const Duration(milliseconds: 550),
-                switchInCurve: Curves.easeInSine,
-                child: homeScreenWidgets[_pageIndex.last],
-              ),
+            : homeScreenWidgets[_pageIndex.last],
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _pageIndex.last,
