@@ -9,9 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import 'package:parichaya_frontend/providers/all_data.dart';
 import '../url.dart';
-import '../providers/preferences.dart';
 import '../providers/connectivity_change_notifier.dart';
 
 import 'package:hive/hive.dart';
@@ -38,8 +36,6 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final prefs = Provider.of<Preferences>(context, listen: false);
-    final data = Provider.of<AllData>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
     bool connectionStatus =
@@ -195,11 +191,10 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                     );
                   } else {
                     final String token = json.decode(response.body)["token"];
-                    prefs.setJwtToken(token);
                     log("token : $token");
                     Hive.box("allData").put("token", token);
-                    data.putData("ninNumber", resendOtp[0]);
-                    data.putData("mobileNumber", resendOtp[1]);
+                    Hive.box("allData").put("ninNumber", resendOtp[0]);
+                    Hive.box("allData").put("mobileNumber", resendOtp[1]);
                     Navigator.pushReplacementNamed(
                         context, SetupPinScreen.routeName);
                   }

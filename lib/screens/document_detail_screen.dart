@@ -50,16 +50,6 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
     final List fieldValues = allDocumentData.values.toList();
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     convertedFieldName(docType),
-      //     style: Theme.of(context).textTheme.headlineSmall,
-      //   ),
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0,
-      //   automaticallyImplyLeading: true,
-      //   iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
-      // ),
       body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: <Widget>[

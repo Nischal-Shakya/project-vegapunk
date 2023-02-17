@@ -8,7 +8,11 @@ import '../url.dart';
 class AllData {
   final thisBox = Hive.box("allData");
 
-  Future<void> storeAllDataInBox(String token) async {
+  String get token {
+    return thisBox.get("token");
+  }
+
+  Future<void> storeAllDataInBox() async {
     try {
       var response = await http.get(Uri.parse(getDataUrl),
           headers: {"Authorization": "Token $token"});
@@ -26,38 +30,41 @@ class AllData {
   }
 
   String getData(String dataKey) {
-    return thisBox.get(dataKey);
+    return thisBox.get(dataKey) ?? "";
   }
 
   void deleteDataFromBox() {
     log("Deleting Data");
-    thisBox.deleteAll(
-        ["data", "token", "mpin", "ninNumber", "mobileNumber", "firstLogin"]);
+    thisBox.clear();
   }
 
-  List get allDocumentTypes {
+  List allDocumentTypes() {
     return (json.decode(thisBox.get("data"))['documents'] as Map).keys.toList();
   }
 
   Map<String, dynamic> getDocumentData(String docType) {
     try {
-      Map<String, dynamic> allNidData =
+      Map<String, dynamic> allData =
           json.decode(thisBox.get("data"))["documents"][docType];
-      allNidData.remove("face_image");
-      allNidData.removeWhere(
+      allData.remove("face_image");
+      log(allData.toString());
+      allData.removeWhere(
           (key, value) => value == null || key == "docType" || key == "NIN");
-      allNidData.update("dob", (value) => value.toString().substring(0, 10));
+      allData.update("dob", (value) => value.toString().substring(0, 10));
       if (docType == "CTZ") {
-        allNidData.update(
-            "CTZ_issued_date", (value) => value.toString().substring(0, 10));
+        allData.update(
+            "CTZ_date_of_issue", (value) => value.toString().substring(0, 10));
       } else if (docType == "DVL") {
-        allNidData.update("DVL_blood_group", (value) => value.toString());
-        allNidData.update(
+        allData.update("DVL_blood_group", (value) => value.toString());
+        allData.update(
             "DVL_data_of_issue", (value) => value.toString().substring(0, 10));
-        allNidData.update(
+        allData.update(
             "DVL_date_of_expiry", (value) => value.toString().substring(0, 10));
+      } else if (docType == "NID") {
+        allData.update(
+            "NID_date_of_issue", (value) => value.toString().substring(0, 10));
       }
-      return allNidData;
+      return allData;
     } catch (e) {
       return {"NID_NIN": "error"};
     }
@@ -76,10 +83,6 @@ class AllData {
 
   String get fullName {
     return "${json.decode(thisBox.get("data"))["documents"]["NID"]["first_name"]} ${json.decode(thisBox.get("data"))["documents"]["NID"]["last_name"]}";
-  }
-
-  String get token {
-    return thisBox.get("token");
   }
 
   String get mpin {

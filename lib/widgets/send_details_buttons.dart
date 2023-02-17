@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:parichaya_frontend/providers/preferences.dart';
+import 'package:parichaya_frontend/providers/all_data.dart';
 import 'package:parichaya_frontend/screens/homescreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -13,8 +13,7 @@ class SendDetailsButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String token =
-        Provider.of<Preferences>(context, listen: false).jwtToken;
+    final String token = Provider.of<AllData>(context, listen: false).token;
 
     return Row(
       children: [

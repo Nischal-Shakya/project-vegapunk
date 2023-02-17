@@ -14,6 +14,9 @@ class GlobalTheme {
       contentTextStyle: const TextStyle(color: Colors.white),
       behavior: SnackBarBehavior.floating,
     ),
+    pageTransitionsTheme: const PageTransitionsTheme(builders: {
+      TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+    }),
     textTheme: const TextTheme(
       headlineLarge: TextStyle(
         color: customBackgroundWhite,
