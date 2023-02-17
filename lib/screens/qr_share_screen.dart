@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -24,6 +26,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
   late String permitId;
   late WebSocketChannel webSocketChannel;
   List<String> viewers = [];
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
   @override
   void didChangeDependencies() {
@@ -50,12 +53,16 @@ class _QrShareScreenState extends State<QrShareScreen> {
           debugPrint("message:$message");
           setState(() {
             permitId = decodedMessage["data"]["permit_id"];
+            log(permitId);
+            log(token);
             isLoading = false;
           });
           debugPrint(permitId.toString());
         } else if (decodedMessage["type"] == "permit.accessed") {
           setState(() {
             viewers.add(decodedMessage["data"]["viewer"]);
+            _listKey.currentState
+                ?.insertItem(0, duration: const Duration(milliseconds: 700));
           });
         }
       });
@@ -83,91 +90,82 @@ class _QrShareScreenState extends State<QrShareScreen> {
       child: Scaffold(
         // backgroundColor: Colors.black,
         appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: const Text(
-            "Parichaya",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: true,
-          // iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.black),
         ),
         body: isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Container(
-                padding: const EdgeInsets.only(
-                  left: 30,
-                  right: 30,
-                  top: 90,
-                  bottom: 100,
-                ),
-                color: Colors.blue,
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  padding: const EdgeInsets.only(
-                    top: 90,
-                    bottom: 100,
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Share Qr Code',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Share Qr Code',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
                       ),
-                      QrImage(
-                        // backgroundColor: Colors.white,
-                        data: json.encode({"permit_id": permitId}),
-                        version: QrVersions.auto,
-                        size: 200.0,
-                      ),
-                      viewers.isEmpty
-                          ? const Text(
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
+                    ),
+                    QrImage(
+                      // backgroundColor: Colors.white,
+                      data: json.encode({"permit_id": permitId}),
+                      version: QrVersions.auto,
+                      size: 200.0,
+                    ),
+                    viewers.isEmpty
+                        ? const Center(
+                            child: Text(
+                                style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.normal,
-                                  color: Colors.black),
-                              "Scan this Qr Code to view User's Information.")
-                          : Expanded(
-                              child: ListView.builder(
-                                itemBuilder: ((context, index) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        weight: 10,
-                                        Icons.person,
-                                        color: Colors.blue,
-                                      ),
-                                      Text(
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                              color: Colors.black),
-                                          "${viewers[index]} is viewed your proof of age"),
-                                    ],
-                                  );
-                                }),
-                                itemCount: viewers.length,
-                                physics: const ScrollPhysics(
-                                  parent: BouncingScrollPhysics(),
+                                  color: Colors.black,
                                 ),
-                              ),
-                            ),
-                    ],
-                  ),
+                                "Scan this Qr Code to view User's Information."),
+                          )
+                        : AnimatedList(
+                            key: _listKey,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index, animation) {
+                              return SizeTransition(
+                                sizeFactor: animation,
+                                axis: Axis.vertical,
+                                child: SlideTransition(
+                                  position: animation.drive(Tween(
+                                          begin: const Offset(-1, 0),
+                                          end: Offset.zero)
+                                      .chain(CurveTween(
+                                          curve: Curves.easeOutCubic))),
+                                  child: FadeTransition(
+                                    opacity: animation,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.remove_red_eye,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        Text(
+                                          "${viewers[index]} viewed your proof of age",
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                  ],
                 ),
               ),
       ),
