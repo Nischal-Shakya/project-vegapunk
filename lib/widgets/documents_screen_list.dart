@@ -10,7 +10,7 @@ class DocumentsScreenList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List allDocumentTypes =
-        Provider.of<AllData>(context, listen: false).allDocumentTypes;
+        Provider.of<AllData>(context, listen: false).allDocumentTypes();
     final double customWidth = MediaQuery.of(context).size.width;
 
     return Expanded(
