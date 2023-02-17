@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -85,7 +83,14 @@ class _QrShareScreenState extends State<QrShareScreen> {
       child: Scaffold(
         // backgroundColor: Colors.black,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.blue,
+          title: const Text(
+            "Parichaya",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           elevation: 0,
           automaticallyImplyLeading: true,
           // iconTheme: IconThemeData(color: Colors.black),
@@ -94,28 +99,66 @@ class _QrShareScreenState extends State<QrShareScreen> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Column(
-                children: [
-                  QrImage(
-                    // backgroundColor: Colors.white,
-                    data: json.encode({"permit_id": permitId}),
-                    version: QrVersions.auto,
-                    size: 200.0,
+            : Container(
+                padding: const EdgeInsets.only(
+                  left: 30,
+                  right: 30,
+                  top: 90,
+                  bottom: 100,
+                ),
+                color: Colors.blue,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  padding: const EdgeInsets.only(
+                    top: 90,
+                    bottom: 100,
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemBuilder: ((context, index) {
-                        return Center(
-                            child: Text(
-                                "${viewers[index]} is viewing your proof of age"));
-                      }),
-                      itemCount: viewers.length,
-                      physics: const ScrollPhysics(
-                        parent: BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Share Qr Code',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
                       ),
-                    ),
+                      QrImage(
+                        // backgroundColor: Colors.white,
+                        data: json.encode({"permit_id": permitId}),
+                        version: QrVersions.auto,
+                        size: 200.0,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemBuilder: ((context, index) {
+                            return viewers.isEmpty
+                                ? const Text(
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black),
+                                    "Scan this Qr Code to view User's Information.")
+                                : Text(
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black),
+                                    "${viewers[index]} is viewed your proof of age");
+                          }),
+                          itemCount: viewers.length,
+                          physics: const ScrollPhysics(
+                            parent: BouncingScrollPhysics(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
       ),
     );
