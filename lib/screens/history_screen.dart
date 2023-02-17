@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../providers/all_data.dart';
 import 'package:provider/provider.dart';
 import '../providers/connectivity_change_notifier.dart';
+import '../providers/homescreen_index_provider.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -15,9 +16,10 @@ class HistoryScreen extends StatefulWidget {
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
+bool isLoading = true;
+
 class _HistoryScreenState extends State<HistoryScreen> {
   late List data;
-  bool isLoading = true;
 
   @override
   void didChangeDependencies() async {
@@ -63,8 +65,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final double customWidth = MediaQuery.of(context).size.width;
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
+    final indexProvider = Provider.of<HomeScreenIndexProvider>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        title:
+            Text('History', style: Theme.of(context).textTheme.headlineSmall),
+        titleSpacing: 0,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
       body: isLoading
           ? Center(
               child: Column(

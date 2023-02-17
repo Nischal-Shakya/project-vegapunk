@@ -15,7 +15,7 @@ class GlobalTheme {
       behavior: SnackBarBehavior.floating,
     ),
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
-      TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+      TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
     }),
     textTheme: const TextTheme(
       headlineLarge: TextStyle(

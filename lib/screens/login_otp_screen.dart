@@ -195,8 +195,8 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                     Hive.box("allData").put("token", token);
                     Hive.box("allData").put("ninNumber", resendOtp[0]);
                     Hive.box("allData").put("mobileNumber", resendOtp[1]);
-                    Navigator.pushReplacementNamed(
-                        context, SetupPinScreen.routeName);
+                    Navigator.of(context, rootNavigator: true)
+                        .pushReplacementNamed(SetupPinScreen.routeName);
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

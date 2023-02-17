@@ -167,12 +167,12 @@ class _QrScanScreenState extends State<QrScanScreen> {
               decodedData['requested_fields'].length > 0 &&
               decodedData.containsKey('requester') &&
               decodedData['requester'].toString().isNotEmpty) {
-            Navigator.pushReplacementNamed(
-                context, DataPermissionScreen.routeName,
+            Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+                DataPermissionScreen.routeName,
                 arguments: decodedData);
           } else if (decodedData.containsKey('permit_id')) {
-            Navigator.pushReplacementNamed(
-                context, AgeVerificationScreen.routeName,
+            Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+                AgeVerificationScreen.routeName,
                 arguments: decodedData['permit_id']);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

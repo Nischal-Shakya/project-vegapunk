@@ -10,6 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'providers/global_theme.dart';
 import 'providers/all_data.dart';
 import 'providers/connectivity_change_notifier.dart';
+import 'providers/homescreen_index_provider.dart';
 
 import './screens/homescreen.dart';
 import './screens/error_screen.dart';
@@ -36,6 +37,9 @@ void main() async {
     Provider<GlobalTheme>(
       create: (context) => GlobalTheme(),
     ),
+    ChangeNotifierProvider<HomeScreenIndexProvider>(
+      create: (context) => HomeScreenIndexProvider(),
+    )
   ], child: const MyApp()));
 }
 

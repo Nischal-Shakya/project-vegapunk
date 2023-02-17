@@ -30,7 +30,8 @@ class SettingsScreen extends StatelessWidget {
                 child: InkWell(
                   child: const SettingsListViewHelper(option: 'Change Mpin'),
                   onTap: () {
-                    Navigator.pushNamed(context, ChangePinScreen.routeName);
+                    Navigator.of(context, rootNavigator: true)
+                        .pushNamed(ChangePinScreen.routeName);
                   },
                 ),
               ),

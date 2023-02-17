@@ -14,6 +14,14 @@ class MoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: Text('More', style: Theme.of(context).textTheme.headlineSmall),
+        titleSpacing: 0,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       body: Column(
         children: [
           const SizedBox(
@@ -29,8 +37,8 @@ class MoreScreen extends StatelessWidget {
                     child:
                         const SettingsListViewHelper(option: 'Verify Your Age'),
                     onTap: () {
-                      Navigator.pushNamed(context, QrShareScreen.routeName,
-                          arguments: "AGE");
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed(QrShareScreen.routeName, arguments: "AGE");
                     },
                   ),
                 ),
@@ -42,7 +50,8 @@ class MoreScreen extends StatelessWidget {
                   child: InkWell(
                     child: const SettingsListViewHelper(option: 'Settings'),
                     onTap: () {
-                      Navigator.pushNamed(context, SettingsScreen.routeName);
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed(SettingsScreen.routeName);
                     },
                   ),
                 ),
@@ -76,8 +85,8 @@ class MoreScreen extends StatelessWidget {
                   child: const SettingsListViewHelper(option: 'Logout'),
                   onTap: () {
                     AllData().deleteDataFromBox();
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
+                    Navigator.of(context, rootNavigator: true)
+                        .pushNamedAndRemoveUntil(
                       LoginScreen.routeName,
                       (route) => false,
                     );

@@ -29,7 +29,8 @@ class DocumentsScreenList extends StatelessWidget {
           shadowColor: Theme.of(context).colorScheme.shadow,
           child: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, DocumentDetailScreen.routeName,
+              Navigator.of(context, rootNavigator: true).pushNamed(
+                  DocumentDetailScreen.routeName,
                   arguments: allDocumentTypes[index]);
             },
             child: Padding(

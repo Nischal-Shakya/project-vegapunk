@@ -93,7 +93,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: true,
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: isLoading
             ? const Center(
@@ -117,54 +117,52 @@ class _QrShareScreenState extends State<QrShareScreen> {
                       version: QrVersions.auto,
                       size: 200.0,
                     ),
-                    viewers.isEmpty
-                        ? const Center(
-                            child: Text(
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black,
-                                ),
-                                "Scan this Qr Code to view User's Information."),
-                          )
-                        : AnimatedList(
-                            key: _listKey,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index, animation) {
-                              return SizeTransition(
-                                sizeFactor: animation,
-                                axis: Axis.vertical,
-                                child: SlideTransition(
-                                  position: animation.drive(Tween(
-                                          begin: const Offset(-1, 0),
-                                          end: Offset.zero)
-                                      .chain(CurveTween(
-                                          curve: Curves.easeOutCubic))),
-                                  child: FadeTransition(
-                                    opacity: animation,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.remove_red_eye,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        Text(
-                                          "${viewers[index]} viewed your proof of age",
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black,
+                            ),
+                            "Scan this Qr Code to view User's Information."),
+                      ),
+                    ),
+                    AnimatedList(
+                      key: _listKey,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index, animation) {
+                        return SizeTransition(
+                          sizeFactor: animation,
+                          axis: Axis.vertical,
+                          child: SlideTransition(
+                            position: animation.drive(Tween(
+                                    begin: const Offset(-1, 0),
+                                    end: Offset.zero)
+                                .chain(CurveTween(curve: Curves.easeOutCubic))),
+                            child: FadeTransition(
+                              opacity: animation,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.remove_red_eye,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
-                                ),
-                              );
-                            },
+                                  Text(
+                                    "${viewers[index]} viewed your proof of age",
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

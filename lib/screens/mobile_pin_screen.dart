@@ -140,8 +140,9 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
             InkWell(
               onTap: () {
                 if (pin == data.mpin) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      HomeScreen.routeName, (Route<dynamic> route) => false);
+                  Navigator.of(context, rootNavigator: true)
+                      .pushNamedAndRemoveUntil(HomeScreen.routeName,
+                          (Route<dynamic> route) => false);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -187,7 +188,8 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                         "NIN": ninNumber,
                         "mobile_number": "+977$mobileNumber"
                       });
-                      Navigator.pushNamed(context, LoginOtpScreen.routeName,
+                      Navigator.of(context, rootNavigator: true).pushNamed(
+                          LoginOtpScreen.routeName,
                           arguments: [ninNumber, mobileNumber]);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -239,8 +241,9 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                   final isAuthenticated = await LocalAuthApi.authenticate();
                   debugPrint(isAuthenticated.toString());
                   if (isAuthenticated) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        HomeScreen.routeName, (Route<dynamic> route) => false);
+                    Navigator.of(context, rootNavigator: true)
+                        .pushNamedAndRemoveUntil(HomeScreen.routeName,
+                            (Route<dynamic> route) => false);
                   }
                 },
               ),

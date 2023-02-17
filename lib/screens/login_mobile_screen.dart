@@ -60,7 +60,8 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
         "mobile_number": "+977${mobileNumbercontroller.text}"
       });
       Hive.box("allData").put("firstLogin", "true");
-      Navigator.pushNamed(context, LoginOtpScreen.routeName,
+      Navigator.of(context, rootNavigator: true).pushNamed(
+          LoginOtpScreen.routeName,
           arguments: [ninNumber, mobileNumbercontroller.text]);
     }
 

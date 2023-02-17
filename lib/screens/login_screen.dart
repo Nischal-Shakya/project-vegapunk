@@ -43,7 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
       // log(ninNumbercontroller.text);
-      Navigator.pushNamed(context, LoginMobileScreen.routeName,
+      Navigator.of(context, rootNavigator: true).pushNamed(
+          LoginMobileScreen.routeName,
           arguments: ninNumbercontroller.text);
     }
 

@@ -37,11 +37,11 @@ class SendDetailsButtons extends StatelessWidget {
                         "is_approved": false,
                       }),
                     )
-                    .then((value) => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeScreen()),
-                        (Route<dynamic> route) => false));
+                    .then((value) => Navigator.of(context, rootNavigator: true)
+                        .pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()),
+                            (Route<dynamic> route) => false));
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
@@ -73,11 +73,11 @@ class SendDetailsButtons extends StatelessWidget {
                         "is_approved": true,
                       }),
                     )
-                    .then((value) => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeScreen()),
-                        (Route<dynamic> route) => false));
+                    .then((value) => Navigator.of(context, rootNavigator: true)
+                        .pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()),
+                            (Route<dynamic> route) => false));
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),

@@ -229,8 +229,9 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
             if (pin.length == 4 && confirmPin.length == 4) {
               if (pin == confirmPin) {
                 data.putData("mpin", pin);
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    HomeScreen.routeName, (Route<dynamic> route) => false);
+                Navigator.of(context, rootNavigator: true)
+                    .pushNamedAndRemoveUntil(
+                        HomeScreen.routeName, (Route<dynamic> route) => false);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(

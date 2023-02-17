@@ -37,7 +37,8 @@ class ErrorScreen extends StatelessWidget {
               decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
               child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
+                    Navigator.of(context, rootNavigator: true)
+                        .popAndPushNamed(HomeScreen.routeName);
                   },
                   child: const Text(
                     "Go back to homescreen",
