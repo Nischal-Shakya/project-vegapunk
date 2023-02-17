@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../url.dart';
@@ -38,13 +38,32 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
     ageVerificationData
         .removeWhere((key, value) => key == "face_image" || value == null);
 
-    ageVerificationDataList = ageVerificationData.values.toList();
+    debugPrint(ageVerificationData.toString());
 
+    ageVerificationDataList = ageVerificationData.values.toList();
     setState(() {
       isLoading = false;
     });
 
     super.didChangeDependencies();
+  }
+
+  int calculateAge(DateTime birthDate) {
+    DateTime currentDate = DateTime.now();
+
+    int age = currentDate.year - birthDate.year;
+    int month1 = currentDate.month;
+    int month2 = birthDate.month;
+    if (month2 > month1) {
+      age--;
+    } else if (month1 == month2) {
+      int day1 = currentDate.day;
+      int day2 = birthDate.day;
+      if (day2 > day1) {
+        age--;
+      }
+    }
+    return age;
   }
 
   @override
@@ -58,20 +77,62 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
           : Column(
               children: [
                 Image.memory(cacheHeight: 200, faceImage),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Column(
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
                       children: [
-                        Text(ageVerificationDataList[index]),
+                        Text("Name :",
+                            style: Theme.of(context).textTheme.bodyLarge),
                         const SizedBox(
-                          height: 10,
+                          width: 15,
+                          height: 50,
                         ),
+                        Text(
+                            "${ageVerificationDataList[1]} ${ageVerificationDataList[2]}",
+                            style: Theme.of(context).textTheme.bodyMedium),
                       ],
-                    );
-                  },
-                  itemCount: ageVerificationDataList.length,
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                      children: [
+                        Text("DOB :",
+                            style: Theme.of(context).textTheme.bodyLarge),
+                        const SizedBox(
+                          width: 20,
+                          height: 50,
+                        ),
+                        Text(
+                            DateFormat.yMMMEd().format(
+                                DateTime.parse(ageVerificationDataList[3])),
+                            style: Theme.of(context).textTheme.bodyMedium)
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                      children: [
+                        Text("Age :",
+                            style: Theme.of(context).textTheme.bodyLarge),
+                        const SizedBox(
+                          width: 30,
+                          height: 50,
+                        ),
+                        Text(
+                            calculateAge(
+                              DateTime.parse(ageVerificationDataList[3]),
+                            ).toString(),
+                            style: Theme.of(context).textTheme.bodyMedium),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
