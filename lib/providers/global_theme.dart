@@ -47,6 +47,11 @@ class GlobalTheme {
         fontSize: 16,
         fontWeight: FontWeight.bold,
       ),
+      bodySmall: TextStyle(
+        color: Colors.black,
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+      ),
       labelSmall: TextStyle(
         fontSize: 14,
         color: Colors.white54,

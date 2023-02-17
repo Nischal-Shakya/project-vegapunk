@@ -40,7 +40,9 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
     final data = Provider.of<AllData>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
-
+    const List condition = [
+      "Be a 4-digit number",
+    ];
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -56,118 +58,74 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
         ),
         backgroundColor: Colors.transparent,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Setup MPIN',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Set up your account with a 4 digit MPIN',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-            SizedBox(
-              height: customHeight * 0.05,
-            ),
-            const Text(
-              "PIN",
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Setup MPIN',
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Stack(children: [
-              Form(
-                key: formKey,
+              const SizedBox(
+                height: 10,
+              ),
+              Card(
                 child: Padding(
-                  padding: EdgeInsets.only(right: customWidth * 0.12),
-                  child: PinCodeTextField(
-                    appContext: context,
-                    length: 4,
-                    obscureText: pinObscure,
-                    obscuringCharacter: '*',
-                    // blinkWhenObscuring: true,
-                    autoDisposeControllers: false,
-                    animationType: AnimationType.slide,
-                    pinTheme: PinTheme(
-                      shape: PinCodeFieldShape.box,
-                      borderRadius: BorderRadius.circular(5),
-                      fieldHeight: 50,
-                      fieldWidth: 50,
-                      inactiveColor: Colors.black45,
-                      activeColor: Colors.black45,
-                      selectedColor: Theme.of(context).colorScheme.primary,
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(children: <Widget>[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Your Mpin Must:",
+                          textAlign: TextAlign.start,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
                     ),
-                    showCursor: false,
-                    controller: textEditingController,
-                    keyboardType: TextInputType.number,
-                    onCompleted: (v) {
-                      debugPrint("pin : $v");
-                      FocusScope.of(context).requestFocus(confirmPinFocusNode);
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        pin = value;
-                      });
-                    },
-                    focusNode: pinFocusNode,
-                    autoDismissKeyboard: false,
-                    autoFocus: true,
-                  ),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5.0, vertical: 4.0),
+                            child: Text(
+                              "${index + 1}. ${condition[index].toString()}",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          );
+                        },
+                        itemCount: condition.length),
+                  ]),
                 ),
               ),
-              Positioned(
-                right: 0,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      pinObscure = !pinObscure;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.visibility,
-                    color: pinObscure
-                        ? Colors.grey
-                        : Theme.of(context).colorScheme.primary,
-                  ),
+              SizedBox(
+                height: customHeight * 0.05,
+              ),
+              const Text(
+                "PIN",
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
-            ]),
-            SizedBox(
-              height: customHeight * 0.05,
-            ),
-            const Text(
-              "Confirm PIN",
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
+              const SizedBox(
+                height: 10,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Stack(
-              children: [
+              Stack(children: [
                 Form(
-                  key: formKey2,
+                  key: formKey,
                   child: Padding(
                     padding: EdgeInsets.only(right: customWidth * 0.12),
                     child: PinCodeTextField(
                       appContext: context,
                       length: 4,
-                      obscureText: confirmPinObscure,
+                      obscureText: pinObscure,
                       obscuringCharacter: '*',
                       // blinkWhenObscuring: true,
                       autoDisposeControllers: false,
@@ -182,21 +140,21 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                         selectedColor: Theme.of(context).colorScheme.primary,
                       ),
                       showCursor: false,
-                      controller: textEditingController2,
+                      controller: textEditingController,
                       keyboardType: TextInputType.number,
                       onCompleted: (v) {
-                        debugPrint("confirm pin : $v");
+                        debugPrint("pin : $v");
+                        FocusScope.of(context)
+                            .requestFocus(confirmPinFocusNode);
                       },
                       onChanged: (value) {
                         setState(() {
-                          confirmPin = value;
+                          pin = value;
                         });
-                        if (value.isEmpty) {
-                          FocusScope.of(context).requestFocus(pinFocusNode);
-                        }
                       },
-                      focusNode: confirmPinFocusNode,
+                      focusNode: pinFocusNode,
                       autoDismissKeyboard: false,
+                      autoFocus: true,
                     ),
                   ),
                 ),
@@ -205,20 +163,94 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                   child: IconButton(
                     onPressed: () {
                       setState(() {
-                        confirmPinObscure = !confirmPinObscure;
+                        pinObscure = !pinObscure;
                       });
                     },
                     icon: Icon(
                       Icons.visibility,
-                      color: confirmPinObscure
+                      color: pinObscure
                           ? Colors.grey
                           : Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ]),
+              SizedBox(
+                height: customHeight * 0.05,
+              ),
+              const Text(
+                "Confirm PIN",
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Stack(
+                children: [
+                  Form(
+                    key: formKey2,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: customWidth * 0.12),
+                      child: PinCodeTextField(
+                        appContext: context,
+                        length: 4,
+                        obscureText: confirmPinObscure,
+                        obscuringCharacter: '*',
+                        // blinkWhenObscuring: true,
+                        autoDisposeControllers: false,
+                        animationType: AnimationType.slide,
+                        pinTheme: PinTheme(
+                          shape: PinCodeFieldShape.box,
+                          borderRadius: BorderRadius.circular(5),
+                          fieldHeight: 50,
+                          fieldWidth: 50,
+                          inactiveColor: Colors.black45,
+                          activeColor: Colors.black45,
+                          selectedColor: Theme.of(context).colorScheme.primary,
+                        ),
+                        showCursor: false,
+                        controller: textEditingController2,
+                        keyboardType: TextInputType.number,
+                        onCompleted: (v) {
+                          debugPrint("confirm pin : $v");
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            confirmPin = value;
+                          });
+                          if (value.isEmpty) {
+                            FocusScope.of(context).requestFocus(pinFocusNode);
+                          }
+                        },
+                        focusNode: confirmPinFocusNode,
+                        autoDismissKeyboard: false,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          confirmPinObscure = !confirmPinObscure;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.visibility,
+                        color: confirmPinObscure
+                            ? Colors.grey
+                            : Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
