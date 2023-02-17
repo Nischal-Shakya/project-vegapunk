@@ -190,8 +190,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       SizedBox(height: 10),
                       Text("No Internet Access"),
                     ],
+<<<<<<< HEAD
+                  );
+                },
+                itemCount: data.length,
+              ));
+=======
                   ),
                 ),
     );
+>>>>>>> main
   }
 }

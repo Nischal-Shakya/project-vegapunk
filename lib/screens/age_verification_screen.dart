@@ -57,7 +57,7 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
             )
           : Column(
               children: [
-                Image.memory(faceImage),
+                Image.memory(cacheHeight: 200, faceImage),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
