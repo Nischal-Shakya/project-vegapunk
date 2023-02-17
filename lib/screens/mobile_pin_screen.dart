@@ -211,7 +211,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
                     "OR",
-                    style: Theme.of(context).textTheme.labelSmall,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
                 const Expanded(child: Divider(color: Colors.grey)),
