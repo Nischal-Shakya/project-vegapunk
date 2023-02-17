@@ -17,13 +17,12 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
     final List allDocumentTypes =
-        Provider.of<AllData>(context, listen: false).allDocumentTypes;
+        Provider.of<AllData>(context, listen: false).allDocumentTypes();
     final data = Provider.of<AllData>(context, listen: false);
-    final String token = Provider.of<AllData>(context, listen: false).token;
 
     return RefreshIndicator(
       onRefresh: () {
-        return data.storeAllDataInBox(token).then((_) {
+        return data.storeAllDataInBox().then((_) {
           setState(() {});
         });
       },

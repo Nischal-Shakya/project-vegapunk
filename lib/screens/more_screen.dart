@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
-import 'package:provider/provider.dart';
 
-import '../providers/preferences.dart';
 import '../widgets/settings_listview_helper.dart';
 import '../providers/all_data.dart';
 
@@ -14,8 +12,6 @@ class MoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final prefs = Provider.of<Preferences>(context, listen: false);
-
     final double customWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Column(
@@ -73,7 +69,6 @@ class MoreScreen extends StatelessWidget {
                 child: InkWell(
                   child: const SettingsListViewHelper(option: 'Logout'),
                   onTap: () {
-                    prefs.setJwtToken('');
                     AllData().deleteDataFromBox();
                     Navigator.pushNamedAndRemoveUntil(
                       context,

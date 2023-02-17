@@ -64,11 +64,12 @@ class _QrScanScreenState extends State<QrScanScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: true,
+        elevation: 0,
       ),
       extendBodyBehindAppBar: true,
       body: TweenAnimationBuilder(
         tween: Tween(begin: 0.0, end: 1.0),
-        duration: const Duration(milliseconds: 600),
+        duration: const Duration(milliseconds: 800),
         builder: (context, value, child) {
           return ShaderMask(
             shaderCallback: ((bounds) {

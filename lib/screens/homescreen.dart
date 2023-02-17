@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() async {
     final data = Provider.of<AllData>(context, listen: false);
-    final String token = Provider.of<AllData>(context, listen: false).token;
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
     String firstLogin = data.getData("firstLogin");
@@ -52,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ));
     }
     if (isFirstLoading && connectionStatus) {
-      data.storeAllDataInBox(token).then((_) {
+      data.storeAllDataInBox().then((_) {
         setState(() {
           isFirstLoading = false;
         });

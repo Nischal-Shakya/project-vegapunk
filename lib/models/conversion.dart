@@ -14,6 +14,10 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "National Identity Number",
   },
+  "NID_date_of_issue": {
+    "category": "National Identity",
+    "fieldName": "Date of Issue",
+  },
   "academic_qualification": {
     "category": "National Identity",
     "fieldName": "Academic Qualification",
@@ -22,13 +26,25 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Birth District",
   },
+  "birth_district_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Birth District Devanagari",
+  },
   "birth_municipality": {
     "category": "National Identity",
     "fieldName": "Birth Municipality",
   },
+  "birth_municipality_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Birth Municipality Devanagari",
+  },
   "birth_state": {
     "category": "National Identity",
     "fieldName": "Birth State",
+  },
+  "birth_state_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Birth State Devanagari",
   },
   "birth_tole": {
     "category": "National Identity",
@@ -55,13 +71,25 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Father's First Name",
   },
+  "father_first_name_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Father's First Name Devanagari",
+  },
   "father_last_name": {
     "category": "National Identity",
     "fieldName": "Father's Last Name",
   },
+  "father_last_name_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Father's Last Name Devanagari",
+  },
   "father_middle_name": {
     "category": "National Identity",
     "fieldName": "Father's Middle Name",
+  },
+  "father_middle_name_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Father's Middle Name Devanagari",
   },
   "father_nationality": {
     "category": "National Identity",
@@ -153,13 +181,25 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Mother's First Name",
   },
+  "mother_first_name_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Mother's First Name Devanagari",
+  },
   "mother_middle_name": {
     "category": "National Identity",
     "fieldName": "Mother's Middle Name",
   },
+  "mother_middle_name_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Mother's Middle Name Devanagari",
+  },
   "mother_last_name": {
     "category": "National Identity",
     "fieldName": "Mother's Last Name",
+  },
+  "mother_last_name_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Mother's Last Name Devanagari",
   },
 
   "mother_nationality": {
@@ -174,13 +214,29 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Permanent State",
   },
+  "permanent_house_number": {
+    "category": "National Identity",
+    "fieldName": "Permanent House Number",
+  },
+  "permanent_state_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Permanent State Devanagari",
+  },
   "permanent_district": {
     "category": "National Identity",
     "fieldName": "Permanent District",
   },
+  "permanent_district_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Permanent District Devanagari",
+  },
   "permanent_municipality": {
     "category": "National Identity",
     "fieldName": "Permanent Local Level"
+  },
+  "permanent_municipality_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Permanent Local Level Devanagari"
   },
   "permanent_ward": {
     "category": "National Identity",
@@ -198,13 +254,25 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Spouse's First Name",
   },
+  "spouse_first_name_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Spouse's First Name Devanagari",
+  },
   "spouse_middle_name": {
     "category": "National Identity",
     "fieldName": "Spouse's Middle Name",
   },
+  "spouse_middle_name_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Spouse's Middle Name Devanagari",
+  },
   "spouse_last_name": {
     "category": "National Identity",
     "fieldName": "Spouse's Last Name",
+  },
+  "spouse_last_name_devanagari": {
+    "category": "National Identity",
+    "fieldName": "Spouse's Last Name Devanagari",
   },
   "spouse_NIN": {
     "category": "National Identity",
@@ -267,17 +335,73 @@ const Map<String, Map> fieldMapping = {
     "category": "Citizenship",
     "fieldName": "Citizenship Certificate Number",
   },
+  "CTZ_citizenship_type": {
+    "category": "Citizenship",
+    "fieldName": "Citizenship Type",
+  },
+  "CTZ_citizenship_type_devanagari": {
+    "category": "Citizenship",
+    "fieldName": "Citizenship Type Devanagari",
+  },
+  "CTZ_date_of_issue": {
+    "category": "Citizenship",
+    "fieldName": "Date of Issue",
+  },
+  "CTZ_father_CCN": {
+    "fieldName": "Father's Citizenship Certificate Number",
+    "category": "Citizenship",
+  },
+  "CTZ_father_address_devanagari": {
+    "fieldName": "Father's Address Devanagari",
+    "category": "Citizenship",
+  },
+  "CTZ_father_citizenship_type_devanagari": {
+    "fieldName": "Father's Citizenship Type Devanagari",
+    "category": "Citizenship",
+  },
   "CTZ_issued_district": {
     "category": "Citizenship",
     "fieldName": "Issued District",
   },
-  "CTZ_issued_date": {
+  "CTZ_issued_district_devanagari": {
     "category": "Citizenship",
-    "fieldName": "Issued Date",
+    "fieldName": "Issued District Devanagari",
+  },
+  "CTZ_issuer_designation_devanagari": {
+    "category": "Citizenship",
+    "fieldName": "Issuer Designation Devanagari",
   },
   "CTZ_issuer_name": {
     "category": "Citizenship",
     "fieldName": "Issuer's Name",
+  },
+  "CTZ_issuer_name_devanagari": {
+    "category": "Citizenship",
+    "fieldName": "Issuer's Name Devanagari",
+  },
+  "CTZ_mother_CCN": {
+    "fieldName": "Mother's Citizenship Certificate Number",
+    "category": "Citizenship",
+  },
+  "CTZ_mother_address_devanagari": {
+    "fieldName": "Mother's Address Devanagari",
+    "category": "Citizenship",
+  },
+  "CTZ_mother_citizenship_type_devanagari": {
+    "fieldName": "Mother's Citizenship Type Devanagari",
+    "category": "Citizenship",
+  },
+  "CTZ_spouse_CCN": {
+    "fieldName": "Spouse's Citizenship Certificate Number",
+    "category": "Citizenship",
+  },
+  "CTZ_spouse_address_devanagari": {
+    "fieldName": "Spouse's Address Devanagari",
+    "category": "Citizenship",
+  },
+  "CTZ_spouse_citizenship_type_devanagari": {
+    "fieldName": "Spouse's Citizenship Type Devanagari",
+    "category": "Citizenship",
   },
 };
 
