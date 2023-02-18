@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -54,7 +56,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
         ));
         return;
       }
-      debugPrint("sending mobile and nin");
+      log("sending mobile and nin");
       http.post(Uri.parse(postMobileAndNinUrl), body: {
         "NIN": ninNumber,
         "mobile_number": "+977${mobileNumbercontroller.text}"

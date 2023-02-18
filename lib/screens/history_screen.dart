@@ -32,13 +32,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
       var response = await http.get(Uri.parse(getHistoryUrl),
           headers: {"Authorization": "Token $token"});
       data = json.decode(response.body);
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     } else {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
     super.didChangeDependencies();
   }

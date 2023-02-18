@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/screens/documents_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/homescreen_index_provider.dart';
@@ -37,31 +38,30 @@ class _HomeScreenState extends State<HomeScreen> {
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
-    log(firstLoading.toString());
-    log(prevConnection.toString());
-    log(connectionStatus.toString());
-
     if (connectionStatus != prevConnection) {
       if (!firstLoading) {
         if (!connectionStatus) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('No Internet Access'),
-            duration: Duration(seconds: 2),
-          ));
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('No Internet Access'),
+                    duration: Duration(seconds: 2),
+                  )));
+
+          log("no internet");
         } else if (connectionStatus) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Internet Connection Restored'),
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.grey,
-          ));
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('No Internet Access'),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Colors.grey,
+                  )));
+          log("got internet");
         }
       }
-
-      setState(() {
-        prevConnection = connectionStatus;
-      });
     }
 
+    prevConnection = connectionStatus;
+    firstLoading = false;
     super.didChangeDependencies();
   }
 
@@ -71,11 +71,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: WillPopScope(
         onWillPop: () async {
+          if (indexProvider.selectedIndex == 0) {
+            SystemNavigator.pop();
+          }
           indexProvider.indexBack();
           if (indexProvider.selectedIndex == 0) {
             navigatorKey.currentState?.popUntil(
               (route) => route.isFirst,
             );
+          } else {
+            navigatorKey.currentState?.pop();
           }
           return false;
         },
@@ -93,9 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
-          debugPrint(index.toString());
-          debugPrint(indexProvider.selectedIndex.toString());
-
           if (index == 0) {
             indexProvider.changeIndex(index);
             navigatorKey.currentState?.popUntil(

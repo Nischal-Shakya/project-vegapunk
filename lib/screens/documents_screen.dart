@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 import '../providers/all_data.dart';
 import '../providers/connectivity_change_notifier.dart';
@@ -53,8 +54,8 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        // systemOverlayStyle: const SystemUiOverlayStyle(
-        //     statusBarColor: Colors.transparent),
+        systemOverlayStyle:
+            const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
         title:
             Text('PARICHAYA', style: Theme.of(context).textTheme.headlineSmall),
         titleSpacing: 0,

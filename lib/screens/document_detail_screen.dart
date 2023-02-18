@@ -109,7 +109,6 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                       ),
                       GestureDetector(
                         onTap: () {
-                          debugPrint(_tabController!.previousIndex.toString());
                           if (firstTap &&
                               _tabController!.previousIndex ==
                                   _tabController!.index) {
