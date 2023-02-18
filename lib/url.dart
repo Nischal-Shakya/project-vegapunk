@@ -12,6 +12,7 @@
 const String url = 'http://65.109.161.97:8000';
 const String wsUrl = 'ws://65.109.161.97:8000';
 const String getDataUrl = '$url/api/v1/identity/documents/';
+const String checkNin = '$url/api/v1/identity/check';
 const String postMobileAndNinUrl = '$url/api/v1/auth/';
 const String postOtp = '$url/api/v1/auth/verify/';
 const String getDataQrUrl = '$url/api/v1/qr/request';

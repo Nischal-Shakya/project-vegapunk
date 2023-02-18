@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/screens/age_verification_screen.dart';
@@ -61,7 +63,7 @@ class MyApp extends StatelessWidget {
         title: 'Parichaya',
         theme: globalTheme,
         debugShowCheckedModeBanner: false,
-        initialRoute: Hive.box("allData").get("token").toString().isEmpty
+        initialRoute: Hive.box("allData").get("token") == null
             ? LoginScreen.routeName
             : MobilePinScreen.routeName,
         routes: {

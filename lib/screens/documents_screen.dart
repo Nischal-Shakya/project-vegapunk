@@ -51,7 +51,6 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
     final data = Provider.of<AllData>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle:
