@@ -22,13 +22,43 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
     with SingleTickerProviderStateMixin {
   bool isSelectedImage = true;
   bool firstTap = true;
+  bool valueInitialized = true;
   double angle = 0;
   TabController? _tabController;
+  late Uint8List documentFrontImage;
+  late Uint8List documentBackImage;
+  late List fieldNames;
+  late List fieldValues;
+  late String docType;
+
+  @override
+  void didChangeDependencies() {
+    if (valueInitialized) {
+      docType = ModalRoute.of(context)!.settings.arguments as String;
+      final allDocumentData =
+          Provider.of<AllData>(context, listen: false).getDocumentData(docType);
+      final documentFrontImageBase64 =
+          Provider.of<AllData>(context, listen: false)
+              .documentFrontImage(docType);
+      final documentBackImageBase64 =
+          Provider.of<AllData>(context, listen: false)
+              .documentBackImage(docType);
+      documentFrontImage =
+          const Base64Decoder().convert(documentFrontImageBase64);
+      documentBackImage =
+          const Base64Decoder().convert(documentBackImageBase64);
+
+      fieldNames = allDocumentData.keys.toList();
+      fieldValues = allDocumentData.values.toList();
+    }
+    valueInitialized = false;
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
-    _tabController = TabController(vsync: this, length: 2);
     super.initState();
+    _tabController = TabController(vsync: this, length: 2);
   }
 
   @override
@@ -39,16 +69,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    final docType = ModalRoute.of(context)!.settings.arguments as String;
-    final allDocumentData =
-        Provider.of<AllData>(context, listen: false).getDocumentData(docType);
-    final faceImageBase64 = Provider.of<AllData>(context, listen: false)
-        .documentFrontImage(docType);
-    final Uint8List faceImage = const Base64Decoder().convert(faceImageBase64);
-
-    final List fieldNames = allDocumentData.keys.toList();
-    final List fieldValues = allDocumentData.values.toList();
-
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
@@ -116,8 +137,9 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                                 .animateTo(_tabController!.index + 1);
                             firstTap = false;
                           } else {
-                            _tabController!
-                                .animateTo(_tabController!.previousIndex);
+                            _tabController!.animateTo(
+                                _tabController!.previousIndex,
+                                duration: const Duration(milliseconds: 600));
                           }
                           setState(() {
                             angle = (angle + pi) % (2 * pi);
@@ -137,27 +159,21 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                                 transform: Matrix4.identity()
                                   ..setEntry(3, 2, 0.001)
                                   ..rotateY(value),
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  width: 150,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  )),
+                                child: SizedBox(
+                                  width: width,
+                                  height: 230,
                                   child: isSelectedImage
                                       ? Image.memory(
-                                          faceImage,
-                                          fit: BoxFit.cover,
+                                          documentFrontImage,
+                                          fit: BoxFit.contain,
                                         )
                                       : Transform(
                                           alignment: Alignment.center,
                                           transform: Matrix4.identity()
                                             ..rotateY(pi),
-                                          child: Image.network(
-                                            'https://www.hellotech.com/guide/wp-content/uploads/2020/05/HelloTech-qr-code-1024x1024.jpg',
-                                            fit: BoxFit.cover,
+                                          child: Image.memory(
+                                            documentBackImage,
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
                                 ),
@@ -175,6 +191,21 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
               ]),
             ),
           ]),
+      floatingActionButton: docType == "DVL"
+          ? CircleAvatar(
+              radius: 30,
+              child: IconButton(
+                splashRadius: 30,
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.qr_code_scanner,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            )
+          : null,
     );
   }
 }
