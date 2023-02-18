@@ -42,16 +42,38 @@ class _HomeScreenState extends State<HomeScreen> {
       if (!firstLoading) {
         if (!connectionStatus) {
           WidgetsBinding.instance.addPostFrameCallback(
-              (_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('No Internet Access'),
+              (_) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Row(
+                      children: const [
+                        Icon(
+                          Icons.wifi_off,
+                          color: Colors.white,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text('No Internet Access'),
+                        ),
+                      ],
+                    ),
                     duration: Duration(seconds: 2),
                   )));
 
           log("no internet");
         } else if (connectionStatus) {
           WidgetsBinding.instance.addPostFrameCallback(
-              (_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('No Internet Access'),
+              (_) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Row(
+                      children: const [
+                        Icon(
+                          Icons.wifi,
+                          color: Colors.white,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text('Internet Connection Restored'),
+                        ),
+                      ],
+                    ),
                     duration: Duration(seconds: 2),
                     backgroundColor: Colors.grey,
                   )));
