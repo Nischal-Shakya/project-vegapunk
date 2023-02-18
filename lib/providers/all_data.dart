@@ -35,7 +35,9 @@ class AllData {
   }
 
   List allDocumentTypes() {
-    return (json.decode(thisBox.get("data"))['documents'] as Map).keys.toList();
+    Map docMap = (json.decode(thisBox.get("data"))['documents'] as Map);
+    docMap.removeWhere((key, value) => value == null);
+    return docMap.keys.toList();
   }
 
   Map<String, dynamic> getDocumentData(String docType) {
@@ -43,6 +45,9 @@ class AllData {
       Map<String, dynamic> allData =
           json.decode(thisBox.get("data"))["documents"][docType];
       allData.remove("face_image");
+      allData.remove("card_front");
+      allData.remove("card_back");
+
       log(allData.toString());
       allData.removeWhere(
           (key, value) => value == null || key == "docType" || key == "NIN");
@@ -53,7 +58,7 @@ class AllData {
       } else if (docType == "DVL") {
         allData.update("DVL_blood_group", (value) => value.toString());
         allData.update(
-            "DVL_data_of_issue", (value) => value.toString().substring(0, 10));
+            "DVL_date_of_issue", (value) => value.toString().substring(0, 10));
         allData.update(
             "DVL_date_of_expiry", (value) => value.toString().substring(0, 10));
       } else if (docType == "NID") {
@@ -62,15 +67,17 @@ class AllData {
       }
       return allData;
     } catch (e) {
-      return {"NID_NIN": "error"};
+      log(e.toString());
+      return {"No Document": "Error"};
     }
   }
 
   String documentFrontImage(String docType) {
-    return json
-        .decode(thisBox.get("data"))["documents"][docType]['face_image']
-        .toString()
-        .split(',')[1];
+    return json.decode(thisBox.get("data"))["documents"][docType]['card_front'];
+  }
+
+  String documentBackImage(String docType) {
+    return json.decode(thisBox.get("data"))["documents"][docType]['card_back'];
   }
 
   String get nIN {
