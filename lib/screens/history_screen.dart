@@ -32,12 +32,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
       var response = await http.get(Uri.parse(getHistoryUrl),
           headers: {"Authorization": "Token $token"});
       data = json.decode(response.body);
-      debugPrint(data.toString());
       setState(() {
         isLoading = false;
       });
-
-      log(response.body.toString());
     } else {
       setState(() {
         isLoading = false;
@@ -47,7 +44,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Widget returnIcon(String activity) {
-    debugPrint(activity);
     Color iconColor = Theme.of(context).colorScheme.primary;
     if (activity == "logged_in") {
       return Icon(Icons.login_outlined, color: iconColor);
@@ -67,143 +63,150 @@ class _HistoryScreenState extends State<HistoryScreen> {
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
     final indexProvider = Provider.of<HomeScreenIndexProvider>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title:
-            Text('History', style: Theme.of(context).textTheme.headlineSmall),
-        titleSpacing: 0,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
-      body: isLoading
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 10),
-                  Text("Fetching History"),
-                ],
-              ),
-            )
-          : connectionStatus
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return IntrinsicHeight(
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: customWidth * 0.05),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: <Widget>[
-                                  VerticalDivider(
-                                    thickness: 3,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  Container(
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                          color: Colors.white),
-                                      child:
-                                          returnIcon(data[index]["activity"])),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: ListTile(
-                                      contentPadding: EdgeInsets.only(
-                                          bottom: 10,
-                                          right: customWidth * 0.05),
-                                      splashColor: Theme.of(context)
-                                          .colorScheme
-                                          .primary
-                                          .withOpacity(0.3),
-                                      title: Text(
-                                        data[index]["title"],
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      subtitle: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            data[index]["description"],
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            DateFormat('MMM d yyyy, h:mm a')
-                                                .format(DateTime.parse(
-                                                    data[index]["created_at"])),
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      trailing:
-                                          data[index]["extra_info"] != null
-                                              ? const Icon(
-                                                  Icons.keyboard_arrow_down)
-                                              : null,
-                                      onTap: () {
-                                        log(data[index]["extra_info"]
-                                            .toString());
-                                      },
-                                    ),
-                                  ),
-                                  const Divider(
-                                    height: 0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    itemCount: data.length,
-                  ),
-                )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        Icons.wifi_off,
-                        color: Colors.blue,
-                        size: 60,
-                      ),
-                      SizedBox(height: 10),
-                      Text("No Internet Access"),
-                    ],
-                  ),
+    return WillPopScope(
+      onWillPop: () async {
+        indexProvider.indexBack();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          title:
+              Text('History', style: Theme.of(context).textTheme.headlineSmall),
+          titleSpacing: 0,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          iconTheme: const IconThemeData(color: Colors.black),
+        ),
+        body: isLoading
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 10),
+                    Text("Fetching History"),
+                  ],
                 ),
+              )
+            : connectionStatus
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: customWidth * 0.05),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: <Widget>[
+                                    VerticalDivider(
+                                      thickness: 3,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            border: Border.all(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary),
+                                            color: Colors.white),
+                                        child: returnIcon(
+                                            data[index]["activity"])),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.only(
+                                            bottom: 10,
+                                            right: customWidth * 0.05),
+                                        splashColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .withOpacity(0.3),
+                                        title: Text(
+                                          data[index]["title"],
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              data[index]["description"],
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.black),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              DateFormat('MMM d yyyy, h:mm a')
+                                                  .format(DateTime.parse(
+                                                      data[index]
+                                                          ["created_at"])),
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        trailing:
+                                            data[index]["extra_info"] != null
+                                                ? const Icon(
+                                                    Icons.keyboard_arrow_down)
+                                                : null,
+                                        onTap: () {
+                                          log(data[index]["extra_info"]
+                                              .toString());
+                                        },
+                                      ),
+                                    ),
+                                    const Divider(
+                                      height: 0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      itemCount: data.length,
+                    ),
+                  )
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.wifi_off,
+                          color: Colors.blue,
+                          size: 60,
+                        ),
+                        SizedBox(height: 10),
+                        Text("No Internet Access"),
+                      ],
+                    ),
+                  ),
+      ),
     );
   }
 }

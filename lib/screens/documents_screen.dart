@@ -18,9 +18,8 @@ class DocumentsScreen extends StatefulWidget {
   State<DocumentsScreen> createState() => _DocumentsScreenState();
 }
 
-bool isFirstLoading = true;
-
 class _DocumentsScreenState extends State<DocumentsScreen> {
+  bool isFirstLoading = true;
   @override
   void didChangeDependencies() async {
     final data = Provider.of<AllData>(context, listen: false);
@@ -50,8 +49,6 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
   @override
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
-    final List allDocumentTypes =
-        Provider.of<AllData>(context, listen: false).allDocumentTypes();
     final data = Provider.of<AllData>(context, listen: false);
 
     return Scaffold(
@@ -106,7 +103,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                     padding:
                         EdgeInsets.symmetric(horizontal: customWidth * 0.08),
                     child: Text(
-                      allDocumentTypes.isEmpty
+                      data.allDocumentTypes().isEmpty
                           ? "No Document Available"
                           : "DOCUMENTS",
                       style: const TextStyle(

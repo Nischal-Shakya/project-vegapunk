@@ -13,16 +13,12 @@ class AllData {
   }
 
   Future<void> storeAllDataInBox() async {
-    try {
-      var response = await http.get(Uri.parse(getDataUrl),
-          headers: {"Authorization": "Token $token"});
-      log("Storing Data");
-      thisBox.put("data", response.body);
-      thisBox.put("firstLogin", "false");
-    } catch (e) {
-      log(e.toString());
-      return;
-    }
+    var response = await http
+        .get(Uri.parse(getDataUrl), headers: {"Authorization": "Token $token"});
+    log("Storing Data");
+
+    thisBox.put("data", response.body);
+    thisBox.put("firstLogin", "false");
   }
 
   void putData(String dataKey, String data) {

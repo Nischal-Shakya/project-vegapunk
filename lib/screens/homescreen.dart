@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/screens/documents_screen.dart';
 import 'package:provider/provider.dart';
@@ -27,32 +29,41 @@ class _HomeScreenState extends State<HomeScreen> {
     HistoryScreen(),
     MoreScreen(),
   ];
+  bool firstLoading = true;
+  bool prevConnection = true;
 
-  // @override
-  // void didChangeDependencies() async {
-// bool isFirstLoading = true;
-  //   bool connectionStatus =
-  //       Provider.of<ConnectivityChangeNotifier>(context).connectivity();
+  @override
+  void didChangeDependencies() async {
+    bool connectionStatus =
+        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
-  //   if (!isFirstLoading && !connectionStatus) {
-  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //       content: Text('No Internet Access'),
-  //       duration: Duration(seconds: 2),
-  //     ));
-  //   } else if (!isFirstLoading && connectionStatus) {
-  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //       content: Text('Internet Connection Restored'),
-  //       duration: Duration(seconds: 2),
-  //       backgroundColor: Colors.grey,
-  //     ));
-  //   } else {
-  //     setState(() {
-  //       isFirstLoading = false;
-  //     });
-  //   }
+    log(firstLoading.toString());
+    log(prevConnection.toString());
+    log(connectionStatus.toString());
 
-  //   super.didChangeDependencies();
-  // }
+    if (connectionStatus != prevConnection) {
+      if (!firstLoading) {
+        if (!connectionStatus) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('No Internet Access'),
+            duration: Duration(seconds: 2),
+          ));
+        } else if (connectionStatus) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Internet Connection Restored'),
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.grey,
+          ));
+        }
+      }
+
+      setState(() {
+        prevConnection = connectionStatus;
+      });
+    }
+
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,9 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute(builder: (_) => homeScreenWidgets[index]));
             } else {
               navigatorKey.currentState?.push(
-                MaterialPageRoute(
-                    builder: (_) =>
-                        homeScreenWidgets[indexProvider.selectedIndex]),
+                MaterialPageRoute(builder: (_) => homeScreenWidgets[index]),
               );
             }
           }
