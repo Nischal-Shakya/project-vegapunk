@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    duration: Duration(seconds: 2),
+                    duration: const Duration(seconds: 2),
                   )));
 
           log("no internet");
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    duration: Duration(seconds: 2),
+                    duration: const Duration(seconds: 2),
                     backgroundColor: Colors.grey,
                   )));
           log("got internet");
