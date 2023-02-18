@@ -28,6 +28,16 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
   final confirmPinFocusNode = FocusNode();
   final pinFocusNode = FocusNode();
 
+  bool checkPattern(String pin) {
+    final intPin = int.parse(pin);
+    for (var i = 1; i <= 9; i++) {
+      if (intPin / i == 1111) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   void dispose() {
     textEditingController.dispose();
@@ -44,6 +54,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
     final double customHeight = MediaQuery.of(context).size.height;
     const List condition = [
       "Be a 4-digit number",
+      "Not be a repetitive pattern",
     ];
     return Scaffold(
       appBar: AppBar(
@@ -261,18 +272,27 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
         child: InkWell(
           onTap: () {
             if (pin.length == 4 && confirmPin.length == 4) {
-              if (pin == confirmPin) {
-                data.putData("mpin", pin);
-                Navigator.of(context, rootNavigator: true)
-                    .pushNamedAndRemoveUntil(
-                        HomeScreen.routeName, (Route<dynamic> route) => false);
-              } else {
+              if (checkPattern(pin)) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text("Pin codes do not match"),
+                    content: Text("Pin codes should not be repetitive pattern"),
                     duration: Duration(seconds: 2),
                   ),
                 );
+              } else {
+                if (pin == confirmPin) {
+                  data.putData("mpin", pin);
+                  Navigator.of(context, rootNavigator: true)
+                      .pushNamedAndRemoveUntil(HomeScreen.routeName,
+                          (Route<dynamic> route) => false);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Pin codes do not match"),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
               }
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
