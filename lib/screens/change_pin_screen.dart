@@ -40,6 +40,16 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
     super.dispose();
   }
 
+  bool checkPattern(String pin) {
+    final intPin = int.parse(pin);
+    for (var i = 1; i <= 9; i++) {
+      if (intPin / i == 1111) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = Provider.of<AllData>(context, listen: false);
@@ -339,23 +349,39 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
         child: InkWell(
           onTap: () {
             final String getOldPin = data.mpin;
-            if (newPin.length == 4 &&
-                confirmPin.length == 4 &&
-                oldPin.length == 4) {
-              if (oldPin == getOldPin) {
-                if (newPin != oldPin) {
-                  if (newPin == confirmPin) {
-                    data.putData("mpin", newPin);
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('MPIN has been changed'),
-                      duration: Duration(seconds: 2),
-                      backgroundColor: Colors.grey,
-                    ));
-                    Navigator.of(context).pop();
+            if (checkPattern(newPin)) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Pin codes should not be repetitive pattern"),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            } else {
+              if (newPin.length == 4 &&
+                  confirmPin.length == 4 &&
+                  oldPin.length == 4) {
+                if (oldPin == getOldPin) {
+                  if (newPin != oldPin) {
+                    if (newPin == confirmPin) {
+                      data.putData("mpin", newPin);
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('MPIN has been changed'),
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.grey,
+                      ));
+                      Navigator.of(context).pop();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Pin codes do not match"),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("Pin codes do not match"),
+                        content: Text("New pin can not be the same as old pin"),
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -363,7 +389,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("New pin can not be the same as old pin"),
+                      content: Text("Invalid old pin"),
                       duration: Duration(seconds: 2),
                     ),
                   );
@@ -371,18 +397,11 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text("Invalid old pin"),
+                    content: Text("Invalid pin code length"),
                     duration: Duration(seconds: 2),
                   ),
                 );
               }
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Invalid pin code length"),
-                  duration: Duration(seconds: 2),
-                ),
-              );
             }
           },
           child: Container(
