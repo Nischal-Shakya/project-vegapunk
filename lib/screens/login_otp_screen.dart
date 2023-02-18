@@ -106,7 +106,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                   keyboardType: TextInputType.number,
                   onCompleted: (v) {
                     otp = v;
-                    debugPrint(otp);
+                    log(otp);
                   },
 
                   onChanged: (value) {
@@ -175,7 +175,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
             onTap: () async {
               try {
                 if (connectionStatus) {
-                  debugPrint("Sending Otp");
+                  log("Sending Otp");
                   var response = await http.post(Uri.parse(postOtp), body: {
                     "NIN": resendOtp[0],
                     "mobile_number": "+977${resendOtp[1]}",

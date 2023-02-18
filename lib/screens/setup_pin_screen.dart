@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/screens/homescreen.dart';
 import 'package:provider/provider.dart';
@@ -143,7 +145,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                       controller: textEditingController,
                       keyboardType: TextInputType.number,
                       onCompleted: (v) {
-                        debugPrint("pin : $v");
+                        log("pin : $v");
                         FocusScope.of(context)
                             .requestFocus(confirmPinFocusNode);
                       },
@@ -216,7 +218,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                         controller: textEditingController2,
                         keyboardType: TextInputType.number,
                         onCompleted: (v) {
-                          debugPrint("confirm pin : $v");
+                          log("confirm pin : $v");
                         },
                         onChanged: (value) {
                           setState(() {

@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
@@ -104,7 +106,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                     controller: textEditingController,
                     keyboardType: TextInputType.number,
                     onCompleted: (v) {
-                      debugPrint("pin : $v");
+                      log("pin : $v");
                     },
                     onChanged: (value) {
                       setState(() {
@@ -183,7 +185,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                   child: const Text("Reset"),
                   onTap: () {
                     if (connectionStatus) {
-                      debugPrint("sending mobile and nin");
+                      log("sending mobile and nin");
                       http.post(Uri.parse(postMobileAndNinUrl), body: {
                         "NIN": ninNumber,
                         "mobile_number": "+977$mobileNumber"
@@ -239,7 +241,6 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                 ),
                 onTap: () async {
                   final isAuthenticated = await LocalAuthApi.authenticate();
-                  debugPrint(isAuthenticated.toString());
                   if (isAuthenticated) {
                     Navigator.of(context, rootNavigator: true)
                         .pushNamedAndRemoveUntil(HomeScreen.routeName,

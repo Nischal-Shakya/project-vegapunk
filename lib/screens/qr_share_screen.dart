@@ -39,25 +39,25 @@ class _QrShareScreenState extends State<QrShareScreen> {
       webSocketChannel = WebSocketChannel.connect(
         Uri.parse('$getPermitIdUrl/?token=$token'),
       );
-      debugPrint("initializing web socket connection");
+      log("initializing web socket connection");
       webSocketChannel.sink.add(jsonEncode({
         "type": "permit.create",
         "data": {"permitted_document_code": docType}
       }));
-      debugPrint("Sending Data Via Web Socket");
+      log("Sending Data Via Web Socket");
 
       webSocketChannel.stream.listen((message) {
         Map<String, dynamic> decodedMessage = jsonDecode(message);
-        debugPrint("message$message");
+        log("message$message");
         if (decodedMessage["type"] == "permit.create.success") {
-          debugPrint("message:$message");
+          log("message:$message");
           setState(() {
             permitId = decodedMessage["data"]["permit_id"];
             log(permitId);
             log(token);
             isLoading = false;
           });
-          debugPrint(permitId.toString());
+          log(permitId.toString());
         } else if (decodedMessage["type"] == "permit.accessed") {
           setState(() {
             viewers.add(decodedMessage["data"]["viewer"]);

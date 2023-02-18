@@ -38,8 +38,6 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
     ageVerificationData
         .removeWhere((key, value) => key == "face_image" || value == null);
 
-    debugPrint(ageVerificationData.toString());
-
     ageVerificationDataList = ageVerificationData.values.toList();
     setState(() {
       isLoading = false;
