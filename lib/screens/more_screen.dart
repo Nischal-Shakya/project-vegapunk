@@ -3,11 +3,11 @@ import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/settings_listview_helper.dart';
-import '../providers/all_data.dart';
 
 import './settings_screen.dart';
 import './login_screen.dart';
 import '../providers/homescreen_index_provider.dart';
+import 'package:hive/hive.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -94,7 +94,7 @@ class MoreScreen extends StatelessWidget {
                   child: InkWell(
                     child: const SettingsListViewHelper(option: 'Logout'),
                     onTap: () {
-                      AllData().deleteDataFromBox();
+                      Hive.box("allData").clear();
                       indexProvider.selectedIndexList.removeRange(
                           1, indexProvider.selectedIndexList.length);
                       Navigator.of(context, rootNavigator: true)

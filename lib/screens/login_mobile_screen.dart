@@ -41,30 +41,38 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
     final String ninNumber =
         ModalRoute.of(context)!.settings.arguments as String;
 
-    void submitMobileNumber() {
+    void submitMobileNumber() async {
       if (mobileNumbercontroller.text.isEmpty ||
           mobileNumbercontroller.text.length != 10) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Invalid Mobile Number"),
           duration: Duration(seconds: 2),
         ));
-        return;
       } else if (!connectionStatus) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("No Internet Access"),
           duration: Duration(seconds: 2),
         ));
-        return;
+      } else {
+        log("sending mobile and nin");
+        var response = await http.post(Uri.parse(postMobileAndNinUrl), body: {
+          "NIN": ninNumber,
+          "mobile_number": "+977${mobileNumbercontroller.text}"
+        });
+        if (response.statusCode >= 400) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              ("Invalid Mobile Number"),
+            ),
+            duration: Duration(seconds: 2),
+          ));
+        } else {
+          Hive.box("allData").put("firstLogin", "true");
+          Navigator.of(context, rootNavigator: true).pushNamed(
+              LoginOtpScreen.routeName,
+              arguments: [ninNumber, mobileNumbercontroller.text]);
+        }
       }
-      log("sending mobile and nin");
-      http.post(Uri.parse(postMobileAndNinUrl), body: {
-        "NIN": ninNumber,
-        "mobile_number": "+977${mobileNumbercontroller.text}"
-      });
-      Hive.box("allData").put("firstLogin", "true");
-      Navigator.of(context, rootNavigator: true).pushNamed(
-          LoginOtpScreen.routeName,
-          arguments: [ninNumber, mobileNumbercontroller.text]);
     }
 
     return Scaffold(
@@ -132,6 +140,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
               style: const TextStyle(fontSize: 16, color: Colors.black),
               keyboardType: TextInputType.number,
               autofocus: true,
+
               // textAlign: TextAlign.center,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(10),

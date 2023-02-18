@@ -13,6 +13,7 @@ class GlobalTheme {
       backgroundColor: Colors.redAccent,
       contentTextStyle: const TextStyle(color: Colors.white),
       behavior: SnackBarBehavior.floating,
+      elevation: 0,
     ),
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
       TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),

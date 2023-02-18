@@ -1,8 +1,14 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter/material.dart';
+import 'dart:developer';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:parichaya_frontend/custom_icons/custom_id_card_icon.dart';
 import './login_mobile_screen.dart';
+import 'package:http/http.dart' as http;
+import '../providers/connectivity_change_notifier.dart';
+import 'package:provider/provider.dart';
+import '../url.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,25 +33,43 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
+    bool connectionStatus =
+        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
     var maskFormatter = MaskTextInputFormatter(
         mask: '###-###-###-#',
         filter: {"#": RegExp(r'[0-9]')},
         type: MaskAutoCompletionType.lazy);
 
-    void submitData() {
+    void submitData() async {
       if (ninNumbercontroller.text.isEmpty ||
           ninNumbercontroller.text.length != 13) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Invalid National Identity Number"),
           duration: Duration(seconds: 2),
         ));
-        return;
+      } else if (!connectionStatus) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("No Internet Access"),
+          duration: Duration(seconds: 2),
+        ));
+      } else {
+        log("checking if nin exists");
+        var response =
+            await http.get(Uri.parse("$checkNin/${ninNumbercontroller.text}"));
+        if (response.statusCode >= 400) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              ("Invalid National Identity Number"),
+            ),
+            duration: Duration(seconds: 2),
+          ));
+        } else {
+          Navigator.of(context, rootNavigator: true).pushNamed(
+              LoginMobileScreen.routeName,
+              arguments: ninNumbercontroller.text);
+        }
       }
-      // log(ninNumbercontroller.text);
-      Navigator.of(context, rootNavigator: true).pushNamed(
-          LoginMobileScreen.routeName,
-          arguments: ninNumbercontroller.text);
     }
 
     return Scaffold(
