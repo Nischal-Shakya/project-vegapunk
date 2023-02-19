@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:parichaya_frontend/screens/age_verification_screen.dart';
+import 'package:parichaya_frontend/screens/shared_screen.dart';
+import 'package:parichaya_frontend/screens/document_detail_screen.dart';
 import 'dart:convert';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -172,7 +173,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                 arguments: decodedData);
           } else if (decodedData.containsKey('permit_id')) {
             Navigator.of(context, rootNavigator: true).pushReplacementNamed(
-                AgeVerificationScreen.routeName,
+                SharedScreen.routeName,
                 arguments: decodedData['permit_id']);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

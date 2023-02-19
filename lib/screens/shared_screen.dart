@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -7,18 +8,18 @@ import '../url.dart';
 import '../providers/all_data.dart';
 import 'package:provider/provider.dart';
 
-class AgeVerificationScreen extends StatefulWidget {
-  const AgeVerificationScreen({super.key});
+class SharedScreen extends StatefulWidget {
+  const SharedScreen({super.key});
 
   static const routeName = '/age_verification_screen';
 
   @override
-  State<AgeVerificationScreen> createState() => _AgeVerificationScreenState();
+  State<SharedScreen> createState() => _SharedScreenState();
 }
 
-class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
+class _SharedScreenState extends State<SharedScreen> {
   bool isLoading = true;
-  late List ageVerificationDataList;
+  late List documentDataList;
   late Uint8List faceImage;
 
   @override
@@ -29,16 +30,16 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
     var response = await http.get(Uri.parse("$getPidDataUrl/$permitId/"),
         headers: {"Authorization": "Token $token"});
 
-    Map<String, dynamic> ageVerificationData =
+    Map<String, dynamic> documentData =
         json.decode(response.body)["permitted_document"];
 
-    faceImage = const Base64Decoder()
-        .convert(ageVerificationData["face_image"].split(',')[1]);
+    faceImage = const Base64Decoder().convert(documentData["face_image"]);
 
-    ageVerificationData
+    documentData
         .removeWhere((key, value) => key == "face_image" || value == null);
 
-    ageVerificationDataList = ageVerificationData.values.toList();
+    documentDataList = documentData.values.toList();
+    log(documentData.toString());
     setState(() {
       isLoading = false;
     });
@@ -86,8 +87,7 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
                           width: 15,
                           height: 50,
                         ),
-                        Text(
-                            "${ageVerificationDataList[1]} ${ageVerificationDataList[2]}",
+                        Text("${documentDataList[1]} ${documentDataList[2]}",
                             style: Theme.of(context).textTheme.bodyMedium),
                       ],
                     ),
@@ -105,8 +105,8 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
                           height: 50,
                         ),
                         Text(
-                            DateFormat.yMMMEd().format(
-                                DateTime.parse(ageVerificationDataList[3])),
+                            DateFormat.yMMMEd()
+                                .format(DateTime.parse(documentDataList[3])),
                             style: Theme.of(context).textTheme.bodyMedium)
                       ],
                     ),
@@ -125,7 +125,7 @@ class _AgeVerificationScreenState extends State<AgeVerificationScreen> {
                         ),
                         Text(
                             calculateAge(
-                              DateTime.parse(ageVerificationDataList[3]),
+                              DateTime.parse(documentDataList[3]),
                             ).toString(),
                             style: Theme.of(context).textTheme.bodyMedium),
                       ],

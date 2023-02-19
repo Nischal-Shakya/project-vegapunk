@@ -29,10 +29,13 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  bool tapped = false;
   @override
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
+    Provider.of<ConnectivityChangeNotifier>(context).initialLoad();
+
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
@@ -55,6 +58,14 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
       } else {
         log("checking if nin exists");
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Checking National Identity Number"),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.grey,
+        ));
+        setState(() {
+          tapped = true;
+        });
         var response =
             await http.get(Uri.parse("$checkNin/${ninNumbercontroller.text}"));
         if (response.statusCode >= 400) {
@@ -69,6 +80,9 @@ class _LoginScreenState extends State<LoginScreen> {
               LoginMobileScreen.routeName,
               arguments: ninNumbercontroller.text);
         }
+        setState(() {
+          tapped = false;
+        });
       }
     }
 
@@ -148,15 +162,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(5.0),
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                child: const Center(
-                  child: Text(
-                    'Log In',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
+                child: Center(
+                  child: tapped
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text(
+                          'Log In',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
                 ),
               ),
             ),
