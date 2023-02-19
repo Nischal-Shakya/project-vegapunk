@@ -1,8 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:parichaya_frontend/screens/age_verification_screen.dart';
+import 'package:parichaya_frontend/screens/shared_screen.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:parichaya_frontend/screens/settings_screen.dart';
@@ -80,8 +78,7 @@ class MyApp extends StatelessWidget {
           MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
           SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
           ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
-          AgeVerificationScreen.routeName: (ctx) =>
-              const AgeVerificationScreen(),
+          SharedScreen.routeName: (ctx) => const SharedScreen(),
         },
       ),
     );

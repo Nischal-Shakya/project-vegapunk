@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/settings_listview_helper.dart';
 import './change_pin_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -28,7 +27,7 @@ class SettingsScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                     horizontal: customWidth * 0.05, vertical: 10),
                 child: InkWell(
-                  child: const SettingsListViewHelper(option: 'Change Mpin'),
+                  child: const Text('Change Mpin'),
                   onTap: () {
                     Navigator.of(context, rootNavigator: true)
                         .pushNamed(ChangePinScreen.routeName);

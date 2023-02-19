@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/screens/documents_screen.dart';
@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
             tooltip: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history_edu_outlined),
+            icon: FaIcon(FontAwesomeIcons.arrowDownUpAcrossLine),
             label: 'History',
             tooltip: '',
           ),

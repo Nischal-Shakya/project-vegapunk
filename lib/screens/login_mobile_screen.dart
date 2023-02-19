@@ -31,6 +31,8 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
     super.dispose();
   }
 
+  bool tapped = false;
+
   @override
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
@@ -55,6 +57,14 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
         ));
       } else {
         log("sending mobile and nin");
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Checking Mobile Number"),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.grey,
+        ));
+        setState(() {
+          tapped = true;
+        });
         var response = await http.post(Uri.parse(postMobileAndNinUrl), body: {
           "NIN": ninNumber,
           "mobile_number": "+977${mobileNumbercontroller.text}"
@@ -72,6 +82,9 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
               LoginOtpScreen.routeName,
               arguments: [ninNumber, mobileNumbercontroller.text]);
         }
+        setState(() {
+          tapped = false;
+        });
       }
     }
 
@@ -161,15 +174,19 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
               borderRadius: BorderRadius.circular(5.0),
               color: Theme.of(context).colorScheme.primary,
             ),
-            child: const Center(
-              child: Text(
-                'Next',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
+            child: Center(
+              child: tapped
+                  ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                  : const Text(
+                      'Next',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
             ),
           ),
         ),

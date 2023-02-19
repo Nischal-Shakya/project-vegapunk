@@ -27,11 +27,12 @@ class _QrShareScreenState extends State<QrShareScreen> {
   late WebSocketChannel webSocketChannel;
   List<String> viewers = [];
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+  late String docType;
 
   @override
   void didChangeDependencies() {
     final String token = Provider.of<AllData>(context, listen: false).token;
-    final String docType = ModalRoute.of(context)!.settings.arguments as String;
+    docType = ModalRoute.of(context)!.settings.arguments as String;
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
@@ -113,7 +114,8 @@ class _QrShareScreenState extends State<QrShareScreen> {
                     ),
                     QrImage(
                       // backgroundColor: Colors.white,
-                      data: json.encode({"permit_id": permitId}),
+                      data: json
+                          .encode({"permit_id": permitId, "doc_type": docType}),
                       version: QrVersions.auto,
                       size: 200.0,
                     ),
@@ -153,7 +155,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
                                         Theme.of(context).colorScheme.primary,
                                   ),
                                   Text(
-                                    "${viewers[index]} viewed your proof of age",
+                                    "${viewers[index]} viewed your ${docType == "AGE" ? 'proof of age' : 'driving license details'}",
                                     style: const TextStyle(color: Colors.black),
                                   ),
                                 ],

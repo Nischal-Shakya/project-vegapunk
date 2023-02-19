@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/models/conversion.dart';
+import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/all_data.dart';
@@ -180,9 +181,6 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                               );
                             }),
                       ),
-                      const Divider(
-                        height: 20,
-                      ),
                       DocumentDetailList(
                           fieldNames: fieldNames, fieldValues: fieldValues),
                     ],
@@ -196,7 +194,10 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
               radius: 30,
               child: IconButton(
                 splashRadius: 30,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true)
+                      .pushNamed(QrShareScreen.routeName, arguments: "DVL");
+                },
                 icon: const Icon(
                   Icons.qr_code_scanner,
                   color: Colors.white,
