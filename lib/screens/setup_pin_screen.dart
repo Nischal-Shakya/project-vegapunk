@@ -31,6 +31,9 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
   bool checkPattern(String pin) {
     final intPin = int.parse(pin);
     for (var i = 1; i <= 9; i++) {
+      if (intPin == 0) {
+        return true;
+      }
       if (intPin / i == 1111) {
         return true;
       }
