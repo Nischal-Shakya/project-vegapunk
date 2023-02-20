@@ -119,6 +119,9 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                   ]),
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
               const Text(
                 "PIN",
                 style: TextStyle(
