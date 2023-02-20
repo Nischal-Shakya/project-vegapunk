@@ -72,141 +72,136 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: <Widget>[
-            SliverAppBar(
-              title: Text(
-                convertedFieldName(docType),
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              backgroundColor: Theme.of(context).colorScheme.background,
-              elevation: 1,
-              automaticallyImplyLeading: true,
-              iconTheme:
-                  IconThemeData(color: Theme.of(context).colorScheme.primary),
-              floating: true,
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 45,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              5.0,
-                            ),
-                            border: Border.all(
-                                color: Theme.of(context).colorScheme.primary)),
-                        child: TabBar(
-                          controller: _tabController,
-                          indicator: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          unselectedLabelColor:
-                              Theme.of(context).colorScheme.primary,
-                          tabs: const [
-                            Tab(
-                              text: 'Front View',
-                            ),
-                            Tab(
-                              text: 'Back View',
-                            ),
-                          ],
-                          onTap: (value) {
-                            if (_tabController!.indexIsChanging) {
-                              setState(() {
-                                angle = (angle + pi) % (2 * pi);
-                              });
-                            }
-                          },
+      body: CustomScrollView(physics: const BouncingScrollPhysics(), slivers: <
+          Widget>[
+        SliverAppBar(
+          title: Text(
+            convertedFieldName(docType),
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          elevation: 1,
+          automaticallyImplyLeading: true,
+          iconTheme:
+              IconThemeData(color: Theme.of(context).colorScheme.primary),
+          floating: true,
+          actions: docType == "DVL"
+              ? [
+                  IconButton(
+                    splashRadius: 30,
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed(QrShareScreen.routeName, arguments: "DVL");
+                    },
+                    icon: const Icon(
+                      Icons.qr_code_scanner,
+                      size: 30,
+                    ),
+                    color: Theme.of(context).colorScheme.primary,
+                  )
+                ]
+              : null,
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate([
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          5.0,
                         ),
+                        border: Border.all(
+                            color: Theme.of(context).colorScheme.primary)),
+                    child: TabBar(
+                      controller: _tabController,
+                      indicator: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          if (firstTap &&
-                              _tabController!.previousIndex ==
-                                  _tabController!.index) {
-                            _tabController!
-                                .animateTo(_tabController!.index + 1);
-                            firstTap = false;
-                          } else {
-                            _tabController!.animateTo(
-                                _tabController!.previousIndex,
-                                duration: const Duration(milliseconds: 600));
-                          }
+                      unselectedLabelColor:
+                          Theme.of(context).colorScheme.primary,
+                      tabs: const [
+                        Tab(
+                          text: 'Front View',
+                        ),
+                        Tab(
+                          text: 'Back View',
+                        ),
+                      ],
+                      onTap: (value) {
+                        if (_tabController!.indexIsChanging) {
                           setState(() {
                             angle = (angle + pi) % (2 * pi);
                           });
-                        },
-                        child: TweenAnimationBuilder(
-                            tween: Tween<double>(begin: 0, end: angle),
-                            duration: const Duration(milliseconds: 600),
-                            builder: (context, value, _) {
-                              if (value >= (pi / 2)) {
-                                isSelectedImage = false;
-                              } else {
-                                isSelectedImage = true;
-                              }
-                              return Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.identity()
-                                  ..setEntry(3, 2, 0.001)
-                                  ..rotateY(value),
-                                child: SizedBox(
-                                  width: width,
-                                  height: 230,
-                                  child: isSelectedImage
-                                      ? Image.memory(
-                                          documentFrontImage,
-                                          fit: BoxFit.contain,
-                                        )
-                                      : Transform(
-                                          alignment: Alignment.center,
-                                          transform: Matrix4.identity()
-                                            ..rotateY(pi),
-                                          child: Image.memory(
-                                            documentBackImage,
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                ),
-                              );
-                            }),
-                      ),
-                      DocumentDetailList(
-                          fieldNames: fieldNames, fieldValues: fieldValues),
-                    ],
+                        }
+                      },
+                    ),
                   ),
-                ),
-              ]),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (firstTap &&
+                          _tabController!.previousIndex ==
+                              _tabController!.index) {
+                        _tabController!.animateTo(_tabController!.index + 1);
+                        firstTap = false;
+                      } else {
+                        _tabController!.animateTo(_tabController!.previousIndex,
+                            duration: const Duration(milliseconds: 600));
+                      }
+                      setState(() {
+                        angle = (angle + pi) % (2 * pi);
+                      });
+                    },
+                    child: TweenAnimationBuilder(
+                        tween: Tween<double>(begin: 0, end: angle),
+                        duration: const Duration(milliseconds: 600),
+                        builder: (context, value, _) {
+                          if (value >= (pi / 2)) {
+                            isSelectedImage = false;
+                          } else {
+                            isSelectedImage = true;
+                          }
+                          return Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.identity()
+                              ..setEntry(3, 2, 0.001)
+                              ..rotateY(value),
+                            child: SizedBox(
+                              width: width,
+                              height: 230,
+                              child: isSelectedImage
+                                  ? Image.memory(
+                                      documentFrontImage,
+                                      fit: BoxFit.contain,
+                                    )
+                                  : Transform(
+                                      alignment: Alignment.center,
+                                      transform: Matrix4.identity()
+                                        ..rotateY(pi),
+                                      child: Image.memory(
+                                        documentBackImage,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                            ),
+                          );
+                        }),
+                  ),
+                  DocumentDetailList(
+                      fieldNames: fieldNames, fieldValues: fieldValues),
+                ],
+              ),
             ),
           ]),
-      floatingActionButton: docType == "DVL"
-          ? CircleAvatar(
-              radius: 30,
-              child: IconButton(
-                splashRadius: 30,
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamed(QrShareScreen.routeName, arguments: "DVL");
-                },
-                icon: const Icon(
-                  Icons.qr_code_scanner,
-                  color: Colors.white,
-                  size: 30,
-                ),
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            )
-          : null,
+        ),
+      ]),
     );
   }
 }
