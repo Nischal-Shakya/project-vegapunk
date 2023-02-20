@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:parichaya_frontend/providers/global_theme.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -110,14 +111,49 @@ class MoreScreen extends StatelessWidget {
                         );
                         break;
                       case 3:
-                        Hive.box("allData").clear();
-                        indexProvider.selectedIndexList.removeRange(
-                            1, indexProvider.selectedIndexList.length);
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamedAndRemoveUntil(
-                          LoginScreen.routeName,
-                          (route) => false,
-                        );
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Log Out",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                content: const Text(
+                                    "Are you sure you want to log out?"),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Hive.box("allData").clear();
+                                      indexProvider.selectedIndexList
+                                          .removeRange(
+                                              1,
+                                              indexProvider
+                                                  .selectedIndexList.length);
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pushNamedAndRemoveUntil(
+                                        LoginScreen.routeName,
+                                        (route) => false,
+                                      );
+                                    },
+                                    child: const Text(
+                                      "Yes",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ))
+                                ],
+                              );
+                            });
                     }
                   },
                   isThreeLine: true,
