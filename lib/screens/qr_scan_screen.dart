@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/screens/shared_screen.dart';
-import 'package:parichaya_frontend/screens/document_detail_screen.dart';
 import 'dart:convert';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 

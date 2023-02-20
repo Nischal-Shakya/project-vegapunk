@@ -58,11 +58,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
       } else {
         log("checking if nin exists");
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Checking National Identity Number"),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.grey,
-        ));
         setState(() {
           tapped = true;
         });
@@ -154,20 +149,21 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               height: customHeight * 0.025,
             ),
-            InkWell(
-              onTap: submitData,
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                child: Center(
-                  child: tapped
-                      ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
-                      : const Text(
+            Container(
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              child: tapped
+                  ? const LinearProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.blue),
+                      minHeight: 50,
+                    )
+                  : InkWell(
+                      onTap: submitData,
+                      child: const Center(
+                        child: Text(
                           'Log In',
                           style: TextStyle(
                               color: Colors.white,
@@ -175,8 +171,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
-                ),
-              ),
+                      ),
+                    ),
             ),
           ],
         ),

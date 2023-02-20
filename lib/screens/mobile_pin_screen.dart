@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
@@ -47,6 +48,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
     final String mobileNumber = data.getData("mobileNumber");
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
+    bool hasFingerPrint = Hive.box("allData").get("enableFingerprint");
 
     return Scaffold(
       appBar: AppBar(
@@ -204,50 +206,54 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
               ],
             ),
             SizedBox(
-              height: customHeight * 0.025,
+              height: hasFingerPrint ? customHeight * 0.025 : 0,
             ),
-            Row(
-              children: [
-                const Expanded(child: Divider(color: Colors.grey)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    "OR",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ),
-                const Expanded(child: Divider(color: Colors.grey)),
-              ],
-            ),
+            hasFingerPrint
+                ? Row(
+                    children: [
+                      const Expanded(child: Divider(color: Colors.grey)),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            "OR",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          )),
+                      const Expanded(child: Divider(color: Colors.grey)),
+                    ],
+                  )
+                : Container(),
             SizedBox(
-              height: customHeight * 0.025,
+              height: hasFingerPrint ? customHeight * 0.025 : 0,
             ),
             Center(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(5),
-                radius: 300,
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.fingerprint,
-                      size: 48,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text("USE BIOMETRICS"),
-                  ],
-                ),
-                onTap: () async {
-                  final isAuthenticated = await LocalAuthApi.authenticate();
-                  if (isAuthenticated) {
-                    Navigator.of(context, rootNavigator: true)
-                        .pushNamedAndRemoveUntil(HomeScreen.routeName,
-                            (Route<dynamic> route) => false);
-                  }
-                },
-              ),
+              child: hasFingerPrint
+                  ? InkWell(
+                      borderRadius: BorderRadius.circular(5),
+                      radius: 300,
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.fingerprint,
+                            size: 48,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("USE BIOMETRICS"),
+                        ],
+                      ),
+                      onTap: () async {
+                        final isAuthenticated =
+                            await LocalAuthApi.authenticate();
+                        if (isAuthenticated) {
+                          Navigator.of(context, rootNavigator: true)
+                              .pushNamedAndRemoveUntil(HomeScreen.routeName,
+                                  (Route<dynamic> route) => false);
+                        }
+                      },
+                    )
+                  : null,
             )
           ],
         ),
