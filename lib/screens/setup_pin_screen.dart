@@ -54,7 +54,6 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
   Widget build(BuildContext context) {
     final data = Provider.of<AllData>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
-    final double customHeight = MediaQuery.of(context).size.height;
     const List condition = [
       "Be a 4-digit number",
       "Not be a repetitive pattern",
@@ -74,6 +73,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
         ),
         backgroundColor: Colors.transparent,
       ),
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
@@ -118,9 +118,6 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                         itemCount: condition.length),
                   ]),
                 ),
-              ),
-              SizedBox(
-                height: customHeight * 0.05,
               ),
               const Text(
                 "PIN",
@@ -191,9 +188,6 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                   ),
                 ),
               ]),
-              SizedBox(
-                height: customHeight * 0.05,
-              ),
               const Text(
                 "Confirm PIN",
                 style: TextStyle(

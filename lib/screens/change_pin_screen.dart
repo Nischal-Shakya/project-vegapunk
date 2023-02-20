@@ -57,7 +57,6 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   Widget build(BuildContext context) {
     final data = Provider.of<AllData>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
-    final double customHeight = MediaQuery.of(context).size.height;
     const List condition = [
       "Be a 4-digit number",
       "Not be same as old pin number"
@@ -77,6 +76,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
         ),
         backgroundColor: Colors.transparent,
       ),
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
@@ -193,9 +193,6 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                   ),
                 ),
               ]),
-              SizedBox(
-                height: customHeight * 0.025,
-              ),
               const Text(
                 "New PIN",
                 style: TextStyle(
@@ -268,9 +265,6 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                   ),
                 ),
               ]),
-              SizedBox(
-                height: customHeight * 0.025,
-              ),
               const Text(
                 "Confirm New PIN",
                 style: TextStyle(
@@ -321,6 +315,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                           }
                         },
                         focusNode: confirmPinFocusNode,
+                        autoDismissKeyboard: false,
                       ),
                     ),
                   ),

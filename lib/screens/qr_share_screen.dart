@@ -68,11 +68,12 @@ class _QrShareScreenState extends State<QrShareScreen> {
         }
       });
     } else {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("No Internet Connection"),
-        duration: Duration(seconds: 2),
-      ));
+      Navigator.of(context).pop();
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("No Internet Connection"),
+                duration: Duration(seconds: 2),
+              )));
     }
 
     super.didChangeDependencies();
@@ -105,19 +106,27 @@ class _QrShareScreenState extends State<QrShareScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
-                      'Share Qr Code',
+                      'Scan with Parichaya App',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                       ),
                     ),
-                    QrImage(
-                      // backgroundColor: Colors.white,
-                      data: json
-                          .encode({"permit_id": permitId, "doc_type": docType}),
-                      version: QrVersions.auto,
-                      size: 200.0,
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blue,
+                            width: 5,
+                          ),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: QrImage(
+                        data: json.encode(
+                            {"permit_id": permitId, "doc_type": docType}),
+                        version: QrVersions.auto,
+                        size: 200.0,
+                      ),
                     ),
                     const Center(
                       child: Padding(

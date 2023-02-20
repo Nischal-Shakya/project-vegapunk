@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/screens/shared_screen.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
-import 'package:parichaya_frontend/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -11,6 +10,7 @@ import 'providers/global_theme.dart';
 import 'providers/all_data.dart';
 import 'providers/connectivity_change_notifier.dart';
 import 'providers/homescreen_index_provider.dart';
+import 'providers/toggle_provider.dart';
 
 import './screens/homescreen.dart';
 import './screens/error_screen.dart';
@@ -39,6 +39,9 @@ void main() async {
     ),
     ChangeNotifierProvider<HomeScreenIndexProvider>(
       create: (context) => HomeScreenIndexProvider(),
+    ),
+    ChangeNotifierProvider<ToggleProvider>(
+      create: (context) => ToggleProvider(),
     )
   ], child: const MyApp()));
 }
@@ -47,19 +50,18 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    final ThemeData globalTheme = Provider.of<GlobalTheme>(context).globalTheme;
+    GlobalTheme globalTheme = Provider.of<GlobalTheme>(context, listen: false);
+    bool isDarkMode = Provider.of<ToggleProvider>(context).isDarkMode;
     return ChangeNotifierProvider(
       create: (context) {
         ConnectivityChangeNotifier changeNotifier =
             ConnectivityChangeNotifier();
-        //Inital load is an async function, can use FutureBuilder to show loading
-        //screen while this function running. This is not covered in this tutorial
         changeNotifier.initialLoad();
         return changeNotifier;
       },
       child: MaterialApp(
         title: 'Parichaya',
-        theme: globalTheme,
+        theme: isDarkMode ? globalTheme.darkTheme : globalTheme.lightTheme,
         debugShowCheckedModeBanner: false,
         initialRoute: Hive.box("allData").get("token") == null
             ? LoginScreen.routeName
@@ -67,7 +69,6 @@ class MyApp extends StatelessWidget {
         routes: {
           HomeScreen.routeName: (ctx) => const HomeScreen(),
           ErrorScreen.routeName: (ctx) => const ErrorScreen(),
-          SettingsScreen.routeName: (ctx) => const SettingsScreen(),
           LoginScreen.routeName: (ctx) => const LoginScreen(),
           LoginMobileScreen.routeName: (ctx) => const LoginMobileScreen(),
           LoginOtpScreen.routeName: (ctx) => const LoginOtpScreen(),

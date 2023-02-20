@@ -57,11 +57,6 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
         ));
       } else {
         log("sending mobile and nin");
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Checking Mobile Number"),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.grey,
-        ));
         setState(() {
           tapped = true;
         });
@@ -78,6 +73,8 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
           ));
         } else {
           Hive.box("allData").put("firstLogin", "true");
+          Hive.box("allData").put("enableFingerprint", false);
+          Hive.box("allData").put("darkmode", false);
           Navigator.of(context, rootNavigator: true).pushNamed(
               LoginOtpScreen.routeName,
               arguments: [ninNumber, mobileNumbercontroller.text]);
@@ -166,20 +163,22 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
-        child: InkWell(
-          onTap: submitMobileNumber,
-          child: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Center(
-              child: tapped
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : const Text(
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          child: tapped
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                )
+              : InkWell(
+                  onTap: submitMobileNumber,
+                  child: const Center(
+                    child: Text(
                       'Next',
                       style: TextStyle(
                           color: Colors.white,
@@ -187,8 +186,8 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
                           fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
-            ),
-          ),
+                  ),
+                ),
         ),
       ),
     );
