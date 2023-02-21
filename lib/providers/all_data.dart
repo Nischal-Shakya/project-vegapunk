@@ -91,4 +91,12 @@ class AllData {
   String get mpin {
     return thisBox.get("mpin");
   }
+
+  String get faceImage {
+    return json.decode(thisBox.get("data"))["documents"]["NID"]['face_image'];
+  }
+
+  String get dob {
+    return json.decode(thisBox.get("data"))["documents"]["NID"]['dob'];
+  }
 }

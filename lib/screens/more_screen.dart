@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:parichaya_frontend/providers/toggle_provider.dart';
 import 'package:parichaya_frontend/screens/change_pin_screen.dart';
-import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:parichaya_frontend/widgets/more_screen_listtile.dart';
 import 'package:provider/provider.dart';
 
+import './verify_age_screen.dart';
 import './login_screen.dart';
 import '../providers/homescreen_index_provider.dart';
 import 'package:hive/hive.dart';
@@ -52,7 +52,7 @@ class MoreScreen extends StatelessWidget {
                 icon: FontAwesomeIcons.cakeCandles,
                 trailingIcon: null,
                 onTap: () => Navigator.of(context, rootNavigator: true)
-                    .pushNamed(QrShareScreen.routeName, arguments: "AGE"),
+                    .pushNamed(VerifyAgeScreen.routeName),
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
@@ -136,15 +136,43 @@ class MoreScreen extends StatelessWidget {
                 icon: Icons.logout,
                 trailingIcon: null,
                 onTap: () {
-                  Hive.box("allData").clear();
-                  indexProvider.selectedIndexList
-                      .removeRange(1, indexProvider.selectedIndexList.length);
-                  toggler.changeTheme(false);
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamedAndRemoveUntil(
-                    LoginScreen.routeName,
-                    (route) => false,
-                  );
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                            title: const Text("Log Out",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18)),
+                            content:
+                                const Text("Are you sure you want to log out?"),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Hive.box("allData").clear();
+                                  indexProvider.selectedIndexList.removeRange(1,
+                                      indexProvider.selectedIndexList.length);
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pushNamedAndRemoveUntil(
+                                    LoginScreen.routeName,
+                                    (route) => false,
+                                  );
+                                },
+                                child: const Text(
+                                  "Yes",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    "Cancel",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ))
+                            ]);
+                      });
                 },
               ),
             ],
