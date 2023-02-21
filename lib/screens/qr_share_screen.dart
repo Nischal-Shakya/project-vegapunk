@@ -109,13 +109,9 @@ class _QrShareScreenState extends State<QrShareScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Scan with\nParichaya App',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
+                        style: Theme.of(context).textTheme.bodyLarge,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -139,16 +135,11 @@ class _QrShareScreenState extends State<QrShareScreen> {
                       const SizedBox(
                         height: 50,
                       ),
-                      const Align(
+                      Align(
                         alignment: Alignment.topLeft,
                         child: Text(
                           "Sharing:",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.start,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
                       const SizedBox(
@@ -163,11 +154,9 @@ class _QrShareScreenState extends State<QrShareScreen> {
                           const SizedBox(
                             width: 15,
                           ),
-                          const Text(
+                          Text(
                             "Photo",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
+                            style: Theme.of(context).textTheme.bodyMedium,
                           )
                         ],
                       ),
@@ -189,9 +178,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
                             docType == "AGE"
                                 ? "Verified Age"
                                 : "Driving License Details",
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
+                            style: Theme.of(context).textTheme.bodyMedium,
                           )
                         ],
                       ),
@@ -202,11 +189,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
                         alignment: Alignment.topLeft,
                         child: Text(
                           viewers.isNotEmpty ? "Viewers:" : "",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium,
                           textAlign: TextAlign.start,
                         ),
                       ),
@@ -234,9 +217,9 @@ class _QrShareScreenState extends State<QrShareScreen> {
                                     ),
                                     Text(
                                       viewers[index],
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                     ),
                                   ],
                                 ),

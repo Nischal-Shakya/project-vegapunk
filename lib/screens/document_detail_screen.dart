@@ -77,7 +77,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
         SliverAppBar(
           title: Text(
             convertedFieldName(docType),
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           backgroundColor: Theme.of(context).colorScheme.background,
           elevation: 1,

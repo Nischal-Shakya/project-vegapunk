@@ -32,7 +32,6 @@ class DataPermissionScreen extends StatelessWidget {
             ),
             child: const Text(
               "Send details to:",
-              style: TextStyle(fontSize: 28, color: Colors.black),
             ),
           ),
           SendDetailsWidget(result: result),

@@ -25,8 +25,7 @@ class MoreScreenListTile extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 5.0),
         child: Text(
           name,
-          style:
-              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
       subtitle: Text(

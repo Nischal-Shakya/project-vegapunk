@@ -13,6 +13,7 @@ import '../url.dart';
 import '../providers/connectivity_change_notifier.dart';
 
 import 'package:hive/hive.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 class LoginOtpScreen extends StatefulWidget {
   const LoginOtpScreen({Key? key}) : super(key: key);
@@ -27,11 +28,64 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   late String otp;
   String currentText = "";
   final formKey = GlobalKey<FormState>();
+  late Map<String, dynamic> deviceData;
+  bool isLoading = true;
 
   @override
   void dispose() {
     textEditingController.dispose();
     super.dispose();
+  }
+
+  Map<String, dynamic> readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'version.securityPatch': build.version.securityPatch,
+      'version.sdkInt': build.version.sdkInt,
+      'version.release': build.version.release,
+      'version.previewSdkInt': build.version.previewSdkInt,
+      'version.incremental': build.version.incremental,
+      'version.codename': build.version.codename,
+      'version.baseOS': build.version.baseOS,
+      'board': build.board,
+      'bootloader': build.bootloader,
+      'brand': build.brand,
+      'device': build.device,
+      'display': build.display,
+      'fingerprint': build.fingerprint,
+      'hardware': build.hardware,
+      'host': build.host,
+      'id': build.id,
+      'manufacturer': build.manufacturer,
+      'model': build.model,
+      'product': build.product,
+      'supported32BitAbis': build.supported32BitAbis,
+      'supported64BitAbis': build.supported64BitAbis,
+      'supportedAbis': build.supportedAbis,
+      'tags': build.tags,
+      'type': build.type,
+      'isPhysicalDevice': build.isPhysicalDevice,
+      'systemFeatures': build.systemFeatures,
+      'displaySizeInches':
+          ((build.displayMetrics.sizeInches * 10).roundToDouble() / 10),
+      'displayWidthPixels': build.displayMetrics.widthPx,
+      'displayWidthInches': build.displayMetrics.widthInches,
+      'displayHeightPixels': build.displayMetrics.heightPx,
+      'displayHeightInches': build.displayMetrics.heightInches,
+      'displayXDpi': build.displayMetrics.xDpi,
+      'displayYDpi': build.displayMetrics.yDpi,
+      'serialNumber': build.serialNumber,
+    };
+  }
+
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  @override
+  void didChangeDependencies() async {
+    deviceData = readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+    setState(() {
+      isLoading = false;
+    });
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -44,198 +98,205 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
     final List<String> resendOtp =
         ModalRoute.of(context)!.settings.arguments as List<String>;
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        toolbarHeight: 100,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.blue,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.transparent,
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Verification Code',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Enter the verification code sent via SMS to +977*******${resendOtp[1].substring(7)}',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-            SizedBox(
-              height: customHeight * 0.05,
-            ),
-            Form(
-              key: formKey,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
-                child: PinCodeTextField(
-                  appContext: context,
-                  length: 4,
-                  // obscureText: true,
-                  // obscuringCharacter: '*',
-                  // blinkWhenObscuring: true,
-
-                  autoDisposeControllers: false,
-                  animationType: AnimationType.slide,
-                  pinTheme: PinTheme(
-                    shape: PinCodeFieldShape.box,
-                    borderRadius: BorderRadius.circular(5),
-                    fieldHeight: 50,
-                    fieldWidth: 50,
-                    inactiveColor: Colors.black45,
-                    activeColor: Colors.black45,
-                    selectedColor: Theme.of(context).colorScheme.primary,
-                  ),
-                  showCursor: false,
-                  controller: textEditingController,
-                  keyboardType: TextInputType.number,
-                  onCompleted: (v) {
-                    otp = v;
-                    log(otp);
-                  },
-
-                  onChanged: (value) {
-                    setState(() {
-                      currentText = value;
-                    });
-                  },
-                  autoFocus: true,
-                  autoDismissKeyboard: false,
+    return isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              toolbarHeight: 100,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.blue,
                 ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
+              backgroundColor: Colors.transparent,
             ),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          InkWell(
-            onTap: () {
-              if (connectionStatus) {
-                http.post(Uri.parse(postMobileAndNinUrl), body: {
-                  "NIN": resendOtp[0],
-                  "mobile_number": "+977${resendOtp[1]}"
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      "OTP has been resent",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    duration: Duration(seconds: 2),
-                    backgroundColor: Colors.grey,
+            body: Padding(
+              padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Verification Code',
+                    style: Theme.of(context).textTheme.displayLarge,
                   ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("No Internet Connection"),
-                    duration: Duration(seconds: 2),
+                  const SizedBox(
+                    height: 10,
                   ),
-                );
-              }
-            },
-            child: Container(
-              height: 50,
-              width: 150,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  border: Border.all(color: Colors.blue)),
-              child: const Center(
-                child: Text(
-                  'Resend',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  Text(
+                    'Enter the verification code sent via SMS to +977*******${resendOtp[1].substring(7)}',
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () async {
-              try {
-                if (connectionStatus) {
-                  log("Sending Otp");
-                  var response = await http.post(Uri.parse(postOtp), body: {
-                    "NIN": resendOtp[0],
-                    "mobile_number": "+977${resendOtp[1]}",
-                    "otp": otp
-                  });
-
-                  if (response.statusCode >= 400) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Invalid OTP"),
-                        duration: Duration(seconds: 2),
+                  SizedBox(
+                    height: customHeight * 0.05,
+                  ),
+                  Form(
+                    key: formKey,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: customWidth * 0.05),
+                      child: PinCodeTextField(
+                        appContext: context,
+                        length: 4,
+                        autoDisposeControllers: false,
+                        animationType: AnimationType.slide,
+                        pinTheme: PinTheme(
+                          shape: PinCodeFieldShape.box,
+                          borderRadius: BorderRadius.circular(5),
+                          fieldHeight: 50,
+                          fieldWidth: 50,
+                          inactiveColor: Colors.black45,
+                          activeColor: Colors.black45,
+                          selectedColor: Theme.of(context).colorScheme.primary,
+                        ),
+                        showCursor: false,
+                        controller: textEditingController,
+                        keyboardType: TextInputType.number,
+                        onCompleted: (v) {
+                          otp = v;
+                          log(otp);
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            currentText = value;
+                          });
+                        },
+                        autoFocus: true,
+                        autoDismissKeyboard: false,
                       ),
-                    );
-                  } else {
-                    final String token = json.decode(response.body)["token"];
-                    log("token : $token");
-                    Hive.box("allData").put("token", token);
-                    Hive.box("allData").put("ninNumber", resendOtp[0]);
-                    Hive.box("allData").put("mobileNumber", resendOtp[1]);
-                    Navigator.of(context, rootNavigator: true)
-                        .pushReplacementNamed(SetupPinScreen.routeName);
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("No Internet Connection"),
-                      duration: Duration(seconds: 2),
                     ),
-                  );
-                }
-              } catch (err) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Invalid OTP"),
-                    duration: Duration(seconds: 2),
                   ),
-                );
-              }
-            },
-            child: Container(
-              height: 50,
-              width: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              child: const Center(
-                child: Text(
-                  'Confirm',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
+                ],
               ),
             ),
-          ),
-        ]),
-      ),
-    );
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Padding(
+              padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        if (connectionStatus) {
+                          http.post(Uri.parse(postMobileAndNinUrl), body: {
+                            "NIN": resendOtp[0],
+                            "mobile_number": "+977${resendOtp[1]}"
+                          }, headers: {
+                            "device_info": deviceData.toString()
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "OTP has been resent",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.grey,
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("No Internet Connection"),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 150,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(color: Colors.blue)),
+                        child: const Center(
+                          child: Text(
+                            'Resend',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        try {
+                          if (connectionStatus) {
+                            log("Sending Otp");
+                            var response = await http.post(Uri.parse(postOtp),
+                                body: {
+                                  "NIN": resendOtp[0],
+                                  "mobile_number": "+977${resendOtp[1]}",
+                                  "otp": otp
+                                });
+
+                            if (response.statusCode >= 400) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Invalid OTP"),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            } else {
+                              final String token =
+                                  json.decode(response.body)["token"];
+                              log("token : $token");
+                              Hive.box("allData").put("token", token);
+                              Hive.box("allData")
+                                  .put("ninNumber", resendOtp[0]);
+                              Hive.box("allData")
+                                  .put("mobileNumber", resendOtp[1]);
+                              Navigator.of(context, rootNavigator: true)
+                                  .pushReplacementNamed(
+                                      SetupPinScreen.routeName);
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("No Internet Connection"),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        } catch (err) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Invalid OTP"),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Confirm',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+            ),
+          );
   }
 }

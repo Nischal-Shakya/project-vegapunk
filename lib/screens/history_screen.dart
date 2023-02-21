@@ -76,7 +76,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: true,
           title:
-              Text('History', style: Theme.of(context).textTheme.headlineSmall),
+              Text('History', style: Theme.of(context).textTheme.headlineLarge),
           titleSpacing: 0,
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -139,37 +139,29 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             .colorScheme
                                             .primary
                                             .withOpacity(0.3),
-                                        title: Text(
-                                          data[index]["title"],
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
+                                        title: Text(data[index]["title"],
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineMedium),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              data[index]["description"],
-                                              style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.black),
-                                            ),
+                                            Text(data[index]["description"],
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headlineSmall),
                                             const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
-                                              DateFormat('MMM d yyyy, h:mm a')
-                                                  .format(DateTime.parse(
-                                                      data[index]
-                                                          ["created_at"])),
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300,
-                                              ),
-                                            ),
+                                                DateFormat('MMM d yyyy, h:mm a')
+                                                    .format(DateTime.parse(
+                                                        data[index]
+                                                            ["created_at"])),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headlineSmall),
                                           ],
                                         ),
                                         trailing:
