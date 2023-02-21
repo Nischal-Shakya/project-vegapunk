@@ -25,10 +25,7 @@ class DocumentDetailList extends StatelessWidget {
           children: [
             Text(
               convertedFieldName(fieldNames[index]),
-              style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.normal),
+              style: Theme.of(context).textTheme.labelLarge,
             ),
             Row(
               children: [
@@ -36,10 +33,7 @@ class DocumentDetailList extends StatelessWidget {
                   fieldNames[index].toString().contains("devanagari")
                       ? utf8.decode(fieldValues[index].toString().codeUnits)
                       : fieldValues[index].toString(),
-                  style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const Spacer(),
                 IconButton(

@@ -31,19 +31,11 @@ class SendDetailsWidget extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
             leading: CircleAvatar(
               radius: 30,
-              child: Text(
-                requester[0].toUpperCase(),
-                style:
-                    const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              ),
+              child: Text(requester[0].toUpperCase(),
+                  style: Theme.of(context).textTheme.headlineLarge),
             ),
-            title: Text(
-              requester,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 16),
-            ),
+            title:
+                Text(requester, style: Theme.of(context).textTheme.bodyMedium),
             subtitle: Row(
               children: [
                 Icon(
@@ -55,11 +47,8 @@ class SendDetailsWidget extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  'Recognized by Parichaya',
-                  style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.shadow),
+                  'Verified Requester',
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
               ],
             ),

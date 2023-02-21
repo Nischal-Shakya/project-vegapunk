@@ -108,7 +108,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
           children: [
             Text(
               'Moblie Number',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.displayLarge,
             ),
             const SizedBox(
               height: 10,
@@ -120,13 +120,9 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
             SizedBox(
               height: customHeight * 0.05,
             ),
-            const Text(
+            Text(
               "Registered Mobile Number",
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
+              style: Theme.of(context).textTheme.labelLarge,
             ),
             const SizedBox(
               height: 10,

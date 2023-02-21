@@ -25,6 +25,7 @@ dependencies:
   connectivity_plus: ^3.0.3
   intl: ^0.18.0
   font_awesome_flutter: ^10.4.0
+  device_info_plus: ^8.1.0
 
 
 

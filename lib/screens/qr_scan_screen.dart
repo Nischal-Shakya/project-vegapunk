@@ -94,25 +94,17 @@ class _QrScanScreenState extends State<QrScanScreen> {
             _buildQrView(context),
             Positioned(
               top: customHeight / 5,
-              child: const Text(
+              child: Text(
                 'Scan to share your  details',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.displayMedium,
                 textAlign: TextAlign.center,
               ),
             ),
             Positioned(
               top: customHeight / 4,
-              child: const Text(
+              child: Text(
                 "Please align the QR within the frame",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.displaySmall,
               ),
             ),
           ],
