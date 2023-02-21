@@ -86,7 +86,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
             children: [
               Text(
                 'Change MPIN',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(
                 height: 10,
@@ -102,7 +102,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                         child: Text(
                           "Your Mpin Must:",
                           textAlign: TextAlign.start,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
                     ),
@@ -125,13 +125,9 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               const SizedBox(
                 height: 20,
               ),
-              const Text(
+              Text(
                 "Old PIN",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(
                 height: 10,
@@ -149,6 +145,8 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                       // blinkWhenObscuring: true,
                       autoDisposeControllers: false,
                       animationType: AnimationType.slide,
+                      textStyle: Theme.of(context).textTheme.titleSmall,
+
                       pinTheme: PinTheme(
                         shape: PinCodeFieldShape.box,
                         borderRadius: BorderRadius.circular(5),
@@ -193,13 +191,9 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                   ),
                 ),
               ]),
-              const Text(
+              Text(
                 "New PIN",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(
                 height: 10,
@@ -217,6 +211,8 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                       // blinkWhenObscuring: true,
                       autoDisposeControllers: false,
                       animationType: AnimationType.slide,
+                      textStyle: Theme.of(context).textTheme.titleSmall,
+
                       pinTheme: PinTheme(
                         shape: PinCodeFieldShape.box,
                         borderRadius: BorderRadius.circular(5),
@@ -265,13 +261,9 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                   ),
                 ),
               ]),
-              const Text(
+              Text(
                 "Confirm New PIN",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(
                 height: 10,
@@ -290,6 +282,8 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                         // blinkWhenObscuring: true,
                         autoDisposeControllers: false,
                         animationType: AnimationType.slide,
+                        textStyle: Theme.of(context).textTheme.titleSmall,
+
                         pinTheme: PinTheme(
                           shape: PinCodeFieldShape.box,
                           borderRadius: BorderRadius.circular(5),

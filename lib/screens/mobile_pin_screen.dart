@@ -65,19 +65,15 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
             Center(
               child: Text(
                 'PARICHAYA',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.displayLarge,
               ),
             ),
             SizedBox(
               height: customHeight * 0.025,
             ),
-            const Text(
+            Text(
               "Enter MPIN to unlock app",
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
+              style: Theme.of(context).textTheme.labelLarge,
             ),
             const SizedBox(
               height: 10,
@@ -93,6 +89,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                     obscureText: pinObscure,
                     obscuringCharacter: '*',
                     // blinkWhenObscuring: true,
+                    textStyle: Theme.of(context).textTheme.titleSmall,
                     autoDisposeControllers: false,
                     animationType: AnimationType.slide,
                     pinTheme: PinTheme(
@@ -184,7 +181,10 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 GestureDetector(
-                  child: const Text("Reset"),
+                  child: Text(
+                    "Reset",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                   onTap: () {
                     if (connectionStatus) {
                       log("sending mobile and nin");
@@ -240,7 +240,10 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text("USE BIOMETRICS"),
+                          Text(
+                            "USE BIOMETRICS",
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
                         ],
                       ),
                       onTap: () async {

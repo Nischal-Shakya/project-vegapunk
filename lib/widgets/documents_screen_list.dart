@@ -49,7 +49,7 @@ class DocumentsScreenList extends StatelessWidget {
                   Expanded(
                     child: Text(
                       convertedFieldName(allDocumentTypes[index]),
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: Theme.of(context).textTheme.labelSmall,
                       softWrap: false,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

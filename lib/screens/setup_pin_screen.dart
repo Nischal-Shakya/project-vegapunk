@@ -83,7 +83,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
             children: [
               Text(
                 'Setup MPIN',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(
                 height: 10,
@@ -99,7 +99,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                         child: Text(
                           "Your Mpin Must:",
                           textAlign: TextAlign.start,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
                     ),
@@ -119,13 +119,12 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                   ]),
                 ),
               ),
-              const Text(
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
                 "PIN",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(
                 height: 10,
@@ -141,6 +140,8 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                       obscureText: pinObscure,
                       obscuringCharacter: '*',
                       // blinkWhenObscuring: true,
+                      textStyle: Theme.of(context).textTheme.titleSmall,
+
                       autoDisposeControllers: false,
                       animationType: AnimationType.slide,
                       pinTheme: PinTheme(
@@ -188,13 +189,9 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                   ),
                 ),
               ]),
-              const Text(
+              Text(
                 "Confirm PIN",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(
                 height: 10,
@@ -209,6 +206,8 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                         appContext: context,
                         length: 4,
                         obscureText: confirmPinObscure,
+                        textStyle: Theme.of(context).textTheme.titleSmall,
+
                         obscuringCharacter: '*',
                         // blinkWhenObscuring: true,
                         autoDisposeControllers: false,

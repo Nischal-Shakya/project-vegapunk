@@ -29,7 +29,7 @@ class MoreScreen extends StatelessWidget {
         appBar: AppBar(
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.black),
-          title: Text('More', style: Theme.of(context).textTheme.headlineSmall),
+          title: Text('More', style: Theme.of(context).textTheme.headlineLarge),
           titleSpacing: 0,
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -39,11 +39,11 @@ class MoreScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   "Features",
-                  style: TextStyle(color: Colors.black54),
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
               MoreScreenListTile(
@@ -54,11 +54,11 @@ class MoreScreen extends StatelessWidget {
                 onTap: () => Navigator.of(context, rootNavigator: true)
                     .pushNamed(VerifyAgeScreen.routeName),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   "Preferences",
-                  style: TextStyle(color: Colors.black54),
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
               MoreScreenListTile(
@@ -76,11 +76,11 @@ class MoreScreen extends StatelessWidget {
                 ),
                 onTap: null,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   "Security",
-                  style: TextStyle(color: Colors.black54),
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
               MoreScreenListTile(
@@ -107,11 +107,11 @@ class MoreScreen extends StatelessWidget {
                 ),
                 onTap: null,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   "Other",
-                  style: TextStyle(color: Colors.black54),
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
               MoreScreenListTile(

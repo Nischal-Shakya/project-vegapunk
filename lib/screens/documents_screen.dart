@@ -56,7 +56,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
         systemOverlayStyle:
             const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
         title:
-            Text('PARICHAYA', style: Theme.of(context).textTheme.headlineSmall),
+            Text('PARICHAYA', style: Theme.of(context).textTheme.headlineLarge),
         titleSpacing: 0,
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -80,12 +80,15 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
-                  SizedBox(
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text("Fetching Data")
+                  Text(
+                    "Fetching Data",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  )
                 ],
               ),
             )
@@ -106,10 +109,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                       data.allDocumentTypes().isEmpty
                           ? "No Document Available"
                           : "DOCUMENTS",
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18),
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                   const SizedBox(

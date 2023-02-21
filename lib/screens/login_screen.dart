@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Text(
               'PARICHAYA',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.displayLarge,
               textAlign: TextAlign.center,
             ),
             const SizedBox(
@@ -106,13 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(
               width: customWidth,
-              child: const Text(
+              child: Text(
                 "National Identity Number",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
             const SizedBox(
@@ -140,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 iconColor: Colors.black,
               ),
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: Theme.of(context).textTheme.labelLarge,
               keyboardType: TextInputType.number,
               textAlignVertical: TextAlignVertical.bottom,
               inputFormatters: [maskFormatter],
