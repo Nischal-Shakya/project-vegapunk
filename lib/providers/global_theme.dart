@@ -79,7 +79,7 @@ class GlobalTheme {
         fontWeight: FontWeight.normal,
       ),
       labelLarge: TextStyle(
-        color: Colors.white54,
+        color: Colors.black54,
         fontSize: 16,
         fontWeight: FontWeight.normal,
       ),
@@ -91,7 +91,6 @@ class GlobalTheme {
       labelSmall: TextStyle(
         fontSize: 12,
         color: Colors.black,
-        fontWeight: FontWeight.bold,
       ),
     ),
   );

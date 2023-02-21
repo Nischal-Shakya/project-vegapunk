@@ -143,7 +143,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
                     fontSize: 16,
                     color: Colors.grey,
                   )),
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: Theme.of(context).textTheme.labelLarge,
               keyboardType: TextInputType.number,
               autofocus: true,
 

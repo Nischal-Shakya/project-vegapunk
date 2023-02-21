@@ -89,6 +89,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                     obscureText: pinObscure,
                     obscuringCharacter: '*',
                     // blinkWhenObscuring: true,
+                    textStyle: Theme.of(context).textTheme.titleSmall,
                     autoDisposeControllers: false,
                     animationType: AnimationType.slide,
                     pinTheme: PinTheme(

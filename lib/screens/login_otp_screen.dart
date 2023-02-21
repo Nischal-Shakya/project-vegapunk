@@ -154,6 +154,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                           activeColor: Colors.black45,
                           selectedColor: Theme.of(context).colorScheme.primary,
                         ),
+                        textStyle: Theme.of(context).textTheme.titleSmall,
                         showCursor: false,
                         controller: textEditingController,
                         keyboardType: TextInputType.number,
@@ -215,13 +216,10 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5.0),
                             border: Border.all(color: Colors.blue)),
-                        child: const Center(
+                        child: Center(
                           child: Text(
                             'Resend',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall,
                             textAlign: TextAlign.center,
                           ),
                         ),

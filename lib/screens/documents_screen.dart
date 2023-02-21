@@ -80,12 +80,15 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
-                  SizedBox(
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text("Fetching Data")
+                  Text(
+                    "Fetching Data",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  )
                 ],
               ),
             )

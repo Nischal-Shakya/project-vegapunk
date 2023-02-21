@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 iconColor: Colors.black,
               ),
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: Theme.of(context).textTheme.labelLarge,
               keyboardType: TextInputType.number,
               textAlignVertical: TextAlignVertical.bottom,
               inputFormatters: [maskFormatter],

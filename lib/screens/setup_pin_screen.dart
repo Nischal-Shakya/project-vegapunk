@@ -140,6 +140,8 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                       obscureText: pinObscure,
                       obscuringCharacter: '*',
                       // blinkWhenObscuring: true,
+                      textStyle: Theme.of(context).textTheme.titleSmall,
+
                       autoDisposeControllers: false,
                       animationType: AnimationType.slide,
                       pinTheme: PinTheme(
@@ -204,6 +206,8 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                         appContext: context,
                         length: 4,
                         obscureText: confirmPinObscure,
+                        textStyle: Theme.of(context).textTheme.titleSmall,
+
                         obscuringCharacter: '*',
                         // blinkWhenObscuring: true,
                         autoDisposeControllers: false,

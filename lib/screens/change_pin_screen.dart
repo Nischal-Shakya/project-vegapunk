@@ -145,6 +145,8 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                       // blinkWhenObscuring: true,
                       autoDisposeControllers: false,
                       animationType: AnimationType.slide,
+                      textStyle: Theme.of(context).textTheme.titleSmall,
+
                       pinTheme: PinTheme(
                         shape: PinCodeFieldShape.box,
                         borderRadius: BorderRadius.circular(5),
@@ -209,6 +211,8 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                       // blinkWhenObscuring: true,
                       autoDisposeControllers: false,
                       animationType: AnimationType.slide,
+                      textStyle: Theme.of(context).textTheme.titleSmall,
+
                       pinTheme: PinTheme(
                         shape: PinCodeFieldShape.box,
                         borderRadius: BorderRadius.circular(5),
@@ -278,6 +282,8 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                         // blinkWhenObscuring: true,
                         autoDisposeControllers: false,
                         animationType: AnimationType.slide,
+                        textStyle: Theme.of(context).textTheme.titleSmall,
+
                         pinTheme: PinTheme(
                           shape: PinCodeFieldShape.box,
                           borderRadius: BorderRadius.circular(5),
