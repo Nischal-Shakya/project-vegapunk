@@ -12,6 +12,7 @@ import 'providers/connectivity_change_notifier.dart';
 import 'providers/homescreen_index_provider.dart';
 import 'providers/toggle_provider.dart';
 
+import './screens/verify_age_screen.dart';
 import './screens/homescreen.dart';
 import './screens/error_screen.dart';
 import './screens/login_screen.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
           SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
           ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
           SharedScreen.routeName: (ctx) => const SharedScreen(),
+          VerifyAgeScreen.routeName: (ctx) => const VerifyAgeScreen(),
         },
       ),
     );
