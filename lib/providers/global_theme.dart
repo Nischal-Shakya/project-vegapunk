@@ -56,11 +56,11 @@ class GlobalTheme {
         fontSize: 14,
         fontWeight: FontWeight.normal,
       ),
-      // titleLarge: TextStyle(
-      //   color: customBlue,
-      //   fontSize: 40,
-      //   fontWeight: FontWeight.bold,
-      // ),
+      titleLarge: TextStyle(
+        color: Colors.black,
+        fontSize: 40,
+        fontWeight: FontWeight.bold,
+      ),
       titleMedium: TextStyle(
         color: Colors.black,
         fontSize: 16,
