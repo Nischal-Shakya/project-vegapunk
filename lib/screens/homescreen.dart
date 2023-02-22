@@ -1,13 +1,12 @@
 import 'dart:developer';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/screens/documents_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/homescreen_index_provider.dart';
 import '../providers/connectivity_change_notifier.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../custom_icons/custom_icons.dart';
 import 'qr_scan_screen.dart';
 import 'more_screen.dart';
 import 'history_screen.dart';
@@ -137,26 +136,75 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(CustomIcons.note, size: 20),
+            icon: SizedBox(
+              height: 30,
+              width: 30,
+              child: SvgPicture.asset(('assets/icons/id.svg'),
+                  colorFilter:
+                      const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
+            ),
+            activeIcon: SizedBox(
+              height: 30,
+              width: 30,
+              child: SvgPicture.asset(('assets/icons/id.svg'),
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
+            ),
             label: 'My Id',
             tooltip: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code_scanner),
+            icon: SizedBox(
+              height: 30,
+              width: 25,
+              child: SvgPicture.asset(('assets/icons/scan-qrcode.svg'),
+                  colorFilter:
+                      const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
+            ),
+            activeIcon: SizedBox(
+              height: 30,
+              width: 25,
+              child: SvgPicture.asset(('assets/icons/scan-qrcode.svg'),
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
+            ),
             label: 'Scan',
             tooltip: '',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.arrowDownUpAcrossLine),
+            icon: SizedBox(
+              height: 30,
+              width: 30,
+              child: SvgPicture.asset(('assets/icons/down-up-arrow.svg'),
+                  colorFilter:
+                      const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
+            ),
+            activeIcon: SizedBox(
+              height: 30,
+              width: 30,
+              child: SvgPicture.asset(('assets/icons/down-up-arrow.svg'),
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
+            ),
             label: 'History',
             tooltip: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              CustomIcons.more,
-              size: 20,
+            icon: SizedBox(
+              height: 30,
+              width: 30,
+              child: SvgPicture.asset(('assets/icons/dots-9.svg'),
+                  colorFilter:
+                      const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
+            ),
+            activeIcon: SizedBox(
+              height: 30,
+              width: 30,
+              child: SvgPicture.asset(('assets/icons/dots-9.svg'),
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
             ),
             label: 'More',
             tooltip: '',

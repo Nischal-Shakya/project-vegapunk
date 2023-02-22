@@ -59,7 +59,6 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
       String token = Provider.of<AllData>(context).token;
       var response = await http.get(Uri.parse("$getPidDataUrl/$docType/"),
           headers: {"Authorization": "Token $token"});
-      print(response.body.toString());
       final Map<String, dynamic> allDocumentData =
           json.decode(response.body)["permitted_document"];
       allDocumentData

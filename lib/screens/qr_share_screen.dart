@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:provider/provider.dart';
@@ -147,9 +147,16 @@ class _QrShareScreenState extends State<QrShareScreen> {
                       ),
                       Row(
                         children: [
-                          Icon(
-                            Icons.portrait_outlined,
-                            color: Theme.of(context).colorScheme.primary,
+                          SizedBox(
+                            height: 20,
+                            width: 30,
+                            child: SvgPicture.asset(
+                              ('assets/icons/photo.svg'),
+                              colorFilter: ColorFilter.mode(
+                                  Theme.of(context).colorScheme.primary,
+                                  BlendMode.srcIn),
+                              fit: BoxFit.contain,
+                            ),
                           ),
                           const SizedBox(
                             width: 15,
@@ -165,11 +172,18 @@ class _QrShareScreenState extends State<QrShareScreen> {
                       ),
                       Row(
                         children: [
-                          FaIcon(
-                            docType == "AGE"
-                                ? Icons.calendar_month
-                                : FontAwesomeIcons.idCard,
-                            color: Theme.of(context).colorScheme.primary,
+                          SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: SvgPicture.asset(
+                              docType == "AGE"
+                                  ? ('assets/icons/calendar.svg')
+                                  : ('assets/icons/id-card.svg'),
+                              colorFilter: ColorFilter.mode(
+                                Theme.of(context).colorScheme.primary,
+                                BlendMode.srcIn,
+                              ),
+                            ),
                           ),
                           const SizedBox(
                             width: 15,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:parichaya_frontend/providers/toggle_provider.dart';
 import 'package:parichaya_frontend/screens/change_pin_screen.dart';
 import 'package:parichaya_frontend/widgets/more_screen_listtile.dart';
 import 'package:provider/provider.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import './verify_age_screen.dart';
 import './login_screen.dart';
@@ -60,7 +60,10 @@ class MoreScreen extends StatelessWidget {
                 MoreScreenListTile(
                   name: "Verify Age",
                   description: "Verify your age",
-                  icon: FontAwesomeIcons.cakeCandles,
+                  icon: SvgPicture.asset(('assets/icons/cake.svg'),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn)),
                   trailingIcon: null,
                   onTap: () => Navigator.of(context, rootNavigator: true)
                       .pushNamed(VerifyAgeScreen.routeName),
@@ -75,9 +78,13 @@ class MoreScreen extends StatelessWidget {
                 MoreScreenListTile(
                   name: "Dark Mode",
                   description: "Choose your light or dark theme preference",
-                  icon: toggler.isDarkMode
-                      ? FontAwesomeIcons.cloudMoon
-                      : FontAwesomeIcons.solidSun,
+                  icon: SvgPicture.asset(
+                      toggler.isDarkMode
+                          ? ('assets/icons/moon-star.svg')
+                          : ('assets/icons/sun.svg'),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn)),
                   trailingIcon: Switch(
                     activeColor: Theme.of(context).colorScheme.primary,
                     value: toggler.isDarkMode,
@@ -97,7 +104,10 @@ class MoreScreen extends StatelessWidget {
                 MoreScreenListTile(
                   name: "Change PIN",
                   description: "Set up a PIN to protect your app",
-                  icon: FontAwesomeIcons.lock,
+                  icon: SvgPicture.asset(('assets/icons/shield-lock.svg'),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn)),
                   trailingIcon: null,
                   onTap: () => Navigator.of(context, rootNavigator: true)
                       .pushNamed(ChangePinScreen.routeName),
@@ -105,7 +115,10 @@ class MoreScreen extends StatelessWidget {
                 MoreScreenListTile(
                   name: "Enable Fingerprint",
                   description: "Use fingerprint to login",
-                  icon: FontAwesomeIcons.fingerprint,
+                  icon: SvgPicture.asset(('assets/icons/fingerprint.svg'),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn)),
                   trailingIcon: Switch(
                     activeColor: Theme.of(context).colorScheme.primary,
                     value: toggler.isBiometricEnabled,
@@ -128,7 +141,10 @@ class MoreScreen extends StatelessWidget {
                 MoreScreenListTile(
                   name: "About Parichaya",
                   description: "Know more about Parichaya",
-                  icon: Icons.info_outline_rounded,
+                  icon: SvgPicture.asset(('assets/icons/info.svg'),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn)),
                   trailingIcon: null,
                   onTap: () => showLicensePage(
                     context: context,
@@ -144,7 +160,10 @@ class MoreScreen extends StatelessWidget {
                 MoreScreenListTile(
                   name: "Logout",
                   description: "Logout from the app",
-                  icon: Icons.logout,
+                  icon: SvgPicture.asset(('assets/icons/logout.svg'),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn)),
                   trailingIcon: null,
                   onTap: () {
                     showDialog(
