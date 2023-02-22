@@ -25,6 +25,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void didChangeDependencies() async {
     isLoading = true;
     String token = Provider.of<AllData>(context).token;
+    log(token);
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
