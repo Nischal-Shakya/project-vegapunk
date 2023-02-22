@@ -89,19 +89,11 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
       appBar: AppBar(
         elevation: 0,
         toolbarHeight: 100,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.blue,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        automaticallyImplyLeading: true,
         backgroundColor: Colors.transparent,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

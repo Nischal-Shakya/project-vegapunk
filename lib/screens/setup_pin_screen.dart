@@ -62,21 +62,13 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
       appBar: AppBar(
         elevation: 0,
         toolbarHeight: 100,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.blue,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        automaticallyImplyLeading: true,
         backgroundColor: Colors.transparent,
       ),
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+          padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,6 +97,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                     ),
                     ListView.builder(
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
@@ -133,7 +126,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                 Form(
                   key: formKey,
                   child: Padding(
-                    padding: EdgeInsets.only(right: customWidth * 0.12),
+                    padding: EdgeInsets.only(right: customWidth * 0.2),
                     child: PinCodeTextField(
                       appContext: context,
                       length: 4,
@@ -173,7 +166,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                   ),
                 ),
                 Positioned(
-                  right: 0,
+                  right: 30,
                   child: IconButton(
                     onPressed: () {
                       setState(() {
@@ -201,14 +194,15 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                   Form(
                     key: formKey2,
                     child: Padding(
-                      padding: EdgeInsets.only(right: customWidth * 0.12),
+                      padding: EdgeInsets.only(right: customWidth * 0.2),
                       child: PinCodeTextField(
                         appContext: context,
                         length: 4,
                         obscureText: confirmPinObscure,
                         textStyle: Theme.of(context).textTheme.titleSmall,
 
-                        obscuringCharacter: '*',
+                        // obscuringCharacter: '\u1F311',
+
                         // blinkWhenObscuring: true,
                         autoDisposeControllers: false,
                         animationType: AnimationType.slide,
@@ -241,7 +235,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                     ),
                   ),
                   Positioned(
-                    right: 0,
+                    right: 30,
                     child: IconButton(
                       onPressed: () {
                         setState(() {

@@ -152,9 +152,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Theme.of(context).colorScheme.primary,
               ),
               child: tapped
-                  ? const LinearProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Colors.blue),
-                      minHeight: 50,
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
                     )
                   : InkWell(
                       onTap: submitData,

@@ -75,8 +75,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
-          title:
-              Text('History', style: Theme.of(context).textTheme.headlineLarge),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(30.0),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text('Activity History',
+                      style: Theme.of(context).textTheme.headlineLarge)),
+            ),
+          ),
           titleSpacing: 0,
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -100,6 +108,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ? Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return IntrinsicHeight(
                           child: Row(

@@ -105,7 +105,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
                 physics: const BouncingScrollPhysics(),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: 50, horizontal: customWidth * 0.2),
+                      vertical: 50, horizontal: customWidth * 0.15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [

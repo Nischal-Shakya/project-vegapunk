@@ -30,6 +30,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   final formKey = GlobalKey<FormState>();
   late Map<String, dynamic> deviceData;
   bool isLoading = true;
+  bool tapped = false;
 
   @override
   void dispose() {
@@ -39,41 +40,8 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
 
   Map<String, dynamic> readAndroidBuildData(AndroidDeviceInfo build) {
     return <String, dynamic>{
-      'version.securityPatch': build.version.securityPatch,
-      'version.sdkInt': build.version.sdkInt,
-      'version.release': build.version.release,
-      'version.previewSdkInt': build.version.previewSdkInt,
-      'version.incremental': build.version.incremental,
-      'version.codename': build.version.codename,
       'version.baseOS': build.version.baseOS,
-      'board': build.board,
-      'bootloader': build.bootloader,
-      'brand': build.brand,
       'device': build.device,
-      'display': build.display,
-      'fingerprint': build.fingerprint,
-      'hardware': build.hardware,
-      'host': build.host,
-      'id': build.id,
-      'manufacturer': build.manufacturer,
-      'model': build.model,
-      'product': build.product,
-      'supported32BitAbis': build.supported32BitAbis,
-      'supported64BitAbis': build.supported64BitAbis,
-      'supportedAbis': build.supportedAbis,
-      'tags': build.tags,
-      'type': build.type,
-      'isPhysicalDevice': build.isPhysicalDevice,
-      'systemFeatures': build.systemFeatures,
-      'displaySizeInches':
-          ((build.displayMetrics.sizeInches * 10).roundToDouble() / 10),
-      'displayWidthPixels': build.displayMetrics.widthPx,
-      'displayWidthInches': build.displayMetrics.widthInches,
-      'displayHeightPixels': build.displayMetrics.heightPx,
-      'displayHeightInches': build.displayMetrics.heightInches,
-      'displayXDpi': build.displayMetrics.xDpi,
-      'displayYDpi': build.displayMetrics.yDpi,
-      'serialNumber': build.serialNumber,
     };
   }
 
@@ -104,19 +72,11 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
             appBar: AppBar(
               elevation: 0,
               toolbarHeight: 100,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.blue,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+              automaticallyImplyLeading: true,
               backgroundColor: Colors.transparent,
             ),
             body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+              padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -230,6 +190,9 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                         try {
                           if (connectionStatus) {
                             log("Sending Otp");
+                            setState(() {
+                              tapped = true;
+                            });
                             var response = await http.post(Uri.parse(postOtp),
                                 body: {
                                   "NIN": resendOtp[0],
@@ -257,6 +220,9 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                                   .pushReplacementNamed(
                                       SetupPinScreen.routeName);
                             }
+                            setState(() {
+                              tapped = false;
+                            });
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -281,16 +247,22 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                           borderRadius: BorderRadius.circular(5.0),
                           color: Theme.of(context).colorScheme.primary,
                         ),
-                        child: const Center(
-                          child: Text(
-                            'Confirm',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                        child: tapped
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Center(
+                                child: Text(
+                                  'Confirm',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                       ),
                     ),
                   ]),
