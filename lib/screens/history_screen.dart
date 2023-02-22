@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import '../url.dart';
@@ -49,16 +50,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Widget returnIcon(String activity) {
-    Color iconColor = Theme.of(context).colorScheme.primary;
+    String iconPath;
     if (activity == "logged_in") {
-      return Icon(Icons.login_outlined, color: iconColor);
+      iconPath = 'assets/icons/login.svg';
     } else if (activity == "qr_generated") {
-      return Icon(Icons.qr_code_2, color: iconColor);
+      iconPath = 'assets/icons/qr-code.svg';
     } else if (activity == "viewed_shared_details") {
-      return Icon(Icons.remove_red_eye_outlined, color: iconColor);
+      iconPath = 'assets/icons/eye.svg';
     } else {
-      return Icon(Icons.file_download_done_outlined, color: iconColor);
+      iconPath = 'assets/icons/verified-document.svg';
     }
+    return SvgPicture.asset(
+      iconPath,
+      colorFilter: ColorFilter.mode(
+        Theme.of(context).colorScheme.primary,
+        BlendMode.srcIn,
+      ),
+    );
   }
 
   @override
@@ -76,8 +84,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
-          title:
-              Text('History', style: Theme.of(context).textTheme.headlineLarge),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(30.0),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text('Activity History',
+                      style: Theme.of(context).textTheme.headlineLarge)),
+            ),
+          ),
           titleSpacing: 0,
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -101,6 +117,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ? Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return IntrinsicHeight(
                           child: Row(
@@ -118,6 +135,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     ),
                                     Container(
                                         padding: const EdgeInsets.all(4),
+                                        height: 30,
+                                        width: 30,
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(20),

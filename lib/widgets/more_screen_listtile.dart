@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MoreScreenListTile extends StatelessWidget {
   const MoreScreenListTile({
@@ -13,7 +13,7 @@ class MoreScreenListTile extends StatelessWidget {
 
   final String name;
   final String description;
-  final IconData icon;
+  final SvgPicture icon;
   final Widget? trailingIcon;
   final VoidCallback? onTap;
 
@@ -32,9 +32,10 @@ class MoreScreenListTile extends StatelessWidget {
         description,
         style: Theme.of(context).textTheme.labelLarge,
       ),
-      leading: FaIcon(
-        icon,
-        color: Theme.of(context).colorScheme.primary,
+      leading: SizedBox(
+        height: 30,
+        width: 30,
+        child: icon,
       ),
       trailing: trailingIcon,
       horizontalTitleGap: 10,

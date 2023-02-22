@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:parichaya_frontend/screens/shared_screen.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +79,6 @@ class MyApp extends StatelessWidget {
           MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
           SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
           ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
-          SharedScreen.routeName: (ctx) => const SharedScreen(),
           VerifyAgeScreen.routeName: (ctx) => const VerifyAgeScreen(),
         },
       ),

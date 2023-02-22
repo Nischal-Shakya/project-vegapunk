@@ -1,9 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:developer';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:parichaya_frontend/custom_icons/custom_id_card_icon.dart';
 import './login_mobile_screen.dart';
 import 'package:http/http.dart' as http;
 import '../providers/connectivity_change_notifier.dart';
@@ -130,11 +130,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 16,
                   color: Colors.grey,
                 ),
-                prefixIcon: const Icon(
-                  CustomIdCardIcon.idCard,
-                  size: 20,
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: SvgPicture.asset(('assets/icons/id-card.svg'),
+                      alignment: Alignment.centerLeft,
+                      fit: BoxFit.contain,
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn)),
                 ),
-                iconColor: Colors.black,
               ),
               style: Theme.of(context).textTheme.labelLarge,
               keyboardType: TextInputType.number,
@@ -152,9 +156,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Theme.of(context).colorScheme.primary,
               ),
               child: tapped
-                  ? const LinearProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Colors.blue),
-                      minHeight: 50,
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
                     )
                   : InkWell(
                       onTap: submitData,

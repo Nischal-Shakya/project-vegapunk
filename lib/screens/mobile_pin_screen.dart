@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
@@ -232,10 +233,12 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                       radius: 300,
                       child: Column(
                         children: [
-                          Icon(
-                            Icons.fingerprint,
-                            size: 48,
-                            color: Theme.of(context).colorScheme.primary,
+                          SvgPicture.asset(
+                            ('assets/icons/fingerprint-scan.svg'),
+                            colorFilter: ColorFilter.mode(
+                              Theme.of(context).colorScheme.primary,
+                              BlendMode.srcIn,
+                            ),
                           ),
                           const SizedBox(
                             height: 10,

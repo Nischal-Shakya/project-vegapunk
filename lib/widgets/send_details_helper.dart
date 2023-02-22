@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../custom_icons/custom_icons.dart';
 import '../models/conversion.dart';
 
 class SendDetailsWidget extends StatelessWidget {
@@ -38,11 +37,7 @@ class SendDetailsWidget extends StatelessWidget {
                 Text(requester, style: Theme.of(context).textTheme.bodyMedium),
             subtitle: Row(
               children: [
-                Icon(
-                  CustomIcons.shieldCheck,
-                  size: 16,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                const ImageIcon(AssetImage(('assets/icons/id.svg'))),
                 const SizedBox(
                   width: 5,
                 ),
