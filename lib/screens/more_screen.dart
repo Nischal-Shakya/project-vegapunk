@@ -66,7 +66,7 @@ class MoreScreen extends StatelessWidget {
                           BlendMode.srcIn)),
                   trailingIcon: null,
                   onTap: () => Navigator.of(context, rootNavigator: true)
-                      .pushNamed(VerifyAgeScreen.routeName),
+                      .pushNamed(VerifyAgeScreen.routeName, arguments: ""),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),

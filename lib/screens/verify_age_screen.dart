@@ -3,8 +3,12 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
 
+import '../url.dart';
 import '../providers/all_data.dart';
 
 int calculateAge(DateTime birthDate) {
@@ -25,93 +29,149 @@ int calculateAge(DateTime birthDate) {
   return age;
 }
 
-class VerifyAgeScreen extends StatelessWidget {
+class VerifyAgeScreen extends StatefulWidget {
   const VerifyAgeScreen({super.key});
 
   static const routeName = '/verify_age_screen';
 
   @override
+  State<VerifyAgeScreen> createState() => _VerifyAgeScreenState();
+}
+
+class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
+  late String faceImageByte64;
+  late Uint8List faceImage;
+  late String dob;
+  bool isLoading = true;
+
+  @override
+  void didChangeDependencies() async {
+    final String permitId =
+        ModalRoute.of(context)!.settings.arguments as String;
+    if (permitId.isNotEmpty) {
+      String token = Provider.of<AllData>(context).token;
+      var response = await http.get(Uri.parse("$getPidDataUrl/$permitId/"),
+          headers: {"Authorization": "Token $token"});
+      final Map<String, dynamic> documentData =
+          json.decode(response.body)["permitted_document"];
+      faceImageByte64 = documentData['face_image'];
+      faceImage = const Base64Decoder().convert(faceImageByte64);
+      dob = documentData['dob'];
+    } else {
+      faceImageByte64 = Provider.of<AllData>(context).faceImage;
+      faceImage = const Base64Decoder().convert(faceImageByte64);
+      dob = Provider.of<AllData>(context).dob;
+    }
+    isLoading = false;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final String faceImageByte64 = Provider.of<AllData>(context).faceImage;
-    final Uint8List faceImage = const Base64Decoder().convert(faceImageByte64);
-    final String dob = Provider.of<AllData>(context).dob;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: Colors.blue),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 30,
-          ),
-          Center(
-            child: Container(
-              alignment: Alignment.topCenter,
-              width: 160,
-              height: 160,
-              child: ClipOval(
-                child: Image.network(
-                  "https://thumbs.dreamstime.com/z/portrait-young-handsome-happy-man-wearing-glasses-casual-smart-blue-clothing-yellow-color-background-square-composition-200740125.jpg",
-                  fit: BoxFit.contain,
+    return isLoading
+        ? Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(height: 10),
+                Text(
+                  "Fetching Proof of Age",
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
-              ),
+              ],
             ),
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          Text(calculateAge(DateTime.parse(dob)).toString(),
-              style: Theme.of(context).textTheme.titleLarge),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.verified,
-                color: Colors.blue,
-              ),
-              Text(
-                "Verified Age",
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 60,
-          ),
-          Text(
-            DateFormat("h:m:s").format(DateTime.now()),
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          Text(
-            DateFormat.yMMMd().format(DateTime.now()),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          ElevatedButton.icon(
-              icon: const Icon(
-                Icons.verified,
-                color: Colors.white,
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              automaticallyImplyLeading: true,
+              iconTheme: const IconThemeData(color: Colors.black),
+            ),
+            body: Column(
+              children: [
+                const SizedBox(
+                  height: 30,
+                ),
+                Center(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    width: 160,
+                    height: 160,
+                    child: ClipOval(
+                      child: Image.memory(
+                        // "https://thumbs.dreamstime.com/z/portrait-young-handsome-happy-man-wearing-glasses-casual-smart-blue-clothing-yellow-color-background-square-composition-200740125.jpg",
+                        faceImage,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              onPressed: null,
-              label: Text(
-                "Create a QR Code",
-                style: Theme.of(context).textTheme.labelMedium,
-              ))
-        ],
-      ),
-    );
+                const SizedBox(
+                  height: 25,
+                ),
+                Text(calculateAge(DateTime.parse(dob)).toString(),
+                    style: Theme.of(context).textTheme.titleLarge),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: SvgPicture.asset(('assets/icons/verified.svg'),
+                          colorFilter: ColorFilter.mode(
+                              Theme.of(context).colorScheme.primary,
+                              BlendMode.srcIn)),
+                    ),
+                    Text(
+                      "Verified Age",
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 60,
+                ),
+                Text(
+                  DateFormat("h:m:s").format(DateTime.now()),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Text(
+                  DateFormat.yMMMd().format(DateTime.now()),
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton.icon(
+                    icon: SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: SvgPicture.asset(('assets/icons/scan-qrcode.svg'),
+                          colorFilter: ColorFilter.mode(
+                              Theme.of(context).colorScheme.primary,
+                              BlendMode.srcIn)),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          const MaterialStatePropertyAll(Colors.blue),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed(QrShareScreen.routeName, arguments: 'AGE');
+                    },
+                    label: Text(
+                      "Create a QR Code",
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ))
+              ],
+            ),
+          );
   }
 }

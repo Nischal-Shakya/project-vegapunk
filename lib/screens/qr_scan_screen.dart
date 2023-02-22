@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/screens/document_detail_screen.dart';
+import 'package:parichaya_frontend/screens/verify_age_screen.dart';
 import 'dart:convert';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -65,6 +66,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: true,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.blue),
       ),
       extendBodyBehindAppBar: true,
       body: TweenAnimationBuilder(
@@ -163,9 +165,15 @@ class _QrScanScreenState extends State<QrScanScreen> {
                 DataPermissionScreen.routeName,
                 arguments: decodedData);
           } else if (decodedData.containsKey('permit_id')) {
-            Navigator.of(context, rootNavigator: true).pushReplacementNamed(
-                DocumentDetailScreen.routeName,
-                arguments: decodedData['permit_id']);
+            if (decodedData['permit_id'] == "DVL") {
+              Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+                  DocumentDetailScreen.routeName,
+                  arguments: decodedData['permit_id']);
+            } else if (decodedData['permit_id'] == "AGE") {
+              Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+                  VerifyAgeScreen.routeName,
+                  arguments: decodedData['permit_id']);
+            }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text('Invalid data'),
