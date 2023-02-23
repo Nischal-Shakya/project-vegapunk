@@ -46,9 +46,10 @@ class SendDetailsButtons extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              title: const Text(
+              title: Text(
                 'Cancel',
                 textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               textColor: Colors.blue,
             ),
@@ -82,13 +83,17 @@ class SendDetailsButtons extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              title: const Text(
-                'Send details',
+              title: Text(
+                'Approve',
                 textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.displaySmall,
               ),
               tileColor: Theme.of(context).colorScheme.primary,
               textColor: Colors.white,
-              trailing: const Icon(Icons.send),
+              trailing: Icon(
+                Icons.send,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
           ),
         ),

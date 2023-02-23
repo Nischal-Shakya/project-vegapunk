@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../models/conversion.dart';
 
 class SendDetailsWidget extends StatelessWidget {
@@ -11,43 +14,68 @@ class SendDetailsWidget extends StatelessWidget {
     final double customHeight = MediaQuery.of(context).size.height;
     final double customWidth = MediaQuery.of(context).size.width;
     final String requester = result["requester"];
+    final String requesterUrl = result["requester_url"];
     final List requestedFields = result["requested_fields"];
+    final image = result["requester_image"];
+
     final List<Map<String, String>> purifiedFields = [
       ...requestedFields.map((element) {
         return convertedField(element);
       }).toList()
     ];
 
+    debugPrint(result.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: customWidth * 0.05,
-          ),
-          child: ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-            leading: CircleAvatar(
-              radius: 30,
-              child: Text(requester[0].toUpperCase(),
-                  style: Theme.of(context).textTheme.headlineLarge),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 10,
             ),
-            title:
-                Text(requester, style: Theme.of(context).textTheme.bodyMedium),
-            subtitle: Row(
+            Container(
+                width: 100,
+                height: 100,
+                child: Image.network(
+                  image,
+                  fit: BoxFit.contain,
+                )),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              requester,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            // const SizedBox(
+            //   height: 5,
+            // ),
+            Text(
+              requesterUrl,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const ImageIcon(AssetImage(('assets/icons/id.svg'))),
-                const SizedBox(
-                  width: 5,
+                SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: SvgPicture.asset(('assets/icons/verified.svg'),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.onBackground,
+                          BlendMode.srcIn)),
                 ),
                 Text(
-                  'Verified Requester',
-                  style: Theme.of(context).textTheme.labelMedium,
+                  "Verified Requester",
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
             ),
-          ),
+          ],
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(
