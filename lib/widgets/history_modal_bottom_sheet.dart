@@ -81,6 +81,8 @@ void historyModalBottomSheet(
                       horizontalTitleGap: 0,
                       visualDensity: VisualDensity.compact,
                       leading: SizedBox(
+                        height: 30,
+                        width: 30,
                         child: returnIcon(context, data['activity']),
                       ),
                       title: Text(data["title"],
@@ -90,10 +92,7 @@ void historyModalBottomSheet(
                               .format(DateTime.parse(data["created_at"])),
                           style: TextStyle(
                               fontSize: 14,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onBackground
-                                  .withOpacity(0.5))),
+                              color: Theme.of(context).colorScheme.shadow)),
                     ),
                     const Divider(),
                     Text(data["description"],

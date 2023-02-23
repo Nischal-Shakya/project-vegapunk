@@ -150,7 +150,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
         child: Container(
           height: 50,
           decoration: BoxDecoration(

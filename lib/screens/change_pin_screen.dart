@@ -330,7 +330,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
         child: InkWell(
           onTap: () {
             final String getOldPin = data.mpin;

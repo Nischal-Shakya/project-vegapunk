@@ -1,8 +1,8 @@
 {
     "request_id": "3dae1646-b194-4830-8d90-aa5dcfd7e693",
     "requester": "NIC Asia Bank Ltd.",
-    "requester_url": "https://nicasia.com",
-    "requester_image": "https://www.nicasiabank.com/assets/frontend/img/nic-asia-bank-og-logo.jpg",
+    "requester_domain": "https://nicasia.com",
+    "requester_logo": "https://www.nicasiabank.com/assets/frontend/img/nic-asia-bank-og-logo.jpg",
     "requested_fields": [
         "first_name",
         "middle_name",
@@ -58,11 +58,4 @@
         "DVL_blood_group",
         "CTZ_mother_full_name"
     ]
-}
-{
-    "firstName": "Asim Nepal",
-    "middle_name",
-    "last_name",
-    "dob",
-    "birthplace"
 }

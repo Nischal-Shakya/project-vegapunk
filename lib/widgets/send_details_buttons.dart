@@ -33,8 +33,8 @@ class SendDetailsButtons extends StatelessWidget {
                 child: ListTile(
                   dense: true,
                   onTap: () async {
-                    await http.post(
-                      Uri.parse('$scanRequestApprovalUrl/$requestId/approval/'),
+                    http.post(
+                      Uri.parse('$accessRequestUrl/$requestId/approval/'),
                       headers: {
                         "Authorization": "Token $token",
                         "Content-Type": "application/json",
@@ -78,8 +78,13 @@ class SendDetailsButtons extends StatelessWidget {
                 child: ListTile(
                   dense: true,
                   onTap: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Approving Request.'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.grey,
+                    ));
                     await http.post(
-                      Uri.parse('$scanRequestApprovalUrl/$requestId/approval/'),
+                      Uri.parse('$accessRequestUrl/$requestId/approval/'),
                       headers: {
                         "Authorization": "Token $token",
                         "Content-Type": "application/json",

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../models/conversion.dart';
+import '../url.dart';
 
 class SendDetailsWidget extends StatelessWidget {
   const SendDetailsWidget({required this.result, super.key});
@@ -11,9 +12,9 @@ class SendDetailsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final double customHeight = MediaQuery.of(context).size.height;
     final String requester = result["requester"];
-    final String requesterUrl = result["requester_url"];
+    final String requesterUrl = result["requester_domain"];
     final List requestedFields = result["requested_fields"];
-    final String image = result["requester_image"];
+    final String image = "$url${result["requester_logo"]}";
 
     final List<Map<String, String>> purifiedFields = [
       ...requestedFields.map((element) {
@@ -30,8 +31,9 @@ class SendDetailsWidget extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            Image.network(
-              image,
+            FadeInImage.assetNetwork(
+              placeholder: 'assets/images/placeholder.jpg',
+              image: image,
               fit: BoxFit.contain,
               height: 100,
               width: 100,

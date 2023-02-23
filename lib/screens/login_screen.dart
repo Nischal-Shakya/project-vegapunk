@@ -63,7 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
         });
         var response =
             await http.get(Uri.parse("$checkNin/${ninNumbercontroller.text}"));
-        if (response.statusCode >= 400) {
+        log(response.body.toString());
+        if (response.statusCode != 200) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
               ("Invalid National Identity Number"),

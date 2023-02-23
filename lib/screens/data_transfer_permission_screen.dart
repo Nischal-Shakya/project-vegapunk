@@ -25,8 +25,8 @@ class DataPermissionScreen extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        await http.post(
-          Uri.parse('$scanRequestApprovalUrl/$requestId/approval/'),
+        http.post(
+          Uri.parse('$accessRequestUrl/$requestId/approval/'),
           headers: {
             "Authorization": "Token $token",
             "Content-Type": "application/json",

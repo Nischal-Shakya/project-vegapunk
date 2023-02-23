@@ -258,7 +258,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
         child: InkWell(
           onTap: () {
             if (pin.length == 4 && confirmPin.length == 4) {

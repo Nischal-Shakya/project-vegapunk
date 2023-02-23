@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:parichaya_frontend/screens/document_detail_screen.dart';
 import 'package:parichaya_frontend/screens/verify_age_screen.dart';
 import 'dart:convert';
@@ -8,7 +11,8 @@ import 'package:provider/provider.dart';
 
 import './data_transfer_permission_screen.dart';
 import '../providers/connectivity_change_notifier.dart';
-
+import 'package:http/http.dart' as http;
+import '../url.dart';
 import 'dart:developer';
 import 'dart:io';
 
@@ -146,49 +150,52 @@ class _QrScanScreenState extends State<QrScanScreen> {
       (scanData) async {
         controller.pauseCamera();
         if (connectionStatus) {
-          // try {
-          String requestId = scanData.code.toString();
-          // log(requestId);
-          // if (requestId.isNotEmpty) {
-          // var response =
-          //     await http.get(Uri.parse('$getDataQrUrl/$requestId/'));
-          // Map decodedData = json.decode(response.body);
-          Map decodedData = json.decode(requestId);
+          try {
+            String requestId = scanData.code.toString();
+            // log(requestId);
+            if (requestId.isNotEmpty) {
+              final String token = Hive.box("allData").get("token");
+              var response = await http.get(
+                  Uri.parse('$accessRequestUrl/$requestId/'),
+                  headers: {"Authorization": "Token $token"});
+              Map decodedData = json.decode(response.body);
+              // Map decodedData = json.decode(requestId);
+              log(decodedData.toString());
 
-          if (decodedData.containsKey('request_id') &&
-              decodedData['request_id'].toString().isNotEmpty &&
-              decodedData.containsKey('requested_fields') &&
-              decodedData['requested_fields'].length > 0 &&
-              decodedData.containsKey('requester') &&
-              decodedData['requester'].toString().isNotEmpty) {
-            Navigator.of(context, rootNavigator: true).pushReplacementNamed(
-                DataPermissionScreen.routeName,
-                arguments: decodedData);
-          } else if (decodedData.containsKey('permit_id')) {
-            if (decodedData['doc_type'] == "DVL") {
-              Navigator.of(context, rootNavigator: true).pushReplacementNamed(
-                  DocumentDetailScreen.routeName,
-                  arguments: decodedData['permit_id']);
-            } else if (decodedData['doc_type'] == "AGE") {
-              Navigator.of(context, rootNavigator: true).pushReplacementNamed(
-                  VerifyAgeScreen.routeName,
-                  arguments: decodedData['permit_id']);
+              if (decodedData.containsKey('request_id') &&
+                  decodedData['request_id'].toString().isNotEmpty &&
+                  decodedData.containsKey('requested_fields') &&
+                  decodedData['requested_fields'].length > 0 &&
+                  decodedData.containsKey('requester') &&
+                  decodedData['requester'].toString().isNotEmpty) {
+                Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+                    DataPermissionScreen.routeName,
+                    arguments: decodedData);
+              } else if (decodedData.containsKey('permit_id')) {
+                if (decodedData['doc_type'] == "DVL") {
+                  Navigator.of(context, rootNavigator: true)
+                      .pushReplacementNamed(DocumentDetailScreen.routeName,
+                          arguments: decodedData['permit_id']);
+                } else if (decodedData['doc_type'] == "AGE") {
+                  Navigator.of(context, rootNavigator: true)
+                      .pushReplacementNamed(VerifyAgeScreen.routeName,
+                          arguments: decodedData['permit_id']);
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Invalid data'),
+                  duration: Duration(seconds: 2),
+                ));
+                controller.resumeCamera();
+              }
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              controller.resumeCamera();
             }
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Invalid data'),
-              duration: Duration(seconds: 2),
-            ));
+          } catch (error) {
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
             controller.resumeCamera();
           }
-          // } else {
-          //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          //   controller.resumeCamera();
-          // }
-          // } catch (error) {
-          //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          //   controller.resumeCamera();
-          // }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('No Internet Access'),

@@ -223,7 +223,7 @@ ColorScheme lightColorScheme = const ColorScheme(
   onSurface: Colors.black87,
   error: Colors.redAccent,
   onError: Colors.white,
-  shadow: Colors.black45,
+  shadow: Colors.black54,
   brightness: Brightness.light,
 );
 
@@ -240,6 +240,6 @@ ColorScheme darkColorScheme = const ColorScheme(
   onSurface: Colors.black87,
   error: Colors.redAccent,
   onError: Colors.white,
-  shadow: Colors.black45,
+  shadow: Colors.white54,
   brightness: Brightness.dark,
 );

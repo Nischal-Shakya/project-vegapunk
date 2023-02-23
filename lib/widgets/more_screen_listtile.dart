@@ -30,7 +30,8 @@ class MoreScreenListTile extends StatelessWidget {
       ),
       subtitle: Text(
         description,
-        style: Theme.of(context).textTheme.labelLarge,
+        style: TextStyle(
+            fontSize: 14, color: Theme.of(context).colorScheme.shadow),
       ),
       leading: SizedBox(
         height: 30,

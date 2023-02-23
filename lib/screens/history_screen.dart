@@ -136,9 +136,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   children: [
                                     Expanded(
                                       child: ListTile(
-                                        contentPadding: EdgeInsets.only(
-                                            bottom: 10,
-                                            right: customWidth * 0.05),
+                                        contentPadding: const EdgeInsets.only(
+                                          bottom: 10,
+                                        ),
                                         splashColor: Theme.of(context)
                                             .colorScheme
                                             .primary
@@ -163,9 +163,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                     .format(DateTime.parse(
                                                         data[index]
                                                             ["created_at"])),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineSmall),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .shadow)),
                                           ],
                                         ),
                                         trailing:

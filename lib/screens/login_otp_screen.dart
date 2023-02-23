@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/screens/setup_pin_screen.dart';
@@ -28,7 +29,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   late String otp;
   String currentText = "";
   final formKey = GlobalKey<FormState>();
-  late Map<String, dynamic> deviceData;
+  late BaseDeviceInfo deviceData;
   bool isLoading = true;
   bool tapped = false;
 
@@ -38,20 +39,16 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
     super.dispose();
   }
 
-  Map<String, dynamic> readAndroidBuildData(AndroidDeviceInfo build) {
-    return <String, dynamic>{
-      'version.baseOS': build.version.baseOS,
-      'device': build.device,
-    };
-  }
-
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   @override
   void didChangeDependencies() async {
-    deviceData = readAndroidBuildData(await deviceInfoPlugin.androidInfo);
-    setState(() {
-      isLoading = false;
-    });
+    if (isLoading) {
+      deviceData = await deviceInfoPlugin.deviceInfo;
+
+      setState(() {
+        isLoading = false;
+      });
+    }
 
     super.didChangeDependencies();
   }
@@ -138,135 +135,130 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
             floatingActionButton: Padding(
-              padding: EdgeInsets.symmetric(horizontal: customWidth * 0.1),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        if (connectionStatus) {
-                          http.post(Uri.parse(postMobileAndNinUrl), body: {
-                            "NIN": resendOtp[0],
-                            "mobile_number": "+977${resendOtp[1]}"
-                          }, headers: {
-                            "device_info": deviceData.toString()
-                          });
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                "OTP has been resent",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              duration: Duration(seconds: 2),
-                              backgroundColor: Colors.grey,
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("No Internet Connection"),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        }
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 150,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(color: Colors.blue)),
-                        child: Center(
+              padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
+              child: InkWell(
+                onTap: () async {
+                  try {
+                    if (connectionStatus) {
+                      log("Sending Otp");
+                      setState(() {
+                        tapped = true;
+                      });
+                      var response = await http.post(Uri.parse(postOtp), body: {
+                        "NIN": resendOtp[0],
+                        "mobile_number": "+977${resendOtp[1]}",
+                        "otp": otp
+                      }, headers: {
+                        'model': deviceData.data['model'].toString(),
+                        'os': Platform.operatingSystem.toString()
+                      });
+                      if (response.statusCode >= 400) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Invalid OTP"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      } else {
+                        final String token =
+                            json.decode(response.body)["token"];
+                        log("token : $token");
+                        Hive.box("allData").put("token", token);
+                        Hive.box("allData").put("ninNumber", resendOtp[0]);
+                        Hive.box("allData").put("mobileNumber", resendOtp[1]);
+                        Navigator.of(context, rootNavigator: true)
+                            .pushReplacementNamed(SetupPinScreen.routeName);
+                      }
+                      setState(() {
+                        tapped = false;
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("No Internet Connection"),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  } catch (err) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Invalid OTP"),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: tapped
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Center(
                           child: Text(
-                            'Resend',
-                            style: Theme.of(context).textTheme.titleSmall,
+                            'Confirm',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                         ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        try {
-                          if (connectionStatus) {
-                            log("Sending Otp");
-                            setState(() {
-                              tapped = true;
-                            });
-                            var response = await http.post(Uri.parse(postOtp),
-                                body: {
-                                  "NIN": resendOtp[0],
-                                  "mobile_number": "+977${resendOtp[1]}",
-                                  "otp": otp
-                                });
-
-                            if (response.statusCode >= 400) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Invalid OTP"),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            } else {
-                              final String token =
-                                  json.decode(response.body)["token"];
-                              log("token : $token");
-                              Hive.box("allData").put("token", token);
-                              Hive.box("allData")
-                                  .put("ninNumber", resendOtp[0]);
-                              Hive.box("allData")
-                                  .put("mobileNumber", resendOtp[1]);
-                              Navigator.of(context, rootNavigator: true)
-                                  .pushReplacementNamed(
-                                      SetupPinScreen.routeName);
-                            }
-                            setState(() {
-                              tapped = false;
-                            });
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("No Internet Connection"),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        } catch (err) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Invalid OTP"),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        }
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        child: tapped
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Center(
-                                child: Text(
-                                  'Confirm',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                      ),
-                    ),
-                  ]),
+                ),
+              ),
             ),
           );
   }
 }
+
+
+// InkWell(
+//                       onTap: () {
+//                         if (connectionStatus) {
+//                           http.post(Uri.parse(postMobileAndNinUrl), body: {
+//                             "NIN": resendOtp[0],
+//                             "mobile_number": "+977${resendOtp[1]}"
+//                           }, headers: {
+//                             "device_info": deviceData.toString()
+//                           });
+//                           ScaffoldMessenger.of(context).showSnackBar(
+//                             const SnackBar(
+//                               content: Text(
+//                                 "OTP has been resent",
+//                                 style: TextStyle(color: Colors.white),
+//                               ),
+//                               duration: Duration(seconds: 2),
+//                               backgroundColor: Colors.grey,
+//                             ),
+//                           );
+//                         } else {
+//                           ScaffoldMessenger.of(context).showSnackBar(
+//                             const SnackBar(
+//                               content: Text("No Internet Connection"),
+//                               duration: Duration(seconds: 2),
+//                             ),
+//                           );
+//                         }
+//                       },
+//                       child: Container(
+//                         height: 50,
+//                         width: 150,
+//                         decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(5.0),
+//                             border: Border.all(color: Colors.blue)),
+//                         child: Center(
+//                           child: Text(
+//                             'Resend',
+//                             style: Theme.of(context).textTheme.titleSmall,
+//                             textAlign: TextAlign.center,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
