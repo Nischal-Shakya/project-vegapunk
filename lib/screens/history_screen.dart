@@ -123,7 +123,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 color: Theme.of(context)
                                                     .colorScheme
                                                     .primary),
-                                            color: Colors.white),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background),
                                         child: returnIcon(
                                             context, data[index]["activity"])),
                                   ],

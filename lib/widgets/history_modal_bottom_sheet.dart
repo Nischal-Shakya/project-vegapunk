@@ -47,61 +47,93 @@ void historyModalBottomSheet(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
     builder: (context) => DraggableScrollableSheet(
       initialChildSize: 0.4,
-      maxChildSize: 0.8,
+      maxChildSize: 0.7,
       minChildSize: 0.32,
       expand: false,
-      builder: (context, scrollController) => SingleChildScrollView(
-        controller: scrollController,
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    width: 20,
-                    height: 2,
+      builder: (context, scrollController) => Column(
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                width: 90,
+                height: 6,
+                decoration: BoxDecoration(
                     color: Colors.grey[300],
-                  ),
-                ),
+                    borderRadius: BorderRadius.circular(5)),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              ListTile(
-                leading: SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: returnIcon(context, data['activity']),
-                ),
-                title: Text(data["title"],
-                    style: Theme.of(context).textTheme.headlineMedium),
-                subtitle: Text(
-                    DateFormat('MMM d yyyy, h:mm a')
-                        .format(DateTime.parse(data["created_at"])),
-                    style: Theme.of(context).textTheme.headlineSmall),
-              ),
-              const Divider(),
-              Text(data["description"],
-                  style: Theme.of(context).textTheme.headlineSmall),
-              Text("You shared:",
-                  style: Theme.of(context).textTheme.headlineSmall),
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
-                itemBuilder: ((context, index) {
-                  return Text("\u2022  ${purifiedFields[index]}",
-                      style: Theme.of(context).textTheme.headlineSmall);
-                }),
-                itemCount: purifiedFields.length,
-              ),
-            ],
+            ),
           ),
-        ),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              controller: scrollController,
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListTile(
+                      contentPadding: const EdgeInsets.all(0),
+                      horizontalTitleGap: 0,
+                      visualDensity: VisualDensity.compact,
+                      leading: SizedBox(
+                        child: returnIcon(context, data['activity']),
+                      ),
+                      title: Text(data["title"],
+                          style: Theme.of(context).textTheme.headlineMedium),
+                      subtitle: Text(
+                          DateFormat('MMM d yyyy, h:mm a')
+                              .format(DateTime.parse(data["created_at"])),
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onBackground
+                                  .withOpacity(0.5))),
+                    ),
+                    const Divider(),
+                    Text(data["description"],
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.onBackground)),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text("You shared:",
+                        style: Theme.of(context).textTheme.headlineMedium),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: ((context, index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Text(
+                                purifiedFields[index].toString(),
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                            ),
+                            const Divider(),
+                          ],
+                        );
+                      }),
+                      itemCount: purifiedFields.length,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     ),
   );

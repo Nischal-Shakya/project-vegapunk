@@ -53,7 +53,7 @@ class MoreScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
                     "Features",
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
                 MoreScreenListTile(
@@ -71,7 +71,7 @@ class MoreScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
                     "Preferences",
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
                 MoreScreenListTile(
@@ -97,7 +97,7 @@ class MoreScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
                     "Security",
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
                 MoreScreenListTile(
@@ -134,7 +134,7 @@ class MoreScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
                     "Other",
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
                 MoreScreenListTile(
@@ -172,7 +172,7 @@ class MoreScreen extends StatelessWidget {
                           title: Text("Log Out",
                               style: Theme.of(context).textTheme.titleMedium),
                           content: Text("Are you sure you want to log out?",
-                              style: Theme.of(context).textTheme.bodySmall),
+                              style: Theme.of(context).textTheme.labelLarge),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {

@@ -117,7 +117,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
               ),
               Text(
                 "PIN",
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
               const SizedBox(
                 height: 10,
@@ -184,7 +184,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
               ]),
               Text(
                 "Confirm PIN",
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
               const SizedBox(
                 height: 10,

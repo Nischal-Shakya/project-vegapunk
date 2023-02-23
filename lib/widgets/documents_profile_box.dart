@@ -76,6 +76,7 @@ class DocumentsProfileBox extends StatelessWidget {
                             },
                             icon: const Icon(
                               Icons.copy,
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -107,9 +108,12 @@ class DocumentsProfileBox extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(100),
               ),
-              child: Center(
-                child: Icon(Icons.qr_code_scanner,
-                    size: 40, color: Theme.of(context).colorScheme.background),
+              child: const Center(
+                child: Icon(
+                  Icons.qr_code_scanner,
+                  size: 40,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/providers/all_data.dart';
@@ -15,18 +17,23 @@ class SendDetailsButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final String token = Provider.of<AllData>(context, listen: false).token;
 
-    return Row(
-      children: [
-        Expanded(
-          child: Card(
-            shape: RoundedRectangleBorder(
-              side: const BorderSide(color: Colors.blue),
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: ListTile(
-              onTap: () async {
-                await http
-                    .post(
+    return Container(
+      decoration:
+          BoxDecoration(color: Theme.of(context).colorScheme.background),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Row(
+          children: [
+            Expanded(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(color: Colors.blue),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                child: ListTile(
+                  dense: true,
+                  onTap: () async {
+                    await http.post(
                       Uri.parse('$scanRequestApprovalUrl/$requestId/approval/'),
                       headers: {
                         "Authorization": "Token $token",
@@ -36,34 +43,42 @@ class SendDetailsButtons extends StatelessWidget {
                         "request_id": requestId,
                         "is_approved": false,
                       }),
-                    )
-                    .then((value) => Navigator.of(context, rootNavigator: true)
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Request Denied.'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.grey,
+                    ));
+                    Navigator.of(context, rootNavigator: true)
                         .pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => const HomeScreen()),
-                            (Route<dynamic> route) => false));
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
+                            (Route<dynamic> route) => false);
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  title: Text(
+                    'Cancel',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  textColor: Colors.blue,
+                ),
               ),
-              title: Text(
-                'Cancel',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              textColor: Colors.blue,
             ),
-          ),
-        ),
-        Expanded(
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
+            const SizedBox(
+              width: 10,
             ),
-            child: ListTile(
-              onTap: () async {
-                await http
-                    .post(
+            Expanded(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                child: ListTile(
+                  dense: true,
+                  onTap: () async {
+                    await http.post(
                       Uri.parse('$scanRequestApprovalUrl/$requestId/approval/'),
                       headers: {
                         "Authorization": "Token $token",
@@ -73,31 +88,37 @@ class SendDetailsButtons extends StatelessWidget {
                         "request_id": requestId,
                         "is_approved": true,
                       }),
-                    )
-                    .then((value) => Navigator.of(context, rootNavigator: true)
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Request Approved.'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.grey,
+                    ));
+                    Navigator.of(context, rootNavigator: true)
                         .pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => const HomeScreen()),
-                            (Route<dynamic> route) => false));
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              title: Text(
-                'Approve',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-              tileColor: Theme.of(context).colorScheme.primary,
-              textColor: Colors.white,
-              trailing: Icon(
-                Icons.send,
-                color: Theme.of(context).colorScheme.onPrimary,
+                            (Route<dynamic> route) => false);
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  title: const Text(
+                    'Approve',
+                    textAlign: TextAlign.center,
+                  ),
+                  tileColor: Theme.of(context).colorScheme.primary,
+                  textColor: Theme.of(context).colorScheme.background,
+                  trailing: Icon(
+                    Icons.send,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

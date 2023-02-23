@@ -18,7 +18,7 @@ class GlobalTheme {
       elevation: 0,
     ),
     iconTheme: const IconThemeData(
-      color: Colors.white,
+      color: Colors.black,
     ),
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
       TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
@@ -39,7 +39,7 @@ class GlobalTheme {
         fontWeight: FontWeight.bold,
       ),
       displayMedium: TextStyle(
-        color: whiteBackground,
+        color: Colors.white,
         fontSize: 24,
         fontWeight: FontWeight.bold,
       ),
@@ -89,9 +89,9 @@ class GlobalTheme {
         fontWeight: FontWeight.w500,
       ),
       bodySmall: TextStyle(
-        color: Colors.black54,
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
       ),
       labelLarge: TextStyle(
         color: Colors.black54,
@@ -128,7 +128,7 @@ class GlobalTheme {
       elevation: 0,
     ),
     iconTheme: const IconThemeData(
-      color: Colors.black,
+      color: Colors.white,
     ),
     fontFamily: GoogleFonts.poppins().fontFamily,
     textTheme: const TextTheme(
@@ -138,12 +138,12 @@ class GlobalTheme {
         fontWeight: FontWeight.bold,
       ),
       displayMedium: TextStyle(
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 24,
         fontWeight: FontWeight.bold,
       ),
       displaySmall: TextStyle(
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
@@ -162,11 +162,11 @@ class GlobalTheme {
         fontSize: 14,
         fontWeight: FontWeight.normal,
       ),
-      // titleLarge: TextStyle(
-      //   color: customBlue,
-      //   fontSize: 40,
-      //   fontWeight: FontWeight.bold,
-      // ),
+      titleLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 40,
+        fontWeight: FontWeight.bold,
+      ),
       titleMedium: TextStyle(
         color: Colors.white,
         fontSize: 16,
@@ -199,7 +199,7 @@ class GlobalTheme {
       ),
       labelMedium: TextStyle(
         fontSize: 14,
-        color: Colors.black54,
+        color: Colors.white54,
         fontWeight: FontWeight.w400,
       ),
       labelSmall: TextStyle(

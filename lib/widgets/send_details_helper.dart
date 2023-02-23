@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../models/conversion.dart';
@@ -12,11 +10,10 @@ class SendDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double customHeight = MediaQuery.of(context).size.height;
-    final double customWidth = MediaQuery.of(context).size.width;
     final String requester = result["requester"];
     final String requesterUrl = result["requester_url"];
     final List requestedFields = result["requested_fields"];
-    final image = result["requester_image"];
+    final String image = result["requester_image"];
 
     final List<Map<String, String>> purifiedFields = [
       ...requestedFields.map((element) {
@@ -24,7 +21,6 @@ class SendDetailsWidget extends StatelessWidget {
       }).toList()
     ];
 
-    debugPrint(result.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -32,77 +28,68 @@ class SendDetailsWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 10,
+              height: 50,
             ),
-            Container(
-                width: 100,
-                height: 100,
-                child: Image.network(
-                  image,
-                  fit: BoxFit.contain,
-                )),
+            Image.network(
+              image,
+              fit: BoxFit.contain,
+              height: 100,
+              width: 100,
+            ),
             const SizedBox(
               height: 10,
             ),
             Text(
               requester,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            // const SizedBox(
-            //   height: 5,
-            // ),
-            Text(
-              requesterUrl,
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            const SizedBox(
-              height: 5,
+            Text(
+              requesterUrl,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 30,
-                  width: 30,
+                  height: 20,
+                  width: 20,
                   child: SvgPicture.asset(('assets/icons/verified.svg'),
                       colorFilter: ColorFilter.mode(
-                          Theme.of(context).colorScheme.onBackground,
+                          Theme.of(context).colorScheme.primary,
                           BlendMode.srcIn)),
                 ),
                 Text(
                   "Verified Requester",
-                  style: Theme.of(context).textTheme.labelSmall,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ],
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-              customWidth * 0.05, 10, customWidth * 0.05, 0),
-          child: const Text("Details you will send",
-              style: TextStyle(color: Colors.black)),
+        const SizedBox(
+          height: 30,
         ),
+        Text("Details you are sharing",
+            style: Theme.of(context).textTheme.headlineMedium),
         const Divider(),
         SizedBox(
-          height: customHeight * 0.6,
+          height: customHeight * 0.42,
           child: ListView.builder(
-            physics: const ScrollPhysics(
-              parent: BouncingScrollPhysics(),
-            ),
+            physics: const BouncingScrollPhysics(),
             itemBuilder: ((context, index) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 10, horizontal: customWidth * 0.05),
+                    padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Row(
                       children: [
                         Text(
                           purifiedFields[index]["fieldName"].toString(),
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.shadow),
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
                         const Spacer(),
                         Text(
@@ -124,7 +111,6 @@ class SendDetailsWidget extends StatelessWidget {
             padding: const EdgeInsets.all(0),
           ),
         ),
-        const Divider(),
       ],
     );
   }

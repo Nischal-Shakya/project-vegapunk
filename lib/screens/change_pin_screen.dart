@@ -120,7 +120,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               ),
               Text(
                 "Old PIN",
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
               const SizedBox(
                 height: 10,
@@ -186,7 +186,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               ]),
               Text(
                 "New PIN",
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
               const SizedBox(
                 height: 10,
@@ -256,7 +256,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               ]),
               Text(
                 "Confirm New PIN",
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
               const SizedBox(
                 height: 10,

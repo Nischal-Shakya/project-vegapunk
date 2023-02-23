@@ -162,7 +162,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                             Icons.qr_code_scanner,
                             size: 30,
                           ),
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.onBackground,
                         )
                       ]
                     : null,
