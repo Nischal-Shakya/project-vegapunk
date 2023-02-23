@@ -176,6 +176,8 @@ class MoreScreen extends StatelessWidget {
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
+                                toggler.changeBiometrics(false);
+                                toggler.changeTheme(false);
                                 Hive.box("allData").clear();
                                 indexProvider.selectedIndexList.removeRange(
                                     1, indexProvider.selectedIndexList.length);
