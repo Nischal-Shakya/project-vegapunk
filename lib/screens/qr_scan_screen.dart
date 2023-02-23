@@ -165,11 +165,11 @@ class _QrScanScreenState extends State<QrScanScreen> {
                 DataPermissionScreen.routeName,
                 arguments: decodedData);
           } else if (decodedData.containsKey('permit_id')) {
-            if (decodedData['permit_id'] == "DVL") {
+            if (decodedData['doc_type'] == "DVL") {
               Navigator.of(context, rootNavigator: true).pushReplacementNamed(
                   DocumentDetailScreen.routeName,
                   arguments: decodedData['permit_id']);
-            } else if (decodedData['permit_id'] == "AGE") {
+            } else if (decodedData['doc_type'] == "AGE") {
               Navigator.of(context, rootNavigator: true).pushReplacementNamed(
                   VerifyAgeScreen.routeName,
                   arguments: decodedData['permit_id']);

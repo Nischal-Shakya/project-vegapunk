@@ -55,14 +55,18 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
 
       fieldNames = allDocumentData.keys.toList();
       fieldValues = allDocumentData.values.toList();
+      setState(() {
+        isLoading = false;
+        valueInitialized = false;
+      });
     } else if (valueInitialized) {
       String token = Provider.of<AllData>(context).token;
       var response = await http.get(Uri.parse("$getPidDataUrl/$docType/"),
           headers: {"Authorization": "Token $token"});
+
       final Map<String, dynamic> allDocumentData =
           json.decode(response.body)["permitted_document"];
-      allDocumentData
-          .removeWhere((key, value) => convertedFieldName(key) == "");
+
       final String documentFrontImageBase64 = allDocumentData['card_front'];
       final String documentBackImageBase64 = allDocumentData['card_back'];
 
@@ -70,12 +74,25 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
           const Base64Decoder().convert(documentFrontImageBase64);
       documentBackImage =
           const Base64Decoder().convert(documentBackImageBase64);
-
+      allDocumentData.remove("face_image");
+      allDocumentData.remove("card_front");
+      allDocumentData.remove("card_back");
+      allDocumentData.removeWhere(
+          (key, value) => value == null || key == "docType" || key == "NIN");
+      allDocumentData.update(
+          "dob", (value) => value.toString().substring(0, 10));
+      allDocumentData.update("DVL_blood_group", (value) => value.toString());
+      allDocumentData.update(
+          "DVL_date_of_issue", (value) => value.toString().substring(0, 10));
+      allDocumentData.update(
+          "DVL_date_of_expiry", (value) => value.toString().substring(0, 10));
       fieldNames = allDocumentData.keys.toList();
       fieldValues = allDocumentData.values.toList();
+      setState(() {
+        isLoading = false;
+        valueInitialized = false;
+      });
     }
-    valueInitialized = false;
-    isLoading = false;
 
     super.didChangeDependencies();
   }

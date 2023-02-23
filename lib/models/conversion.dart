@@ -316,7 +316,7 @@ const Map<String, Map> fieldMapping = {
     "category": "Driving License",
     "fieldName": "Categories",
   },
-  "DVL_data_of_issue": {
+  "DVL_date_of_issue": {
     "category": "Driving License",
     "fieldName": "Date of Issue",
   },

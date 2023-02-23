@@ -43,6 +43,7 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
   late Uint8List faceImage;
   late String dob;
   bool isLoading = true;
+  bool isSharedData = false;
 
   @override
   void didChangeDependencies() async {
@@ -52,6 +53,10 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
       String token = Provider.of<AllData>(context).token;
       var response = await http.get(Uri.parse("$getPidDataUrl/$permitId/"),
           headers: {"Authorization": "Token $token"});
+      setState(() {
+        isLoading = false;
+        isSharedData = true;
+      });
       final Map<String, dynamic> documentData =
           json.decode(response.body)["permitted_document"];
       faceImageByte64 = documentData['face_image'];
@@ -61,8 +66,10 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
       faceImageByte64 = Provider.of<AllData>(context).faceImage;
       faceImage = const Base64Decoder().convert(faceImageByte64);
       dob = Provider.of<AllData>(context).dob;
+      setState(() {
+        isLoading = false;
+      });
     }
-    isLoading = false;
     super.didChangeDependencies();
   }
 
@@ -143,31 +150,35 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                ElevatedButton.icon(
-                    icon: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: SvgPicture.asset(('assets/icons/scan-qrcode.svg'),
-                          colorFilter: const ColorFilter.mode(
-                              Colors.white, BlendMode.srcIn)),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor:
-                          const MaterialStatePropertyAll(Colors.blue),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                isSharedData
+                    ? const SizedBox()
+                    : ElevatedButton.icon(
+                        icon: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: SvgPicture.asset(
+                              ('assets/icons/scan-qrcode.svg'),
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.white, BlendMode.srcIn)),
                         ),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true)
-                          .pushNamed(QrShareScreen.routeName, arguments: 'AGE');
-                    },
-                    label: const Text(
-                      "Create a QR Code",
-                      style: TextStyle(color: Colors.white, fontSize: 14),
-                    ))
+                        style: ButtonStyle(
+                          backgroundColor:
+                              const MaterialStatePropertyAll(Colors.blue),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pushNamed(
+                              QrShareScreen.routeName,
+                              arguments: 'AGE');
+                        },
+                        label: const Text(
+                          "Create a QR Code",
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ))
               ],
             ),
           );
