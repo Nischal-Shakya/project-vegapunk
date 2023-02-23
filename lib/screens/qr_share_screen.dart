@@ -95,7 +95,6 @@ class _QrShareScreenState extends State<QrShareScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: true,
-          iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: isLoading
             ? const Center(

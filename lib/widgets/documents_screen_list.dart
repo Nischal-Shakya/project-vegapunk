@@ -23,6 +23,7 @@ class DocumentsScreenList extends StatelessWidget {
       ),
       itemCount: allDocumentTypes.length,
       padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
+      physics: const BouncingScrollPhysics(),
       itemBuilder: (BuildContext ctx, index) {
         return Card(
           elevation: 2,

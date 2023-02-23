@@ -28,7 +28,6 @@ class MoreScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
-          iconTheme: const IconThemeData(color: Colors.black),
           titleSpacing: 0,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(30.0),

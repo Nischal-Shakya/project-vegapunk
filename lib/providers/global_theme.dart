@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 const Color customBlue = Color(0xff0a81ff);
 const Color customBlueFaded = Color.fromARGB(255, 37, 143, 255);
 const Color customShadow = Color.fromRGBO(26, 20, 20, 10);
+const Color whiteBackground = Color(0xFFFAFAFA);
+const Color blackBackground = Color(0xFF303030);
 
 class GlobalTheme {
   final lightTheme = ThemeData(
@@ -15,14 +17,19 @@ class GlobalTheme {
       behavior: SnackBarBehavior.floating,
       elevation: 0,
     ),
+    iconTheme: const IconThemeData(
+      color: Colors.white,
+    ),
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
       TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
     }),
     appBarTheme: const AppBarTheme(
       foregroundColor: Colors.transparent,
       backgroundColor: Colors.transparent,
-      iconTheme: IconThemeData(color: Colors.black),
       elevation: 0,
+      iconTheme: IconThemeData(
+        color: Colors.black,
+      ),
     ),
     fontFamily: GoogleFonts.poppins().fontFamily,
     textTheme: const TextTheme(
@@ -32,12 +39,12 @@ class GlobalTheme {
         fontWeight: FontWeight.bold,
       ),
       displayMedium: TextStyle(
-        color: Colors.white,
+        color: whiteBackground,
         fontSize: 24,
         fontWeight: FontWeight.bold,
       ),
       displaySmall: TextStyle(
-        color: Colors.white,
+        color: whiteBackground,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
@@ -119,6 +126,9 @@ class GlobalTheme {
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.white),
       elevation: 0,
+    ),
+    iconTheme: const IconThemeData(
+      color: Colors.black,
     ),
     fontFamily: GoogleFonts.poppins().fontFamily,
     textTheme: const TextTheme(
@@ -207,7 +217,7 @@ ColorScheme lightColorScheme = const ColorScheme(
   secondary: Colors.amber,
   secondaryContainer: Colors.amber,
   onSecondary: Colors.amber,
-  background: Colors.white,
+  background: whiteBackground,
   onBackground: Colors.black,
   surface: Colors.white70,
   onSurface: Colors.black87,
@@ -224,7 +234,7 @@ ColorScheme darkColorScheme = const ColorScheme(
   secondary: Colors.amber,
   secondaryContainer: Colors.amber,
   onSecondary: Colors.amber,
-  background: Colors.black,
+  background: blackBackground,
   onBackground: Colors.white,
   surface: Colors.white70,
   onSurface: Colors.black87,

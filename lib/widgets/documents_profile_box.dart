@@ -76,7 +76,6 @@ class DocumentsProfileBox extends StatelessWidget {
                             },
                             icon: const Icon(
                               Icons.copy,
-                              color: Colors.white,
                             ),
                           ),
                         ],

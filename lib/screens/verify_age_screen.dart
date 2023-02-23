@@ -87,7 +87,6 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               automaticallyImplyLeading: true,
-              iconTheme: const IconThemeData(color: Colors.black),
             ),
             body: Column(
               children: [
@@ -134,7 +133,7 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                   height: 60,
                 ),
                 Text(
-                  DateFormat("h:m:s").format(DateTime.now()),
+                  DateFormat("h:mm:s").format(DateTime.now()),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Text(
@@ -146,12 +145,11 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                 ),
                 ElevatedButton.icon(
                     icon: SizedBox(
-                      height: 30,
-                      width: 30,
+                      height: 20,
+                      width: 20,
                       child: SvgPicture.asset(('assets/icons/scan-qrcode.svg'),
-                          colorFilter: ColorFilter.mode(
-                              Theme.of(context).colorScheme.primary,
-                              BlendMode.srcIn)),
+                          colorFilter: const ColorFilter.mode(
+                              Colors.white, BlendMode.srcIn)),
                     ),
                     style: ButtonStyle(
                       backgroundColor:
@@ -166,9 +164,9 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                       Navigator.of(context, rootNavigator: true)
                           .pushNamed(QrShareScreen.routeName, arguments: 'AGE');
                     },
-                    label: Text(
+                    label: const Text(
                       "Create a QR Code",
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: TextStyle(color: Colors.white, fontSize: 14),
                     ))
               ],
             ),

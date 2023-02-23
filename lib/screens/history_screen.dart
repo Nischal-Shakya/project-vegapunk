@@ -97,7 +97,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
           titleSpacing: 0,
           elevation: 0,
           backgroundColor: Colors.transparent,
-          iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: isLoading
             ? Center(

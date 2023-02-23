@@ -18,7 +18,6 @@ class DataPermissionScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.background,
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
