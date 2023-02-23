@@ -9,6 +9,12 @@ const Map<String, Map> fieldMapping = {
   "DVL": {
     "fieldName": "Driving License",
   },
+  "face_image": {
+    "fieldName": "Image",
+  },
+  "card_front": {
+    "fieldName": "Driving License Card",
+  },
 
   "NIN": {
     "category": "National Identity",

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:parichaya_frontend/widgets/history_modal_bottom_sheet.dart';
 import '../url.dart';
 import 'package:http/http.dart' as http;
 import '../providers/all_data.dart';
@@ -47,26 +47,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
       }
     }
     super.didChangeDependencies();
-  }
-
-  Widget returnIcon(String activity) {
-    String iconPath;
-    if (activity == "logged_in") {
-      iconPath = 'assets/icons/login.svg';
-    } else if (activity == "qr_generated") {
-      iconPath = 'assets/icons/qr-code.svg';
-    } else if (activity == "viewed_shared_details") {
-      iconPath = 'assets/icons/eye.svg';
-    } else {
-      iconPath = 'assets/icons/verified-document.svg';
-    }
-    return SvgPicture.asset(
-      iconPath,
-      colorFilter: ColorFilter.mode(
-        Theme.of(context).colorScheme.primary,
-        BlendMode.srcIn,
-      ),
-    );
   }
 
   @override
@@ -145,7 +125,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                     .primary),
                                             color: Colors.white),
                                         child: returnIcon(
-                                            data[index]["activity"])),
+                                            context, data[index]["activity"])),
                                   ],
                                 ),
                               ),
@@ -191,10 +171,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 ? const Icon(
                                                     Icons.keyboard_arrow_down)
                                                 : null,
-                                        onTap: () {
-                                          log(data[index]["extra_info"]
-                                              .toString());
-                                        },
+                                        onTap: data[index]["extra_info"] == null
+                                            ? null
+                                            : () {
+                                                log(data[index]["extra_info"]
+                                                    .toString());
+                                                historyModalBottomSheet(
+                                                    context, data[index]);
+                                              },
                                       ),
                                     ),
                                     const Divider(
