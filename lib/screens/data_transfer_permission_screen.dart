@@ -19,28 +19,30 @@ class DataPermissionScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              customWidth * 0.05,
-              AppBar().preferredSize.height * 1.5,
-              customWidth * 0.05,
-              0,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                customWidth * 0.05,
+                AppBar().preferredSize.height * 1.5,
+                customWidth * 0.05,
+                0,
+              ),
+              child: const Text(
+                "Send details to:",
+              ),
             ),
-            child: const Text(
-              "Send details to:",
-            ),
-          ),
-          SendDetailsWidget(result: result),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
-            child: SendDetailsButtons(
-              requestId: requestId,
-            ),
-          )
-        ],
+            SendDetailsWidget(result: result),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
+              child: SendDetailsButtons(
+                requestId: requestId,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
