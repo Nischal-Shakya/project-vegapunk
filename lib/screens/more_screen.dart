@@ -77,10 +77,7 @@ class MoreScreen extends StatelessWidget {
                 MoreScreenListTile(
                   name: "Dark Mode",
                   description: "Choose your light or dark theme preference",
-                  icon: SvgPicture.asset(
-                      toggler.isDarkMode
-                          ? ('assets/icons/moon-star.svg')
-                          : ('assets/icons/sun.svg'),
+                  icon: SvgPicture.asset(('assets/icons/moon-star.svg'),
                       colorFilter: ColorFilter.mode(
                           Theme.of(context).colorScheme.primary,
                           BlendMode.srcIn)),
@@ -176,6 +173,14 @@ class MoreScreen extends StatelessWidget {
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("Cancel",
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium),
+                            ),
+                            TextButton(
+                              onPressed: () {
                                 toggler.changeBiometrics(false);
                                 toggler.changeTheme(false);
                                 Hive.box("allData").clear();
@@ -188,14 +193,6 @@ class MoreScreen extends StatelessWidget {
                                 );
                               },
                               child: Text("Yes",
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Cancel",
                                   style:
                                       Theme.of(context).textTheme.titleMedium),
                             ),

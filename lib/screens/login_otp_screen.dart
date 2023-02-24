@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -32,10 +33,33 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   late BaseDeviceInfo deviceData;
   bool isLoading = true;
   bool tapped = false;
+  bool resend = false;
+  Timer? _timer;
+  int _start = 5;
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+            _start = 5;
+            resend = false;
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
 
   @override
   void dispose() {
     textEditingController.dispose();
+    _timer!.cancel();
     super.dispose();
   }
 
@@ -129,6 +153,56 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        resend = true;
+                      });
+                      startTimer();
+                      if (connectionStatus) {
+                        http.post(Uri.parse(postMobileAndNinUrl), body: {
+                          "NIN": resendOtp[0],
+                          "mobile_number": "+977${resendOtp[1]}"
+                        }, headers: {
+                          "device_info": deviceData.toString()
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "OTP has been resent",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            duration: Duration(seconds: 2),
+                            backgroundColor: Colors.grey,
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("No Internet Connection"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    },
+                    child: !resend
+                        ? Center(
+                            child: Text(
+                              'Resend',
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          )
+                        : const SizedBox(),
+                  ),
+                  resend
+                      ? Center(
+                          child: Text(
+                            "Resend code after ${_start}s",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
             ),
@@ -159,6 +233,9 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                             duration: Duration(seconds: 2),
                           ),
                         );
+                        setState(() {
+                          tapped = false;
+                        });
                       } else {
                         final String token =
                             json.decode(response.body)["token"];
@@ -179,6 +256,9 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                           duration: Duration(seconds: 2),
                         ),
                       );
+                      setState(() {
+                        tapped = false;
+                      });
                     }
                   } catch (err) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -187,6 +267,9 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                         duration: Duration(seconds: 2),
                       ),
                     );
+                    setState(() {
+                      tapped = false;
+                    });
                   }
                 },
                 child: Container(
@@ -217,48 +300,3 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
           );
   }
 }
-
-
-// InkWell(
-//                       onTap: () {
-//                         if (connectionStatus) {
-//                           http.post(Uri.parse(postMobileAndNinUrl), body: {
-//                             "NIN": resendOtp[0],
-//                             "mobile_number": "+977${resendOtp[1]}"
-//                           }, headers: {
-//                             "device_info": deviceData.toString()
-//                           });
-//                           ScaffoldMessenger.of(context).showSnackBar(
-//                             const SnackBar(
-//                               content: Text(
-//                                 "OTP has been resent",
-//                                 style: TextStyle(color: Colors.white),
-//                               ),
-//                               duration: Duration(seconds: 2),
-//                               backgroundColor: Colors.grey,
-//                             ),
-//                           );
-//                         } else {
-//                           ScaffoldMessenger.of(context).showSnackBar(
-//                             const SnackBar(
-//                               content: Text("No Internet Connection"),
-//                               duration: Duration(seconds: 2),
-//                             ),
-//                           );
-//                         }
-//                       },
-//                       child: Container(
-//                         height: 50,
-//                         width: 150,
-//                         decoration: BoxDecoration(
-//                             borderRadius: BorderRadius.circular(5.0),
-//                             border: Border.all(color: Colors.blue)),
-//                         child: Center(
-//                           child: Text(
-//                             'Resend',
-//                             style: Theme.of(context).textTheme.titleSmall,
-//                             textAlign: TextAlign.center,
-//                           ),
-//                         ),
-//                       ),
-//                     ),

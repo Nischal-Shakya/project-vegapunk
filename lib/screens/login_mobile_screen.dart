@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import '../providers/connectivity_change_notifier.dart';
 import 'package:provider/provider.dart';
@@ -128,8 +129,17 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
                       borderSide: const BorderSide(color: Colors.blue)),
-                  constraints: const BoxConstraints(maxHeight: 50),
-                  prefixIcon: const Icon(Icons.phone_android),
+                  constraints: const BoxConstraints(maxHeight: 52),
+                  prefixIcon: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 15, top: 10, bottom: 10),
+                    child: SvgPicture.asset(('assets/icons/phone.svg'),
+                        alignment: Alignment.centerLeft,
+                        fit: BoxFit.contain,
+                        colorFilter: ColorFilter.mode(
+                            Theme.of(context).colorScheme.primary,
+                            BlendMode.srcIn)),
+                  ),
                   prefixText: "+977 ",
                   hintStyle: const TextStyle(
                     fontSize: 16,
@@ -138,6 +148,8 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
               style: Theme.of(context).textTheme.labelLarge,
               keyboardType: TextInputType.number,
               autofocus: true,
+
+              textAlignVertical: TextAlignVertical.top,
 
               // textAlign: TextAlign.center,
               inputFormatters: [

@@ -61,7 +61,7 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
           json.decode(response.body)["permitted_document"];
       faceImageByte64 = documentData['face_image'];
       faceImage = const Base64Decoder().convert(faceImageByte64);
-      dob = documentData['dob'];
+      dob = documentData['date_of_birth'];
     } else {
       faceImageByte64 = Provider.of<AllData>(context).faceImage;
       faceImage = const Base64Decoder().convert(faceImageByte64);
@@ -123,8 +123,8 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 30,
-                      width: 30,
+                      height: 24,
+                      width: 24,
                       child: SvgPicture.asset(('assets/icons/verified.svg'),
                           colorFilter: ColorFilter.mode(
                               Theme.of(context).colorScheme.primary,

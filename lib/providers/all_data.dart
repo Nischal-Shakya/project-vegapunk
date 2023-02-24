@@ -12,13 +12,19 @@ class AllData {
     return thisBox.get("token");
   }
 
-  Future<void> storeAllDataInBox() async {
+  Future<bool> storeAllDataInBox() async {
     var response = await http
         .get(Uri.parse(getDataUrl), headers: {"Authorization": "Token $token"});
-    log("Storing Data");
 
-    thisBox.put("data", response.body);
-    thisBox.put("firstLogin", "false");
+    log(response.statusCode.toString());
+    if (response.statusCode != 200) {
+      return false;
+    } else {
+      log("Storing Data");
+      thisBox.put("data", response.body);
+      thisBox.put("firstLogin", "false");
+      return true;
+    }
   }
 
   void putData(String dataKey, String data) {
@@ -51,7 +57,8 @@ class AllData {
       log(allData.toString());
       allData.removeWhere(
           (key, value) => value == null || key == "docType" || key == "NIN");
-      allData.update("dob", (value) => value.toString().substring(0, 10));
+      allData.update(
+          "date_of_birth", (value) => value.toString().substring(0, 10));
       if (docType == "CTZ") {
         allData.update(
             "CTZ_date_of_issue", (value) => value.toString().substring(0, 10));
@@ -97,6 +104,7 @@ class AllData {
   }
 
   String get dob {
-    return json.decode(thisBox.get("data"))["documents"]["NID"]['dob'];
+    return json.decode(thisBox.get("data"))["documents"]["NID"]
+        ['date_of_birth'];
   }
 }

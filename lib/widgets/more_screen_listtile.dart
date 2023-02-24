@@ -34,8 +34,8 @@ class MoreScreenListTile extends StatelessWidget {
             fontSize: 14, color: Theme.of(context).colorScheme.shadow),
       ),
       leading: SizedBox(
-        height: 30,
-        width: 30,
+        height: 24,
+        width: 24,
         child: icon,
       ),
       trailing: trailingIcon,

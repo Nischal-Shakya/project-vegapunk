@@ -22,6 +22,8 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
   String confirmPin = "";
   bool pinObscure = true;
   bool confirmPinObscure = true;
+  bool pinValidated = false;
+  bool confirmPinValidated = false;
   final formKey = const Key("1");
   final formKey2 = const Key("2");
 
@@ -54,10 +56,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
   Widget build(BuildContext context) {
     final data = Provider.of<AllData>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
-    const List condition = [
-      "Be a 4-digit number",
-      "Not be a repetitive pattern",
-    ];
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -65,195 +64,184 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
         automaticallyImplyLeading: true,
         backgroundColor: Colors.transparent,
       ),
-      resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Setup MPIN',
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(children: <Widget>[
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Your Mpin Must:",
-                          textAlign: TextAlign.start,
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                    ),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5.0, vertical: 4.0),
-                            child: Text(
-                              "${index + 1}. ${condition[index].toString()}",
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          );
-                        },
-                        itemCount: condition.length),
-                  ]),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Setup MPIN',
+              style: Theme.of(context).textTheme.displayLarge,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              "Set up your account with a string MPIN",
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              "PIN",
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Stack(children: [
+              Form(
+                key: formKey,
+                child: PinCodeTextField(
+                  appContext: context,
+                  length: 4,
+                  obscureText: pinObscure,
+                  textStyle:
+                      const TextStyle(color: Colors.black45, fontSize: 16),
+                  obscuringCharacter: '\u2B24',
+                  autoDisposeControllers: false,
+                  animationType: AnimationType.slide,
+                  pinTheme: PinTheme(
+                      shape: PinCodeFieldShape.box,
+                      borderRadius: BorderRadius.circular(5),
+                      fieldHeight: 50,
+                      fieldWidth: 50,
+                      inactiveColor: Colors.black45,
+                      activeColor: Colors.black45,
+                      selectedColor: Theme.of(context).colorScheme.primary,
+                      fieldOuterPadding: const EdgeInsets.only(right: 15)),
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  showCursor: false,
+                  validator: (value) {
+                    if (value?.length != 4) {
+                      return "*Invalid MPIN length";
+                    }
+                    if (checkPattern(value!)) {
+                      return "*MPIN should not be repetitive";
+                    }
+
+                    pinValidated = true;
+                    return null;
+                  },
+                  onChanged: (_) {},
+                  errorTextSpace: 30,
+                  controller: textEditingController,
+                  keyboardType: TextInputType.number,
+                  onCompleted: (value) {
+                    setState(() {
+                      pin = value;
+                    });
+                    log("pin : $value");
+                    FocusScope.of(context).requestFocus(confirmPinFocusNode);
+                  },
+                  focusNode: pinFocusNode,
+                  autoDismissKeyboard: false,
+                  autoFocus: true,
                 ),
               ),
-              const SizedBox(
-                height: 20,
+              Positioned(
+                right: 60,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      pinObscure = !pinObscure;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.visibility,
+                    color: pinObscure
+                        ? Colors.grey
+                        : Theme.of(context).colorScheme.primary,
+                  ),
+                ),
               ),
-              Text(
-                "PIN",
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Stack(children: [
+            ]),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              "Confirm PIN",
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Stack(
+              children: [
                 Form(
-                  key: formKey,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: customWidth * 0.2),
-                    child: PinCodeTextField(
-                      appContext: context,
-                      length: 4,
-                      obscureText: pinObscure,
-                      obscuringCharacter: '*',
-                      // blinkWhenObscuring: true,
-                      textStyle: Theme.of(context).textTheme.titleSmall,
+                  key: formKey2,
+                  child: PinCodeTextField(
+                    appContext: context,
+                    length: 4,
+                    obscureText: confirmPinObscure,
+                    textStyle:
+                        const TextStyle(color: Colors.black45, fontSize: 16),
 
-                      autoDisposeControllers: false,
-                      animationType: AnimationType.slide,
-                      pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(5),
-                        fieldHeight: 50,
-                        fieldWidth: 50,
-                        inactiveColor: Colors.black45,
-                        activeColor: Colors.black45,
-                        selectedColor: Theme.of(context).colorScheme.primary,
-                      ),
-                      showCursor: false,
-                      controller: textEditingController,
-                      keyboardType: TextInputType.number,
-                      onCompleted: (v) {
-                        log("pin : $v");
-                        FocusScope.of(context)
-                            .requestFocus(confirmPinFocusNode);
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          pin = value;
-                        });
-                      },
-                      focusNode: pinFocusNode,
-                      autoDismissKeyboard: false,
-                      autoFocus: true,
+                    obscuringCharacter: '\u2B24',
+
+                    // blinkWhenObscuring: true,
+                    autoDisposeControllers: false,
+                    animationType: AnimationType.slide,
+                    pinTheme: PinTheme(
+                      shape: PinCodeFieldShape.box,
+                      borderRadius: BorderRadius.circular(5),
+                      fieldHeight: 50,
+                      fieldWidth: 50,
+                      inactiveColor: Colors.black45,
+                      activeColor: Colors.black45,
+                      selectedColor: Theme.of(context).colorScheme.primary,
+                      fieldOuterPadding: const EdgeInsets.only(right: 15),
                     ),
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    showCursor: false,
+                    controller: textEditingController2,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value?.length != 4) {
+                        return "*Invalid MPIN length";
+                      } else if (value != pin) {
+                        return "*MPIN does not match";
+                      }
+                      confirmPinValidated = true;
+                      return null;
+                    },
+                    errorTextSpace: 30,
+                    onCompleted: (v) {
+                      log("confirm pin : $v");
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        confirmPin = value;
+                      });
+                      if (value.isEmpty) {
+                        FocusScope.of(context).requestFocus(pinFocusNode);
+                      }
+                    },
+                    focusNode: confirmPinFocusNode,
+                    autoDismissKeyboard: false,
                   ),
                 ),
                 Positioned(
-                  right: 30,
+                  right: 60,
                   child: IconButton(
                     onPressed: () {
                       setState(() {
-                        pinObscure = !pinObscure;
+                        confirmPinObscure = !confirmPinObscure;
                       });
                     },
                     icon: Icon(
                       Icons.visibility,
-                      color: pinObscure
+                      color: confirmPinObscure
                           ? Colors.grey
                           : Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
-              ]),
-              Text(
-                "Confirm PIN",
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Stack(
-                children: [
-                  Form(
-                    key: formKey2,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: customWidth * 0.2),
-                      child: PinCodeTextField(
-                        appContext: context,
-                        length: 4,
-                        obscureText: confirmPinObscure,
-                        textStyle: Theme.of(context).textTheme.titleSmall,
-
-                        // obscuringCharacter: '\u1F311',
-
-                        // blinkWhenObscuring: true,
-                        autoDisposeControllers: false,
-                        animationType: AnimationType.slide,
-                        pinTheme: PinTheme(
-                          shape: PinCodeFieldShape.box,
-                          borderRadius: BorderRadius.circular(5),
-                          fieldHeight: 50,
-                          fieldWidth: 50,
-                          inactiveColor: Colors.black45,
-                          activeColor: Colors.black45,
-                          selectedColor: Theme.of(context).colorScheme.primary,
-                        ),
-                        showCursor: false,
-                        controller: textEditingController2,
-                        keyboardType: TextInputType.number,
-                        onCompleted: (v) {
-                          log("confirm pin : $v");
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            confirmPin = value;
-                          });
-                          if (value.isEmpty) {
-                            FocusScope.of(context).requestFocus(pinFocusNode);
-                          }
-                        },
-                        focusNode: confirmPinFocusNode,
-                        autoDismissKeyboard: false,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 30,
-                    child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          confirmPinObscure = !confirmPinObscure;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.visibility,
-                        color: confirmPinObscure
-                            ? Colors.grey
-                            : Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -261,34 +249,16 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
         padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
         child: InkWell(
           onTap: () {
-            if (pin.length == 4 && confirmPin.length == 4) {
-              if (checkPattern(pin)) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Pin codes should not be repetitive pattern"),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              } else {
-                if (pin == confirmPin) {
-                  data.putData("mpin", pin);
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamedAndRemoveUntil(HomeScreen.routeName,
-                          (Route<dynamic> route) => false);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Pin codes do not match"),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                }
-              }
-            } else {
+            if (pinValidated && confirmPinValidated) {
+              data.putData("mpin", pin);
+              Navigator.of(context, rootNavigator: true)
+                  .pushNamedAndRemoveUntil(
+                      HomeScreen.routeName, (Route<dynamic> route) => false);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text("Invalid pin code length"),
+                  content: Text("Pin code has been set"),
                   duration: Duration(seconds: 2),
+                  backgroundColor: Colors.grey,
                 ),
               );
             }

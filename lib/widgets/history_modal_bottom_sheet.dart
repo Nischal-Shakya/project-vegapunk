@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 get purifiedFields => null;
 
-Widget returnIcon(BuildContext context, String activity) {
+String returnIcon(BuildContext context, String activity) {
   String iconPath;
   if (activity == "logged_in") {
     iconPath = 'assets/icons/login.svg';
@@ -16,13 +16,7 @@ Widget returnIcon(BuildContext context, String activity) {
   } else {
     iconPath = 'assets/icons/verified-document.svg';
   }
-  return SvgPicture.asset(
-    iconPath,
-    colorFilter: ColorFilter.mode(
-      Theme.of(context).colorScheme.primary,
-      BlendMode.srcIn,
-    ),
-  );
+  return iconPath;
 }
 
 void historyModalBottomSheet(
@@ -81,9 +75,15 @@ void historyModalBottomSheet(
                       horizontalTitleGap: 0,
                       visualDensity: VisualDensity.compact,
                       leading: SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: returnIcon(context, data['activity']),
+                        height: 24,
+                        width: 24,
+                        child: SvgPicture.asset(
+                          returnIcon(context, data['activity']),
+                          colorFilter: ColorFilter.mode(
+                            Theme.of(context).colorScheme.primary,
+                            BlendMode.srcIn,
+                          ),
+                        ),
                       ),
                       title: Text(data["title"],
                           style: Theme.of(context).textTheme.headlineMedium),

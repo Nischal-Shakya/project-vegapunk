@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../providers/all_data.dart';
 
@@ -108,11 +109,13 @@ class DocumentsProfileBox extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(100),
               ),
-              child: const Center(
-                child: Icon(
-                  Icons.qr_code_scanner,
-                  size: 40,
-                  color: Colors.white,
+              child: Center(
+                child: SizedBox(
+                  height: 35,
+                  width: 35,
+                  child: SvgPicture.asset(('assets/icons/scan-qrcode.svg'),
+                      colorFilter: const ColorFilter.mode(
+                          Colors.white, BlendMode.srcIn)),
                 ),
               ),
             ),

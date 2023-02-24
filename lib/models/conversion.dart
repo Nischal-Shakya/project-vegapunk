@@ -56,16 +56,16 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Birth Tole",
   },
-  "birth_ward": {
+  "birth_ward_number": {
     "category": "National Identity",
-    "fieldName": "Birth Ward",
+    "fieldName": "Birth Ward Number",
   },
   "caste": {
     "category": "National Identity",
     "fieldName": "Caste",
   },
 
-  "dob": {
+  "date_of_birth": {
     "category": "National Identity",
     "fieldName": "Date of Birth",
   },
@@ -212,6 +212,10 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Mother's Nationality",
   },
+  "nationality": {
+    "category": "National Identity",
+    "fieldName": "Mother's Nationality",
+  },
   "occupation": {
     "category": "National Identity",
     "fieldName": "Occupation",
@@ -244,9 +248,9 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Permanent Local Level Devanagari"
   },
-  "permanent_ward": {
+  "permanent_ward_number": {
     "category": "National Identity",
-    "fieldName": "Permanent Ward",
+    "fieldName": "Permanent Ward Number",
   },
   "permanent_tole": {
     "category": "National Identity",
@@ -300,9 +304,9 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "Temporary Local Level",
   },
-  "temporary_ward": {
+  "temporary_ward_number": {
     "category": "National Identity",
-    "fieldName": "Temporary Ward",
+    "fieldName": "Temporary Ward Number",
   },
   "temporary_tole": {
     "category": "National Identity",

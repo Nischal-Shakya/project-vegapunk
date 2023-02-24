@@ -147,8 +147,8 @@ class _QrShareScreenState extends State<QrShareScreen> {
                       Row(
                         children: [
                           SizedBox(
-                            height: 20,
-                            width: 30,
+                            height: 24,
+                            width: 24,
                             child: SvgPicture.asset(
                               ('assets/icons/photo.svg'),
                               colorFilter: ColorFilter.mode(
@@ -172,8 +172,8 @@ class _QrShareScreenState extends State<QrShareScreen> {
                       Row(
                         children: [
                           SizedBox(
-                            height: 30,
-                            width: 30,
+                            height: 24,
+                            width: 24,
                             child: SvgPicture.asset(
                               docType == "AGE"
                                   ? ('assets/icons/calendar.svg')

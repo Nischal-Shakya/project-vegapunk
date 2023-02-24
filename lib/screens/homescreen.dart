@@ -139,33 +139,33 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           BottomNavigationBarItem(
             icon: SizedBox(
-              height: 30,
-              width: 30,
+              height: 24,
+              width: 24,
               child: SvgPicture.asset(('assets/icons/id.svg'),
                   colorFilter:
                       const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
             ),
             activeIcon: SizedBox(
-              height: 30,
-              width: 30,
+              height: 24,
+              width: 24,
               child: SvgPicture.asset(('assets/icons/id.svg'),
                   colorFilter: ColorFilter.mode(
                       Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
             ),
-            label: 'My Id',
+            label: 'Documents',
             tooltip: '',
           ),
           BottomNavigationBarItem(
             icon: SizedBox(
-              height: 30,
-              width: 25,
+              height: 24,
+              width: 24,
               child: SvgPicture.asset(('assets/icons/scan-qrcode.svg'),
                   colorFilter:
                       const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
             ),
             activeIcon: SizedBox(
-              height: 30,
-              width: 25,
+              height: 24,
+              width: 24,
               child: SvgPicture.asset(('assets/icons/scan-qrcode.svg'),
                   colorFilter: ColorFilter.mode(
                       Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
@@ -175,15 +175,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: SizedBox(
-              height: 30,
-              width: 30,
+              height: 24,
+              width: 24,
               child: SvgPicture.asset(('assets/icons/down-up-arrow.svg'),
                   colorFilter:
                       const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
             ),
             activeIcon: SizedBox(
-              height: 30,
-              width: 30,
+              height: 24,
+              width: 24,
               child: SvgPicture.asset(('assets/icons/down-up-arrow.svg'),
                   colorFilter: ColorFilter.mode(
                       Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
@@ -193,15 +193,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: SizedBox(
-              height: 30,
-              width: 30,
+              height: 24,
+              width: 24,
               child: SvgPicture.asset(('assets/icons/dots-9.svg'),
                   colorFilter:
                       const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
             ),
             activeIcon: SizedBox(
-              height: 30,
-              width: 30,
+              height: 24,
+              width: 24,
               child: SvgPicture.asset(('assets/icons/dots-9.svg'),
                   colorFilter: ColorFilter.mode(
                       Theme.of(context).colorScheme.primary, BlendMode.srcIn)),

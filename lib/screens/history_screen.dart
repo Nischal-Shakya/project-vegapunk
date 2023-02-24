@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/widgets/history_modal_bottom_sheet.dart';
+import 'package:flutter_svg/svg.dart';
 import '../url.dart';
 import 'package:http/http.dart' as http;
 import '../providers/all_data.dart';
@@ -113,21 +114,29 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           Theme.of(context).colorScheme.primary,
                                     ),
                                     Container(
-                                        padding: const EdgeInsets.all(4),
-                                        height: 30,
-                                        width: 30,
+                                        padding: const EdgeInsets.all(6),
+                                        height: 35,
+                                        width: 35,
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(20),
-                                            border: Border.all(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary),
+                                            // border: Border.all(
+                                            //     color: Theme.of(context)
+                                            //         .colorScheme
+                                            //         .primary),
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .background),
-                                        child: returnIcon(
-                                            context, data[index]["activity"])),
+                                                .primary),
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            returnIcon(context,
+                                                data[index]['activity']),
+                                            colorFilter: const ColorFilter.mode(
+                                              Colors.white,
+                                              BlendMode.srcIn,
+                                            ),
+                                          ),
+                                        )),
                                   ],
                                 ),
                               ),
@@ -151,10 +160,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(data[index]["description"],
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineSmall),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Flexible(
+                                                  child: Text(
+                                                    data[index]["description"],
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineSmall,
+                                                  ),
+                                                ),
+                                                data[index]["extra_info"] !=
+                                                        null
+                                                    ? const Icon(Icons
+                                                        .keyboard_arrow_down)
+                                                    : const SizedBox(),
+                                              ],
+                                            ),
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -170,11 +195,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                         .shadow)),
                                           ],
                                         ),
-                                        trailing:
-                                            data[index]["extra_info"] != null
-                                                ? const Icon(
-                                                    Icons.keyboard_arrow_down)
-                                                : null,
                                         onTap: data[index]["extra_info"] == null
                                             ? null
                                             : () {

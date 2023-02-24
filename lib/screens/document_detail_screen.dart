@@ -7,6 +7,7 @@ import 'package:parichaya_frontend/models/conversion.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../providers/all_data.dart';
 import '../widgets/document_detail_list.dart';
@@ -80,7 +81,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
       allDocumentData.removeWhere(
           (key, value) => value == null || key == "docType" || key == "NIN");
       allDocumentData.update(
-          "dob", (value) => value.toString().substring(0, 10));
+          "date_of_birth", (value) => value.toString().substring(0, 10));
       allDocumentData.update("DVL_blood_group", (value) => value.toString());
       allDocumentData.update(
           "DVL_date_of_issue", (value) => value.toString().substring(0, 10));
@@ -158,9 +159,12 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                                 .pushNamed(QrShareScreen.routeName,
                                     arguments: "DVL");
                           },
-                          icon: const Icon(
-                            Icons.qr_code_scanner,
-                            size: 30,
+                          icon: SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: SvgPicture.asset(
+                              ('assets/icons/scan-qrcode.svg'),
+                            ),
                           ),
                           color: Theme.of(context).colorScheme.onBackground,
                         )

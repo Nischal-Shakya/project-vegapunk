@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:parichaya_frontend/providers/homescreen_index_provider.dart';
+import 'package:parichaya_frontend/providers/toggle_provider.dart';
+import 'package:parichaya_frontend/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
 import '../providers/all_data.dart';
 import '../providers/connectivity_change_notifier.dart';
+import 'package:hive/hive.dart';
 
 import '../widgets/documents_screen_list.dart';
 import '../widgets/documents_profile_box.dart';
@@ -27,12 +32,32 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
     String firstLogin = data.getData("firstLogin");
+    final indexProvider = Provider.of<HomeScreenIndexProvider>(context);
+    final toggler = Provider.of<ToggleProvider>(context);
 
     if (isFirstLoading && connectionStatus) {
-      data.storeAllDataInBox().then((_) {
-        setState(() {
-          isFirstLoading = false;
-        });
+      data.storeAllDataInBox().then((isTokenValid) {
+        if (isTokenValid) {
+          setState(() {
+            isFirstLoading = false;
+          });
+        } else {
+          toggler.changeBiometrics(false);
+          toggler.changeTheme(false);
+          Hive.box("allData").clear();
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              ("Your session has expired."),
+            ),
+            duration: Duration(seconds: 2),
+          ));
+          indexProvider.selectedIndexList
+              .removeRange(1, indexProvider.selectedIndexList.length);
+          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+            LoginScreen.routeName,
+            (route) => false,
+          );
+        }
       });
     } else if (firstLogin == "true") {
       // ignore: use_build_context_synchronously
@@ -60,10 +85,14 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
         titleSpacing: 0,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: Icon(
-          Icons.account_circle_sharp,
-          size: 40,
-          color: Theme.of(context).colorScheme.primary,
+        leading: SizedBox(
+          height: 24,
+          width: 24,
+          child: SvgPicture.asset(
+            ('assets/icons/logo.svg'),
+            colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary, BlendMode.srcIn),
+          ),
         ),
         actions: [
           Padding(

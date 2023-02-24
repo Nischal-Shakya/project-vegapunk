@@ -17,6 +17,8 @@ class GlobalTheme {
       behavior: SnackBarBehavior.floating,
       elevation: 0,
     ),
+    inputDecorationTheme: const InputDecorationTheme(
+        errorStyle: TextStyle(color: Colors.red, fontSize: 12)),
     iconTheme: const IconThemeData(
       color: Colors.black,
     ),
@@ -118,6 +120,8 @@ class GlobalTheme {
       behavior: SnackBarBehavior.floating,
       elevation: 0,
     ),
+    inputDecorationTheme: const InputDecorationTheme(
+        errorStyle: TextStyle(color: Colors.red, fontSize: 14)),
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
       TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
     }),
@@ -221,7 +225,7 @@ ColorScheme lightColorScheme = const ColorScheme(
   onBackground: Colors.black,
   surface: Colors.white70,
   onSurface: Colors.black87,
-  error: Colors.redAccent,
+  error: Colors.red,
   onError: Colors.white,
   shadow: Colors.black54,
   brightness: Brightness.light,
@@ -238,7 +242,7 @@ ColorScheme darkColorScheme = const ColorScheme(
   onBackground: Colors.white,
   surface: Colors.white70,
   onSurface: Colors.black87,
-  error: Colors.redAccent,
+  error: Colors.red,
   onError: Colors.white,
   shadow: Colors.white54,
   brightness: Brightness.dark,

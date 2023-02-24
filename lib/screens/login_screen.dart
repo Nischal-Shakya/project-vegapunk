@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.grey,
                 ),
                 prefixIcon: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: SvgPicture.asset(('assets/icons/id-card.svg'),
                       alignment: Alignment.centerLeft,
                       fit: BoxFit.contain,

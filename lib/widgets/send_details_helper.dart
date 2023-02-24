@@ -53,8 +53,8 @@ class SendDetailsWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 20,
-                  width: 20,
+                  height: 24,
+                  width: 24,
                   child: SvgPicture.asset(('assets/icons/verified.svg'),
                       colorFilter: ColorFilter.mode(
                           Theme.of(context).colorScheme.primary,
