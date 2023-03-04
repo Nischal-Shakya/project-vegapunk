@@ -31,12 +31,9 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
   bool pinObscure = true;
   final formKey = const Key("1");
 
-  final pinFocusNode = FocusNode();
-
   @override
   void dispose() {
-    textEditingController.dispose();
-    pinFocusNode.dispose();
+    textEditingController.clearComposing();
     super.dispose();
   }
 
@@ -91,7 +88,6 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                     textStyle:
                         const TextStyle(color: Colors.black45, fontSize: 16),
                     obscuringCharacter: '\u2B24',
-                    autoDisposeControllers: false,
                     animationType: AnimationType.slide,
                     pinTheme: PinTheme(
                       shape: PinCodeFieldShape.box,
@@ -113,7 +109,6 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                         pin = value;
                       });
                     },
-                    focusNode: pinFocusNode,
                     autoDismissKeyboard: false,
                     autoFocus: true,
                   ),
@@ -235,10 +230,6 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
                         children: [
                           SvgPicture.asset(
                             ('assets/icons/fingerprint-scan.svg'),
-                            colorFilter: ColorFilter.mode(
-                              Theme.of(context).colorScheme.primary,
-                              BlendMode.srcIn,
-                            ),
                           ),
                           const SizedBox(
                             height: 10,

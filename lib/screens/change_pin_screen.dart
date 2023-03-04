@@ -32,6 +32,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   @override
   void dispose() {
     pinFocusNode.dispose();
+    textEditingController.clearComposing();
     super.dispose();
   }
 
@@ -101,7 +102,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                         pin = value;
                       });
                     },
-                    autoFocus: true,
+                    // autoFocus: true,
                   ),
                 ),
               ),

@@ -99,18 +99,18 @@ class _QrScanScreenState extends State<QrScanScreen> {
           children: <Widget>[
             _buildQrView(context),
             Positioned(
-              top: customHeight / 5,
+              top: customHeight / 4,
               child: Text(
-                'Scan to share your  details',
-                style: Theme.of(context).textTheme.displayMedium,
+                'Scan the Parichaya Qr Code',
+                style: Theme.of(context).textTheme.displaySmall,
                 textAlign: TextAlign.center,
               ),
             ),
             Positioned(
-              top: customHeight / 4,
-              child: Text(
+              top: customHeight / 3.2,
+              child: const Text(
                 "Please align the QR within the frame",
-                style: Theme.of(context).textTheme.displaySmall,
+                style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),
           ],
