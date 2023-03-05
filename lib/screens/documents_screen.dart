@@ -98,7 +98,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: Icon(
-              Icons.search,
+              Icons.notifications_none_outlined,
               size: 30,
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -127,6 +127,8 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                   setState(() {});
                 });
               },
+              color: Theme.of(context).colorScheme.onBackground,
+              backgroundColor: Theme.of(context).colorScheme.background,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

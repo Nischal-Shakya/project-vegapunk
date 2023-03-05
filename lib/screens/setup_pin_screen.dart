@@ -116,9 +116,14 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                   showCursor: false,
                   validator: (value) {
                     if (value?.length != 4) {
-                      return "*Invalid MPIN length";
+                      confirmPinValidated = false;
+
+                      return "";
                     }
+
                     if (checkPattern(value!)) {
+                      confirmPinValidated = false;
+
                       return "*MPIN should not be repetitive";
                     }
 
@@ -200,13 +205,16 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value?.length != 4) {
-                        return "*Invalid MPIN length";
+                        confirmPinValidated = false;
+                        return "";
                       } else if (value != pin) {
+                        confirmPinValidated = false;
                         return "*MPIN does not match";
                       }
                       confirmPinValidated = true;
                       return null;
                     },
+
                     errorTextSpace: 30,
                     onCompleted: (v) {
                       log("confirm pin : $v");
