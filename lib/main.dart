@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:parichaya_frontend/screens/about_us_screen.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
           SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
           ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
           VerifyAgeScreen.routeName: (ctx) => const VerifyAgeScreen(),
+          AboutUsScreen.routeName: (ctx) => const AboutUsScreen()
         },
       ),
     );

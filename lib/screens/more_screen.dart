@@ -10,6 +10,7 @@ import './verify_age_screen.dart';
 import './login_screen.dart';
 import '../providers/homescreen_index_provider.dart';
 import '../widgets/biometrics_widget.dart';
+import './about_us_screen.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -135,24 +136,28 @@ class MoreScreen extends StatelessWidget {
                   ),
                 ),
                 MoreScreenListTile(
-                  name: "About Parichaya",
-                  description: "Know more about Parichaya",
-                  icon: SvgPicture.asset(('assets/icons/info.svg'),
-                      colorFilter: ColorFilter.mode(
-                          Theme.of(context).colorScheme.primary,
-                          BlendMode.srcIn)),
-                  trailingIcon: null,
-                  onTap: () => showLicensePage(
-                    context: context,
-                    applicationIcon: const Icon(
-                      Icons.fingerprint,
-                      color: Colors.blue,
+                    name: "About Parichaya",
+                    description: "Know more about Parichaya",
+                    icon: SvgPicture.asset(('assets/icons/info.svg'),
+                        colorFilter: ColorFilter.mode(
+                            Theme.of(context).colorScheme.primary,
+                            BlendMode.srcIn)),
+                    trailingIcon: null,
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed(AboutUsScreen.routeName);
+                    }
+                    //  showLicensePage(
+                    //   context: context,
+                    //   applicationIcon: const Icon(
+                    //     Icons.fingerprint,
+                    //     color: Colors.blue,
+                    //   ),
+                    //   applicationLegalese: "View all open source licenses.",
+                    //   useRootNavigator: true,
+                    //   applicationVersion: "v2.15",
+                    // ),
                     ),
-                    applicationLegalese: "View all open source licenses.",
-                    useRootNavigator: true,
-                    applicationVersion: "v2.15",
-                  ),
-                ),
                 MoreScreenListTile(
                   name: "Logout",
                   description: "Logout from the app",
