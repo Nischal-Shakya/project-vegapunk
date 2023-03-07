@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/providers/preference_provider.dart';
+import 'package:parichaya_frontend/screens/about_us.dart';
 import 'package:parichaya_frontend/screens/change_pin_screen.dart';
 import 'package:parichaya_frontend/widgets/more_screen_listtile.dart';
 import 'package:provider/provider.dart';
@@ -143,16 +144,8 @@ class MoreScreen extends StatelessWidget {
                           Theme.of(context).colorScheme.primary,
                           BlendMode.srcIn)),
                   trailingIcon: null,
-                  onTap: () => showLicensePage(
-                    context: context,
-                    applicationIcon: const Icon(
-                      Icons.fingerprint,
-                      color: Colors.blue,
-                    ),
-                    applicationLegalese: "View all open source licenses.",
-                    useRootNavigator: true,
-                    applicationVersion: "v2.15",
-                  ),
+                  onTap: () => Navigator.of(context, rootNavigator: true)
+                      .pushNamed(AboutUs.routeName),
                 ),
                 MoreScreenListTile(
                   name: "Logout",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:parichaya_frontend/screens/about_us.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
@@ -75,18 +76,19 @@ class MyApp extends StatelessWidget {
         initialRoute:
             isLoggedIn ? MobilePinScreen.routeName : LoginScreen.routeName,
         routes: {
-          HomeScreen.routeName: (ctx) => const HomeScreen(),
+          AboutUs.routeName: (ctx) => const AboutUs(),
+          ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
+          DataPermissionScreen.routeName: (ctx) => const DataPermissionScreen(),
+          DocumentDetailScreen.routeName: (ctx) => const DocumentDetailScreen(),
           ErrorScreen.routeName: (ctx) => const ErrorScreen(),
-          LoginScreen.routeName: (ctx) => const LoginScreen(),
+          HomeScreen.routeName: (ctx) => const HomeScreen(),
           LoginMobileScreen.routeName: (ctx) => const LoginMobileScreen(),
           LoginOtpScreen.routeName: (ctx) => const LoginOtpScreen(),
-          DataPermissionScreen.routeName: (ctx) => const DataPermissionScreen(),
+          LoginScreen.routeName: (ctx) => const LoginScreen(),
+          MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
           QrScanScreen.routeName: (ctx) => const QrScanScreen(),
           QrShareScreen.routeName: (ctx) => const QrShareScreen(),
-          DocumentDetailScreen.routeName: (ctx) => const DocumentDetailScreen(),
-          MobilePinScreen.routeName: (ctx) => const MobilePinScreen(),
           SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
-          ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
           VerifyAgeScreen.routeName: (ctx) => const VerifyAgeScreen(),
         },
       ),

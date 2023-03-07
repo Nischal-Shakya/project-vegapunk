@@ -28,12 +28,10 @@ class DocumentsDataProvider with ChangeNotifier {
     return documents![docType];
   }
 
-  Map<String, dynamic>? getFilteredDocumentData(String docType) {
-    if (documents == null) {
-      return null;
-    }
+  Map<String, dynamic>? oldgetFilteredDocumentData(
+      String docType, Map<String, dynamic> documents) {
     try {
-      Map<String, dynamic> allData = Map<String, dynamic>.from(documents!);
+      Map<String, dynamic> allData = Map<String, dynamic>.from(documents);
       Map<String, dynamic> tileFields = {};
 
       for (MapEntry<String, dynamic> items in allData[docType].entries) {
@@ -48,6 +46,25 @@ class DocumentsDataProvider with ChangeNotifier {
     } catch (e) {
       return {"No Document": "Error"};
     }
+  }
+
+  Map<String, dynamic>? getFilteredDocumentData(Map<String, dynamic> document) {
+    // try {
+    // Map<String, dynamic> allData = Map<String, dynamic>.from(documents);
+    Map<String, dynamic> tileFields = {};
+
+    for (MapEntry<String, dynamic> items in document.entries) {
+      if (["face_image", "card_front", "card_back", "docType", "NIN"]
+          .any((String field) => field == items.key)) {
+        continue;
+      }
+      tileFields[items.key] = items.value;
+    }
+    tileFields.removeWhere((key, value) => value == null);
+    return tileFields;
+    // } catch (e) {
+    //   // return {"No Document": "Error"};
+    // }
   }
 
   Uint8List? documentFrontImage(String docType) {
