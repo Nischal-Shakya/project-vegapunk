@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../providers/all_data.dart';
+import '../providers/documents_provider.dart';
+import '../providers/auth_provider.dart';
 
 import '../screens/qr_scan_screen.dart';
 
@@ -12,8 +13,10 @@ class DocumentsProfileBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nIN = Provider.of<AllData>(context, listen: false).nIN;
-    final fullName = Provider.of<AllData>(context, listen: false).fullName;
+    final nIN = Provider.of<AuthDataProvider>(context, listen: false).NIN ?? "";
+
+    String? fullName =
+        Provider.of<DocumentsDataProvider>(context).getFullName() ?? "";
 
     final double customWidth = MediaQuery.of(context).size.width;
 

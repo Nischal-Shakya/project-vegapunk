@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:parichaya_frontend/providers/all_data.dart';
+import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/screens/homescreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -15,7 +15,8 @@ class SendDetailsButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String token = Provider.of<AllData>(context, listen: false).token;
+    final String token =
+        Provider.of<AuthDataProvider>(context, listen: false).token!;
 
     return Container(
       decoration:

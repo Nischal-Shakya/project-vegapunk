@@ -6,6 +6,22 @@ const Map<String, Map> fieldMapping = {
   "CTZ": {
     "fieldName": "Citizenship",
   },
+  "CTZ_date_of_issue": {
+    "category": "Driving License",
+    "fieldName": "Date of Issue",
+  },
+  "NID_date_of_issue": {
+    "category": "Driving License",
+    "fieldName": "Date of Issue",
+  },
+  "NID_date_of_expiry": {
+    "category": "Driving License",
+    "fieldName": "Date of Expiration",
+  },
+  "CTZ_date_of_expiry": {
+    "category": "Driving License",
+    "fieldName": "Date of Expiration",
+  },
   "DVL": {
     "fieldName": "Driving License",
   },
@@ -20,9 +36,13 @@ const Map<String, Map> fieldMapping = {
     "category": "National Identity",
     "fieldName": "National Identity Number",
   },
-  "NID_date_of_issue": {
+  "createdAt": {
     "category": "National Identity",
-    "fieldName": "Date of Issue",
+    "fieldName": "Created At",
+  },
+  "updatedAt": {
+    "category": "National Identity",
+    "fieldName": "Updated At",
   },
   "academic_qualification": {
     "category": "National Identity",
@@ -352,10 +372,6 @@ const Map<String, Map> fieldMapping = {
   "CTZ_citizenship_type_devanagari": {
     "category": "Citizenship",
     "fieldName": "Citizenship Type Devanagari",
-  },
-  "CTZ_date_of_issue": {
-    "category": "Citizenship",
-    "fieldName": "Date of Issue",
   },
   "CTZ_father_CCN": {
     "fieldName": "Father's Citizenship Certificate Number",

@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:provider/provider.dart';
-import '../providers/all_data.dart';
 import '../url.dart';
 import 'dart:convert';
 
@@ -32,7 +32,8 @@ class _QrShareScreenState extends State<QrShareScreen> {
 
   @override
   void didChangeDependencies() {
-    final String token = Provider.of<AllData>(context, listen: false).token;
+    final String token =
+        Provider.of<AuthDataProvider>(context, listen: false).token ?? "";
     docType = ModalRoute.of(context)!.settings.arguments as String;
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();

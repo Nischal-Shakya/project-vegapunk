@@ -8,7 +8,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import '../providers/connectivity_change_notifier.dart';
 import 'package:provider/provider.dart';
-import 'package:hive/hive.dart';
 
 import '../url.dart';
 
@@ -73,9 +72,6 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
             duration: Duration(seconds: 2),
           ));
         } else {
-          Hive.box("allData").put("firstLogin", "true");
-          Hive.box("allData").put("enableFingerprint", false);
-          Hive.box("allData").put("darkmode", false);
           Navigator.of(context, rootNavigator: true).pushNamed(
               LoginOtpScreen.routeName,
               arguments: [ninNumber, mobileNumbercontroller.text]);

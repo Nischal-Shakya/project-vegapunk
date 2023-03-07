@@ -14,7 +14,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../url.dart';
 import '../providers/connectivity_change_notifier.dart';
 
-import 'package:hive/hive.dart';
+import '../providers/auth_provider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 class LoginOtpScreen extends StatefulWidget {
@@ -34,22 +34,24 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   bool isLoading = true;
   bool tapped = false;
   bool resend = false;
-  Timer? _timer;
-  int _start = 5;
+  Timer _timer = Timer(Duration.zero, () {});
+  int totalTime = 5;
+  late int startTime;
   void startTimer() {
+    startTime = totalTime;
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (_start == 0) {
+        if (startTime == 0) {
           setState(() {
             timer.cancel();
-            _start = 5;
+            totalTime += 5;
             resend = false;
           });
         } else {
           setState(() {
-            _start--;
+            startTime--;
           });
         }
       },
@@ -59,7 +61,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   @override
   void dispose() {
     textEditingController.dispose();
-    _timer!.cancel();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -83,6 +85,8 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
     final double customHeight = MediaQuery.of(context).size.height;
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
+    AuthDataProvider authDataProvider =
+        Provider.of<AuthDataProvider>(context, listen: false);
 
     final List<String> resendOtp =
         ModalRoute.of(context)!.settings.arguments as List<String>;
@@ -198,7 +202,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                   resend
                       ? Center(
                           child: Text(
-                            "Resend code after ${_start}s",
+                            "Resend code after ${startTime}s",
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                         )
@@ -240,9 +244,11 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                         final String token =
                             json.decode(response.body)["token"];
                         log("token : $token");
-                        Hive.box("allData").put("token", token);
-                        Hive.box("allData").put("ninNumber", resendOtp[0]);
-                        Hive.box("allData").put("mobileNumber", resendOtp[1]);
+
+                        authDataProvider.setToken(token);
+                        authDataProvider.setNIN(resendOtp[0]);
+                        authDataProvider.setMobileNumber(resendOtp[1]);
+
                         Navigator.of(context, rootNavigator: true)
                             .pushReplacementNamed(SetupPinScreen.routeName);
                       }

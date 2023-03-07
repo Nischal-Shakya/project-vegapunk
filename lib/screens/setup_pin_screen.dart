@@ -5,7 +5,7 @@ import 'package:parichaya_frontend/screens/homescreen.dart';
 import 'package:provider/provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import 'package:parichaya_frontend/providers/all_data.dart';
+import '../providers/auth_provider.dart';
 
 class SetupPinScreen extends StatefulWidget {
   const SetupPinScreen({Key? key}) : super(key: key);
@@ -24,8 +24,8 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
   bool confirmPinObscure = true;
   bool pinValidated = false;
   bool confirmPinValidated = false;
-  final formKey = const Key("1");
-  final formKey2 = const Key("2");
+  final formKey = const Key("3");
+  final formKey2 = const Key("4");
 
   final confirmPinFocusNode = FocusNode();
   final pinFocusNode = FocusNode();
@@ -54,7 +54,8 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final data = Provider.of<AllData>(context, listen: false);
+    AuthDataProvider authDataProvider =
+        Provider.of<AuthDataProvider>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -258,7 +259,7 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
         child: InkWell(
           onTap: () {
             if (pinValidated && confirmPinValidated) {
-              data.putData("mpin", pin);
+              authDataProvider.setMPIN(pin);
               Navigator.of(context, rootNavigator: true)
                   .pushNamedAndRemoveUntil(
                       HomeScreen.routeName, (Route<dynamic> route) => false);

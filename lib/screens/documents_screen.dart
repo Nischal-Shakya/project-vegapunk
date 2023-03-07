@@ -1,14 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:parichaya_frontend/providers/homescreen_index_provider.dart';
-import 'package:parichaya_frontend/providers/toggle_provider.dart';
 import 'package:parichaya_frontend/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
-import '../providers/all_data.dart';
+import '../url.dart';
+
+import '../providers/auth_provider.dart';
+import '../providers/documents_provider.dart';
 import '../providers/connectivity_change_notifier.dart';
-import 'package:hive/hive.dart';
 
 import '../widgets/documents_screen_list.dart';
 import '../widgets/documents_profile_box.dart';
@@ -26,46 +30,62 @@ class DocumentsScreen extends StatefulWidget {
 
 class _DocumentsScreenState extends State<DocumentsScreen> {
   bool isFirstLoading = true;
-  @override
-  void didChangeDependencies() async {
-    final data = Provider.of<AllData>(context, listen: false);
-    bool connectionStatus =
-        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
-    String firstLogin = data.getData("firstLogin");
-    final indexProvider = Provider.of<HomeScreenIndexProvider>(context);
-    final toggler = Provider.of<ToggleProvider>(context);
+  bool valueInitialized = false;
+  late AuthDataProvider authDataProvider;
+  late DocumentsDataProvider documentsDataProvider;
 
-    if (isFirstLoading && connectionStatus) {
-      data.storeAllDataInBox().then((isTokenValid) {
-        if (isTokenValid) {
-          setState(() {
-            isFirstLoading = false;
-          });
-        } else {
-          toggler.changeBiometrics(false);
-          toggler.changeTheme(false);
-          Hive.box("allData").clear();
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-              ("Your session has expired."),
-            ),
-            duration: Duration(seconds: 2),
-          ));
-          indexProvider.selectedIndexList
-              .removeRange(1, indexProvider.selectedIndexList.length);
-          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-            LoginScreen.routeName,
-            (route) => false,
-          );
-        }
-      });
-    } else if (firstLogin == "true") {
-      // ignore: use_build_context_synchronously
+  Future<void> updateDBData() async {
+    String token = authDataProvider.token!;
+    var response = await http
+        .get(Uri.parse(getDataUrl), headers: {"Authorization": "Token $token"});
+    // TODO:Check if data has been updated since last fetch.
+    // If updated, fetch it.
+    // Else, skip it.
+    // log(response.statusCode.toString());
+    if (response.statusCode == 401) {
+      authDataProvider.logout();
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+        LoginScreen.routeName,
+        (route) => false,
+      );
+    }
+    if (response.statusCode != 200) {
+      return;
+    }
+    if (response.statusCode == 200) {
+      Map<String, dynamic> fetchedDocuments =
+          json.decode(response.body)["documents"] as Map<String, dynamic>;
+      fetchedDocuments.removeWhere((key, value) => value == null);
+      await documentsDataProvider.setDocumentsData(fetchedDocuments);
+    } else {
       Navigator.of(context, rootNavigator: true)
           .pushReplacementNamed(ErrorScreen.routeName);
-    } else {
+    }
+    setState(() {
+      isFirstLoading = false;
+    });
+  }
+
+  @override
+  void didChangeDependencies() async {
+    if (!valueInitialized) {
+      authDataProvider = Provider.of<AuthDataProvider>(context, listen: false);
+      documentsDataProvider =
+          Provider.of<DocumentsDataProvider>(context, listen: false);
+      bool connectionStatus =
+          Provider.of<ConnectivityChangeNotifier>(context).connectivity();
+
+      if (!connectionStatus) {
+        if (documentsDataProvider.documents == null) {
+          Navigator.of(context, rootNavigator: true)
+              .pushReplacementNamed(ErrorScreen.routeName);
+        }
+      } else {
+        await updateDBData();
+      }
+
       setState(() {
-        isFirstLoading = false;
+        valueInitialized = true;
       });
     }
 
@@ -75,7 +95,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
   @override
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
-    final data = Provider.of<AllData>(context, listen: false);
+    // final data = Provider.of<AllData>(context);
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle:
@@ -90,8 +110,8 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
           width: 24,
           child: SvgPicture.asset(
             ('assets/icons/logo.svg'),
-            colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.primary, BlendMode.srcIn),
+            // colorFilter: ColorFilter.mode(
+            //     Theme.of(context).colorScheme.primary, BlendMode.srcIn),
           ),
         ),
         actions: [
@@ -122,10 +142,8 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
               ),
             )
           : RefreshIndicator(
-              onRefresh: () {
-                return data.storeAllDataInBox().then((_) {
-                  setState(() {});
-                });
+              onRefresh: () async {
+                await updateDBData();
               },
               color: Theme.of(context).colorScheme.onBackground,
               backgroundColor: Theme.of(context).colorScheme.background,
@@ -137,9 +155,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                     padding:
                         EdgeInsets.symmetric(horizontal: customWidth * 0.08),
                     child: Text(
-                      data.allDocumentTypes().isEmpty
-                          ? "No Document Available"
-                          : "DOCUMENTS",
+                      "DOCUMENTS",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),

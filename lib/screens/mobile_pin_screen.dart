@@ -4,11 +4,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive/hive.dart';
+import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
-import 'package:parichaya_frontend/providers/all_data.dart';
 import 'package:parichaya_frontend/screens/login_otp_screen.dart';
 import 'package:parichaya_frontend/screens/homescreen.dart';
 import '../providers/connectivity_change_notifier.dart';
@@ -29,7 +28,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
   TextEditingController textEditingController = TextEditingController();
   String pin = "";
   bool pinObscure = true;
-  final formKey = const Key("1");
+  final formKey = const Key("2");
 
   @override
   void dispose() {
@@ -39,14 +38,16 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final data = Provider.of<AllData>(context, listen: false);
     final double customWidth = MediaQuery.of(context).size.width;
     final double customHeight = MediaQuery.of(context).size.height;
-    final String ninNumber = data.getData("ninNumber");
-    final String mobileNumber = data.getData("mobileNumber");
+    final AuthDataProvider authDataProvider =
+        Provider.of<AuthDataProvider>(context, listen: false);
+    final mobilePin = authDataProvider.MPIN;
+    final String ninNumber = authDataProvider.NIN!;
+    final String mobileNumber = authDataProvider.mobileNumber!;
+    bool hasFingerPrint = authDataProvider.isBiometricEnabled;
     bool connectionStatus =
         Provider.of<ConnectivityChangeNotifier>(context).connectivity();
-    bool hasFingerPrint = Hive.box("allData").get("enableFingerprint");
 
     return Scaffold(
       appBar: AppBar(
@@ -136,7 +137,7 @@ class _MobilePinScreenState extends State<MobilePinScreen> {
             ),
             InkWell(
               onTap: () {
-                if (pin == data.mpin) {
+                if (pin == mobilePin) {
                   Navigator.of(context, rootNavigator: true)
                       .pushNamedAndRemoveUntil(HomeScreen.routeName,
                           (Route<dynamic> route) => false);

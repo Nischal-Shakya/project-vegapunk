@@ -4,12 +4,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive/hive.dart';
+import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/screens/setup_pin_screen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
-
-import 'package:parichaya_frontend/providers/all_data.dart';
 
 import '../widgets/biometrics_widget.dart';
 
@@ -38,9 +36,11 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final data = Provider.of<AllData>(context, listen: false);
+    final AuthDataProvider authDataProvider =
+        Provider.of<AuthDataProvider>(context, listen: false);
+    final mobilePin = authDataProvider.MPIN;
+    bool hasFingerPrint = authDataProvider.isBiometricEnabled;
     final double customWidth = MediaQuery.of(context).size.width;
-    bool hasFingerPrint = Hive.box("allData").get("enableFingerprint");
 
     return Scaffold(
       appBar: AppBar(
@@ -181,7 +181,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
         padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
         child: InkWell(
           onTap: () {
-            if (pin == data.mpin) {
+            if (pin == mobilePin) {
               Navigator.of(context, rootNavigator: true)
                   .pushNamed(SetupPinScreen.routeName);
             } else {

@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:parichaya_frontend/providers/auth_provider.dart';
+import 'package:parichaya_frontend/providers/documents_provider.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 
 import '../url.dart';
-import '../providers/all_data.dart';
 
 int calculateAge(DateTime birthDate) {
   DateTime currentDate = DateTime.now();
@@ -50,7 +51,7 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
     final String permitId =
         ModalRoute.of(context)!.settings.arguments as String;
     if (permitId.isNotEmpty) {
-      String token = Provider.of<AllData>(context).token;
+      String token = Provider.of<AuthDataProvider>(context).token ?? "";
       var response = await http.get(Uri.parse("$getPidDataUrl/$permitId/"),
           headers: {"Authorization": "Token $token"});
       setState(() {
@@ -63,9 +64,8 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
       faceImage = const Base64Decoder().convert(faceImageByte64);
       dob = documentData['date_of_birth'];
     } else {
-      faceImageByte64 = Provider.of<AllData>(context).faceImage;
-      faceImage = const Base64Decoder().convert(faceImageByte64);
-      dob = Provider.of<AllData>(context).dob;
+      faceImage = Provider.of<DocumentsDataProvider>(context).getFaceImage()!;
+      dob = Provider.of<DocumentsDataProvider>(context).getDateOfbirth()!;
       setState(() {
         isLoading = false;
       });
@@ -178,7 +178,8 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                         label: const Text(
                           "Create a QR Code",
                           style: TextStyle(color: Colors.white, fontSize: 14),
-                        ))
+                        ),
+                      ),
               ],
             ),
           );

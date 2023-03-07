@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/screens/document_detail_screen.dart';
 import 'package:parichaya_frontend/screens/verify_age_screen.dart';
 import 'dart:convert';
@@ -154,7 +154,8 @@ class _QrScanScreenState extends State<QrScanScreen> {
             String requestId = scanData.code.toString();
             // log(requestId);
             if (requestId.isNotEmpty) {
-              final String token = Hive.box("allData").get("token");
+              final String token =
+                  Provider.of<AuthDataProvider>(context).token!;
               var response = await http.get(
                   Uri.parse('$accessRequestUrl/$requestId/'),
                   headers: {"Authorization": "Token $token"});

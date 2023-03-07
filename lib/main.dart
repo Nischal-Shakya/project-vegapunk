@@ -6,10 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'providers/global_theme.dart';
-import 'providers/all_data.dart';
+import 'providers/auth_provider.dart';
+import 'providers/documents_provider.dart';
+import 'providers/preference_provider.dart';
+
 import 'providers/connectivity_change_notifier.dart';
 import 'providers/homescreen_index_provider.dart';
-import 'providers/toggle_provider.dart';
 
 import './screens/verify_age_screen.dart';
 import './screens/homescreen.dart';
@@ -26,13 +28,21 @@ import './screens/change_pin_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('allData');
+  await Hive.openBox('userData');
+  await Hive.openBox('userPreferences');
+  await Hive.openBox('authData');
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   runApp(MultiProvider(providers: [
-    Provider<AllData>(
-      create: (context) => AllData(),
+    ChangeNotifierProvider<DocumentsDataProvider>(
+      create: (context) => DocumentsDataProvider(),
+    ),
+    ChangeNotifierProvider<AuthDataProvider>(
+      create: (context) => AuthDataProvider(),
+    ),
+    ChangeNotifierProvider<PreferencesProvider>(
+      create: (context) => PreferencesProvider(),
     ),
     Provider<GlobalTheme>(
       create: (context) => GlobalTheme(),
@@ -40,9 +50,6 @@ void main() async {
     ChangeNotifierProvider<HomeScreenIndexProvider>(
       create: (context) => HomeScreenIndexProvider(),
     ),
-    ChangeNotifierProvider<ToggleProvider>(
-      create: (context) => ToggleProvider(),
-    )
   ], child: const MyApp()));
 }
 
@@ -51,7 +58,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalTheme globalTheme = Provider.of<GlobalTheme>(context, listen: false);
-    bool isDarkMode = Provider.of<ToggleProvider>(context).isDarkMode;
+    bool isDarkMode = Provider.of<PreferencesProvider>(context).darkMode;
+    String? token = Provider.of<AuthDataProvider>(context).token;
+    bool isLoggedIn = token != null;
     return ChangeNotifierProvider(
       create: (context) {
         ConnectivityChangeNotifier changeNotifier =
@@ -63,9 +72,8 @@ class MyApp extends StatelessWidget {
         title: 'Parichaya',
         theme: isDarkMode ? globalTheme.darkTheme : globalTheme.lightTheme,
         debugShowCheckedModeBanner: false,
-        initialRoute: Hive.box("allData").get("token") == null
-            ? LoginScreen.routeName
-            : MobilePinScreen.routeName,
+        initialRoute:
+            isLoggedIn ? MobilePinScreen.routeName : LoginScreen.routeName,
         routes: {
           HomeScreen.routeName: (ctx) => const HomeScreen(),
           ErrorScreen.routeName: (ctx) => const ErrorScreen(),

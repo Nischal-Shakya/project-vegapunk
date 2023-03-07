@@ -4,12 +4,13 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/models/conversion.dart';
+import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../providers/all_data.dart';
+import '../providers/documents_provider.dart';
 import '../widgets/document_detail_list.dart';
 import '../url.dart';
 
@@ -41,18 +42,12 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
     docType = ModalRoute.of(context)!.settings.arguments as String;
     if (valueInitialized &&
         (docType == 'CTZ' || docType == 'DVL' || docType == 'NID')) {
+      final documentsDataProvider = Provider.of<DocumentsDataProvider>(context);
       final Map<String, dynamic> allDocumentData =
-          Provider.of<AllData>(context, listen: false).getDocumentData(docType);
-      final String documentFrontImageBase64 =
-          Provider.of<AllData>(context, listen: false)
-              .documentFrontImage(docType);
-      final String documentBackImageBase64 =
-          Provider.of<AllData>(context, listen: false)
-              .documentBackImage(docType);
-      documentFrontImage =
-          const Base64Decoder().convert(documentFrontImageBase64);
-      documentBackImage =
-          const Base64Decoder().convert(documentBackImageBase64);
+          documentsDataProvider.getFilteredDocumentData(docType)!;
+
+      documentFrontImage = documentsDataProvider.documentFrontImage(docType)!;
+      documentBackImage = documentsDataProvider.documentBackImage(docType)!;
 
       fieldNames = allDocumentData.keys.toList();
       fieldValues = allDocumentData.values.toList();
@@ -61,7 +56,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
         valueInitialized = false;
       });
     } else if (valueInitialized) {
-      String token = Provider.of<AllData>(context).token;
+      String token = Provider.of<AuthDataProvider>(context).token ?? "";
       var response = await http.get(Uri.parse("$getPidDataUrl/$docType/"),
           headers: {"Authorization": "Token $token"});
 

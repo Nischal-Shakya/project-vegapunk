@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:parichaya_frontend/providers/toggle_provider.dart';
+import 'package:parichaya_frontend/providers/auth_provider.dart';
+import 'package:parichaya_frontend/providers/preference_provider.dart';
 import 'package:parichaya_frontend/screens/change_pin_screen.dart';
 import 'package:parichaya_frontend/widgets/more_screen_listtile.dart';
 import 'package:provider/provider.dart';
-import 'package:hive/hive.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import './verify_age_screen.dart';
@@ -18,7 +18,8 @@ class MoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final double customWidth = MediaQuery.of(context).size.width;
     final indexProvider = Provider.of<HomeScreenIndexProvider>(context);
-    final toggler = Provider.of<ToggleProvider>(context);
+    final preferencesProvider = Provider.of<PreferencesProvider>(context);
+    final authDataProvider = Provider.of<AuthDataProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -83,9 +84,9 @@ class MoreScreen extends StatelessWidget {
                           BlendMode.srcIn)),
                   trailingIcon: Switch(
                     activeColor: Theme.of(context).colorScheme.primary,
-                    value: toggler.isDarkMode,
+                    value: preferencesProvider.darkMode,
                     onChanged: (bool value) {
-                      toggler.changeTheme(value);
+                      preferencesProvider.setDarkMode(value);
                     },
                   ),
                   onTap: null,
@@ -117,11 +118,11 @@ class MoreScreen extends StatelessWidget {
                           BlendMode.srcIn)),
                   trailingIcon: Switch(
                     activeColor: Theme.of(context).colorScheme.primary,
-                    value: toggler.isBiometricEnabled,
+                    value: authDataProvider.isBiometricEnabled,
                     onChanged: (bool value) async {
                       final isAuthenticated = await LocalAuthApi.authenticate();
                       if (isAuthenticated) {
-                        toggler.changeBiometrics(value);
+                        authDataProvider.setIsBiometricEnabled(value);
                       }
                     },
                   ),
@@ -181,9 +182,7 @@ class MoreScreen extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                toggler.changeBiometrics(false);
-                                toggler.changeTheme(false);
-                                Hive.box("allData").clear();
+                                authDataProvider.logout();
                                 indexProvider.selectedIndexList.removeRange(
                                     1, indexProvider.selectedIndexList.length);
                                 Navigator.of(context, rootNavigator: true)
