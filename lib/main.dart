@@ -25,6 +25,7 @@ import 'screens/document_detail_screen.dart';
 import './screens/mobile_pin_screen.dart';
 import './screens/setup_pin_screen.dart';
 import './screens/change_pin_screen.dart';
+import './screens/about_us_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,6 +91,7 @@ class MyApp extends StatelessWidget {
           QrShareScreen.routeName: (ctx) => const QrShareScreen(),
           SetupPinScreen.routeName: (ctx) => const SetupPinScreen(),
           VerifyAgeScreen.routeName: (ctx) => const VerifyAgeScreen(),
+          AboutUsScreen.routeName: (ctx) => const AboutUsScreen(),
         },
       ),
     );

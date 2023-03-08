@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parichaya_frontend/screens/about_us_screen.dart';
 import 'package:parichaya_frontend/widgets/more_screen_listtile.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -49,7 +50,8 @@ class AboutUs extends StatelessWidget {
                   colorFilter: ColorFilter.mode(
                       Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
               trailingIcon: null,
-              onTap: () {},
+              onTap: () => Navigator.of(context, rootNavigator: true)
+                  .pushNamed(AboutUsScreen.routeName),
             ),
             MoreScreenListTile(
               name: "Open Source Licenses",
