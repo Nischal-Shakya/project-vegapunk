@@ -39,6 +39,7 @@ flutter_native_splash:
   color: "#0A81FF"
   image: assets/images/splash.png
   color_dark: "#303030"
+  android_disable_fullscreen: false
 
 flutter:
 
