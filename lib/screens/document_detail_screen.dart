@@ -1,9 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:math' as math;
-import 'dart:typed_data';
+
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/models/conversion.dart';
@@ -11,6 +11,7 @@ import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/screens/error_screen.dart';
 import 'package:parichaya_frontend/screens/login_screen.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
+import 'package:parichaya_frontend/widgets/document_card_image.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,45 +29,36 @@ class DocumentDetailScreen extends StatefulWidget {
   State<DocumentDetailScreen> createState() => _DocumentDetailScreenState();
 }
 
-class _DocumentDetailScreenState extends State<DocumentDetailScreen>
-    with SingleTickerProviderStateMixin {
+class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   bool isLoading = true;
-  bool isSelectedImage = true;
-  bool firstTap = true;
+
   bool valueInitialized = true;
-  double angle = 0;
-  TabController? _tabController;
-  late Uint8List documentFrontImage;
-  late Uint8List documentBackImage;
-  late List fieldNames;
-  late List fieldValues;
-  late String docType;
 
   @override
-  void didChangeDependencies() async {
-    docType = ModalRoute.of(context)!.settings.arguments as String;
+  Widget build(BuildContext context) {
+    final AuthDataProvider authDataProvider =
+        Provider.of<AuthDataProvider>(context, listen: false);
+    final DocumentsDataProvider documentsDataProvider =
+        Provider.of<DocumentsDataProvider>(context);
+    late Uint8List documentFrontImage;
+    late Uint8List documentBackImage;
+    late Map allDocumentData;
+
+    String docType = ModalRoute.of(context)!.settings.arguments as String;
     if (valueInitialized &&
         (docType == 'CTZ' || docType == 'DVL' || docType == 'NID')) {
-      final documentsDataProvider = Provider.of<DocumentsDataProvider>(context);
-      final Map<String, dynamic> allDocumentData = documentsDataProvider
-          .getFilteredDocumentData(documentsDataProvider.documents![docType])!;
+      allDocumentData = documentsDataProvider.getFilteredDocumentData(docType)!;
 
-      documentFrontImage = documentsDataProvider.documentFrontImage(docType)!;
-      documentBackImage = documentsDataProvider.documentBackImage(docType)!;
-
-      fieldNames = allDocumentData.keys.toList();
-      fieldValues = allDocumentData.values.toList();
+      documentFrontImage = documentsDataProvider
+          .getDocumentCardFrontImage(documentsDataProvider.documents![docType]);
+      documentBackImage = documentsDataProvider
+          .getDocumentCardBackImage(documentsDataProvider.documents![docType]);
       setState(() {
         isLoading = false;
         valueInitialized = false;
       });
     } else if (valueInitialized) {
-      String token = Provider.of<AuthDataProvider>(context).token ?? "";
-      var response = await http.get(Uri.parse("$getPidDataUrl/$docType/"),
-          headers: {"Authorization": "Token $token"});
-
-      final Map<String, dynamic> allDocumentData =
-          json.decode(response.body)["permitted_document"];
+      final Map allDocumentData = json.decode(docType)["permitted_document"];
 
       final String documentFrontImageBase64 = allDocumentData['card_front'];
       final String documentBackImageBase64 = allDocumentData['card_back'];
@@ -91,36 +83,12 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
           "createdAt", (value) => value.toString().substring(0, 10));
       allDocumentData.update(
           "updatedAt", (value) => value.toString().substring(0, 10));
-      fieldNames = allDocumentData.keys.toList();
-      fieldValues = allDocumentData.values.toList();
       setState(() {
         isLoading = false;
         valueInitialized = false;
       });
     }
 
-    super.didChangeDependencies();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, length: 2);
-  }
-
-  @override
-  void dispose() {
-    _tabController!.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final AuthDataProvider authDataProvider =
-        Provider.of<AuthDataProvider>(context, listen: false);
-    final DocumentsDataProvider documentsDataProvider =
-        Provider.of<DocumentsDataProvider>(context, listen: false);
     return RefreshIndicator(
       onRefresh: () async {
         String token = authDataProvider.token!;
@@ -142,8 +110,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
           return;
         }
         if (response.statusCode == 200) {
-          Map<String, dynamic> fetchedDocuments =
-              json.decode(response.body)["documents"] as Map<String, dynamic>;
+          Map fetchedDocuments = json.decode(response.body)["documents"] as Map;
           fetchedDocuments.removeWhere((key, value) => value == null);
           await documentsDataProvider.setDocumentsData(fetchedDocuments);
         } else {
@@ -220,101 +187,13 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                height: 45,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                      5.0,
-                                    ),
-                                    border: Border.all(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary)),
-                                child: TabBar(
-                                  controller: _tabController,
-                                  indicator: BoxDecoration(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  unselectedLabelColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  tabs: const [
-                                    Tab(
-                                      text: 'Front View',
-                                    ),
-                                    Tab(
-                                      text: 'Back View',
-                                    ),
-                                  ],
-                                  onTap: (value) {
-                                    if (_tabController!.indexIsChanging) {
-                                      setState(() {
-                                        angle =
-                                            (angle + math.pi) % (2 * math.pi);
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (firstTap &&
-                                      _tabController!.previousIndex ==
-                                          _tabController!.index) {
-                                    _tabController!
-                                        .animateTo(_tabController!.index + 1);
-                                    firstTap = false;
-                                  } else {
-                                    _tabController!.animateTo(
-                                        _tabController!.previousIndex,
-                                        duration:
-                                            const Duration(milliseconds: 600));
-                                  }
-                                  setState(() {
-                                    angle = (angle + math.pi) % (2 * math.pi);
-                                  });
-                                },
-                                child: TweenAnimationBuilder(
-                                    tween: Tween<double>(begin: 0, end: angle),
-                                    duration: const Duration(milliseconds: 600),
-                                    builder: (context, value, _) {
-                                      if (value >= (math.pi / 2)) {
-                                        isSelectedImage = false;
-                                      } else {
-                                        isSelectedImage = true;
-                                      }
-                                      return Transform(
-                                        alignment: Alignment.center,
-                                        transform: Matrix4.identity()
-                                          ..setEntry(3, 2, 0.001)
-                                          ..rotateY(value),
-                                        child: SizedBox(
-                                          width: width,
-                                          height: 230,
-                                          child: isSelectedImage
-                                              ? Image.memory(
-                                                  documentFrontImage,
-                                                  fit: BoxFit.contain,
-                                                )
-                                              : Transform(
-                                                  alignment: Alignment.center,
-                                                  transform: Matrix4.identity()
-                                                    ..rotateY(math.pi),
-                                                  child: Image.memory(
-                                                    documentBackImage,
-                                                    fit: BoxFit.contain,
-                                                  ),
-                                                ),
-                                        ),
-                                      );
-                                    }),
+                              DocumentCardImage(
+                                cardFront: documentFrontImage,
+                                cardBack: documentBackImage,
                               ),
                               DocumentDetailList(
-                                  fieldNames: fieldNames,
-                                  fieldValues: fieldValues),
+                                  fieldNames: allDocumentData.keys.toList(),
+                                  fieldValues: allDocumentData.values.toList()),
                             ],
                           ),
                         ),

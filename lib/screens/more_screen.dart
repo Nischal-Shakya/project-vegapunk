@@ -47,12 +47,13 @@ class MoreScreen extends StatelessWidget {
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.only(top: 10, left: customWidth * 0.05),
+            padding: const EdgeInsets.only(top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: customWidth * 0.05),
                   child: Text(
                     "Features",
                     style: Theme.of(context).textTheme.labelLarge,
@@ -70,7 +71,8 @@ class MoreScreen extends StatelessWidget {
                       .pushNamed(VerifyAgeScreen.routeName, arguments: ""),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: customWidth * 0.05),
                   child: Text(
                     "Preferences",
                     style: Theme.of(context).textTheme.labelLarge,
@@ -93,7 +95,8 @@ class MoreScreen extends StatelessWidget {
                   onTap: null,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: customWidth * 0.05),
                   child: Text(
                     "Security",
                     style: Theme.of(context).textTheme.labelLarge,
@@ -130,7 +133,8 @@ class MoreScreen extends StatelessWidget {
                   onTap: null,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: customWidth * 0.05),
                   child: Text(
                     "Other",
                     style: Theme.of(context).textTheme.labelLarge,

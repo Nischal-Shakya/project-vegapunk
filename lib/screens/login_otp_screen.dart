@@ -124,7 +124,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                     key: formKey,
                     child: Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: customWidth * 0.05),
+                          EdgeInsets.symmetric(horizontal: customWidth * 0.10),
                       child: PinCodeTextField(
                         appContext: context,
                         length: 4,

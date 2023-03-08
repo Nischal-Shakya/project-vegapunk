@@ -19,8 +19,10 @@ class MoreScreenListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double customWidth = MediaQuery.of(context).size.width;
+
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+      contentPadding: EdgeInsets.only(left: customWidth * 0.05, right: 5),
       title: Padding(
         padding: const EdgeInsets.only(bottom: 5.0),
         child: Text(

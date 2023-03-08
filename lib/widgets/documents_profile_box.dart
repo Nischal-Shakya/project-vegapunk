@@ -15,7 +15,7 @@ class DocumentsProfileBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final nIN = Provider.of<AuthDataProvider>(context, listen: false).NIN ?? "";
 
-    String? fullName =
+    String fullName =
         Provider.of<DocumentsDataProvider>(context).getFullName() ?? "";
 
     final double customWidth = MediaQuery.of(context).size.width;

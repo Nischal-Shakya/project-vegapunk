@@ -10,7 +10,7 @@ final authDataBox = Hive.box("authData");
 class DocumentsDataProvider with ChangeNotifier {
   Map<dynamic, dynamic>? documents = userDataBox.get('documents'); //null
 
-  Future<void> setDocumentsData(Map<String, dynamic> documents) async {
+  Future<void> setDocumentsData(Map documents) async {
     await userDataBox.put('documents', documents);
     this.documents = documents;
 
@@ -21,41 +21,58 @@ class DocumentsDataProvider with ChangeNotifier {
     return documents!.keys.toList();
   }
 
-  Map<String, dynamic>? getDocumentData(String docType) {
+  Map? getDocumentData(String docType) {
     if (documents == null) {
       return null;
     }
     return documents![docType];
   }
 
-  Map<String, dynamic>? oldgetFilteredDocumentData(
-      String docType, Map<String, dynamic> documents) {
+  Map? getFilteredDocumentData(String docType) {
+    if (documents == null) {
+      return null;
+    }
     try {
-      Map<String, dynamic> allData = Map<String, dynamic>.from(documents);
-      Map<String, dynamic> tileFields = {};
+      Map allData = Map.from(documents!);
+      Map tileFields = {};
 
-      for (MapEntry<String, dynamic> items in allData[docType].entries) {
-        if (["face_image", "card_front", "card_back", "docType", "NIN"]
-            .any((String field) => field == items.key)) {
+      for (MapEntry items in allData[docType].entries) {
+        if ([
+          "face_image",
+          "card_front",
+          "card_back",
+          "docType",
+          "NIN",
+          "createdAt",
+          "updatedAt"
+        ].any((String field) => field == items.key)) {
           continue;
         }
         tileFields[items.key] = items.value;
       }
       tileFields.removeWhere((key, value) => value == null);
+
       return tileFields;
     } catch (e) {
       return {"No Document": "Error"};
     }
   }
 
-  Map<String, dynamic>? getFilteredDocumentData(Map<String, dynamic> document) {
+  Map? newgetFilteredDocumentData(Map document) {
     // try {
-    // Map<String, dynamic> allData = Map<String, dynamic>.from(documents);
-    Map<String, dynamic> tileFields = {};
+    // Map allData = Map.from(documents);
+    Map tileFields = {};
 
-    for (MapEntry<String, dynamic> items in document.entries) {
-      if (["face_image", "card_front", "card_back", "docType", "NIN"]
-          .any((String field) => field == items.key)) {
+    for (MapEntry items in document.entries) {
+      if ([
+        "face_image",
+        "card_front",
+        "card_back",
+        "docType",
+        "NIN",
+        "createdAt",
+        "updatedAt"
+      ].any((String field) => field == items.key)) {
         continue;
       }
       tileFields[items.key] = items.value;
@@ -67,19 +84,28 @@ class DocumentsDataProvider with ChangeNotifier {
     // }
   }
 
-  Uint8List? documentFrontImage(String docType) {
-    if (documents == null) {
-      return null;
-    }
-    return const Base64Decoder().convert(documents![docType]['card_front']);
+  // Uint8List? documentFrontImage(String docType) {
+  //   if (documents == null) {
+  //     return null;
+  //   }
+  //   return const Base64Decoder().convert(documents![docType]['card_front']);
+  // }
+
+  Uint8List getDocumentCardFrontImage(Map document) {
+    return const Base64Decoder().convert(document['card_front']);
   }
 
-  Uint8List? documentBackImage(String docType) {
-    if (documents == null) {
-      return null;
-    }
-    return const Base64Decoder().convert(documents![docType]['card_back']);
+  Uint8List getDocumentCardBackImage(Map document) {
+    // Uint8List cardFront = const Base64Decoder().convert(document['card_front']);
+    return const Base64Decoder().convert(document['card_back']);
   }
+
+  // Uint8List? documentBackImage(String docType) {
+  //   if (documents == null) {
+  //     return null;
+  //   }
+  //   return const Base64Decoder().convert(documents![docType]['card_back']);
+  // }
 
   String? getFullName() {
     if (documents == null) {

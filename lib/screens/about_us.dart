@@ -31,11 +31,12 @@ class AboutUs extends StatelessWidget {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: EdgeInsets.only(top: 10, left: customWidth * 0.05),
+          padding: const EdgeInsets.only(top: 10),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              padding: EdgeInsets.symmetric(
+                  vertical: 10.0, horizontal: customWidth * 0.05),
               child: Text(
                 "Know more about us",
                 style: Theme.of(context).textTheme.labelLarge,

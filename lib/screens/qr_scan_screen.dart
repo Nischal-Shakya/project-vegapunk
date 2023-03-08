@@ -29,6 +29,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
   Barcode? result;
   QRViewController? controller;
   late bool connectionStatus;
+  bool isLoading = false;
 
   @override
   void didChangeDependencies() {
@@ -73,49 +74,63 @@ class _QrScanScreenState extends State<QrScanScreen> {
         iconTheme: const IconThemeData(color: Colors.blue),
       ),
       extendBodyBehindAppBar: true,
-      body: TweenAnimationBuilder(
-        tween: Tween(begin: 0.0, end: 1.0),
-        duration: const Duration(milliseconds: 800),
-        builder: (context, value, child) {
-          return ShaderMask(
-            shaderCallback: ((bounds) {
-              return RadialGradient(
-                radius: value * 5,
-                colors: const [
-                  Colors.white,
-                  Colors.white,
-                  Colors.transparent,
-                  Colors.transparent
+      body: isLoading
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Fetching Driving License",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                 ],
-                stops: const [0, 0.55, 0.6, 1],
-                // center: const FractionalOffset(0.4, 0.95),
-              ).createShader(bounds);
-            }),
-            child: child,
-          );
-        },
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: <Widget>[
-            _buildQrView(context),
-            Positioned(
-              top: customHeight / 4,
-              child: Text(
-                'Scan the Parichaya Qr Code',
-                style: Theme.of(context).textTheme.displaySmall,
-                textAlign: TextAlign.center,
+              ),
+            )
+          : TweenAnimationBuilder(
+              tween: Tween(begin: 0.0, end: 1.0),
+              duration: const Duration(milliseconds: 800),
+              builder: (context, value, child) {
+                return ShaderMask(
+                  shaderCallback: ((bounds) {
+                    return RadialGradient(
+                      radius: value * 5,
+                      colors: const [
+                        Colors.white,
+                        Colors.white,
+                        Colors.transparent,
+                        Colors.transparent
+                      ],
+                      stops: const [0, 0.55, 0.6, 1],
+                      // center: const FractionalOffset(0.4, 0.95),
+                    ).createShader(bounds);
+                  }),
+                  child: child,
+                );
+              },
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: <Widget>[
+                  _buildQrView(context),
+                  Positioned(
+                    top: customHeight / 4,
+                    child: Text(
+                      'Scan the Parichaya Qr Code',
+                      style: Theme.of(context).textTheme.displaySmall,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Positioned(
+                    top: customHeight / 3.2,
+                    child: const Text(
+                      "Please align the QR within the frame",
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Positioned(
-              top: customHeight / 3.2,
-              child: const Text(
-                "Please align the QR within the frame",
-                style: TextStyle(fontSize: 14, color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -162,7 +177,6 @@ class _QrScanScreenState extends State<QrScanScreen> {
               Map decodedData = json.decode(response.body);
               // Map decodedData = json.decode(requestId);
               log(decodedData.toString());
-
               if (decodedData.containsKey('request_id') &&
                   decodedData['request_id'].toString().isNotEmpty &&
                   decodedData.containsKey('requested_fields') &&
@@ -174,9 +188,18 @@ class _QrScanScreenState extends State<QrScanScreen> {
                     arguments: decodedData);
               } else if (decodedData.containsKey('permit_id')) {
                 if (decodedData['doc_type'] == "DVL") {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  var response = await http.get(
+                      Uri.parse("$getPidDataUrl/DVL/"),
+                      headers: {"Authorization": "Token $token"});
+                  setState(() {
+                    isLoading = false;
+                  });
                   Navigator.of(context, rootNavigator: true)
                       .pushReplacementNamed(DocumentDetailScreen.routeName,
-                          arguments: decodedData['permit_id']);
+                          arguments: response.body);
                 } else if (decodedData['doc_type'] == "AGE") {
                   Navigator.of(context, rootNavigator: true)
                       .pushReplacementNamed(VerifyAgeScreen.routeName,

@@ -140,7 +140,7 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                   height: 60,
                 ),
                 Text(
-                  DateFormat("h:mm:s").format(DateTime.now()),
+                  DateFormat("h:mm:ss").format(DateTime.now()),
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 Text(

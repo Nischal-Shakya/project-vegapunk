@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:parichaya_frontend/screens/login_screen.dart';
@@ -53,17 +54,13 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
       return;
     }
     if (response.statusCode == 200) {
-      Map<String, dynamic> fetchedDocuments =
-          json.decode(response.body)["documents"] as Map<String, dynamic>;
+      Map fetchedDocuments = json.decode(response.body)["documents"] as Map;
       fetchedDocuments.removeWhere((key, value) => value == null);
       await documentsDataProvider.setDocumentsData(fetchedDocuments);
     } else {
       Navigator.of(context, rootNavigator: true)
           .pushReplacementNamed(ErrorScreen.routeName);
     }
-    setState(() {
-      isFirstLoading = false;
-    });
   }
 
   @override
@@ -85,6 +82,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
       }
 
       setState(() {
+        isFirstLoading = false;
         valueInitialized = true;
       });
     }

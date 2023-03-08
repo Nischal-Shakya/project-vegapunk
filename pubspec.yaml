@@ -36,10 +36,9 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter_native_splash:
-  color: "#ffffff"
+  color: "#0A81FF"
   image: assets/images/splash.png
-  color_dark: "#0F0F0F"
-  image_dark: assets/images/dark-splash.png
+  color_dark: "#303030"
 
 flutter:
 
