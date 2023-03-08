@@ -9,6 +9,7 @@ import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 
 import '../url.dart';
 
@@ -45,6 +46,7 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
   late String dob;
   bool isLoading = true;
   bool isSharedData = false;
+  String? _timeString;
 
   @override
   void didChangeDependencies() async {
@@ -74,7 +76,30 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
   }
 
   @override
+  void initState() {
+    _timeString = _formatDateTime(DateTime.now());
+    Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
+    super.initState();
+  }
+
+  void _getTime() {
+    final DateTime now = DateTime.now();
+    final String formattedDateTime = _formatDateTime(now);
+    setState(() {
+      _timeString = formattedDateTime;
+    });
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return DateFormat('hh:mm:ss').format(dateTime);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    DateTime currentTime = DateTime.now();
+    setState(() {
+      currentTime = DateTime.now();
+    });
     return isLoading
         ? Center(
             child: Column(
@@ -146,14 +171,14 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                   height: 60,
                 ),
                 Text(
-                  DateFormat("h:mm:ss").format(DateTime.now()),
+                  _timeString!,
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).textTheme.labelLarge!.color),
                 ),
                 Text(
-                  DateFormat.yMMMMd().format(DateTime.now()),
+                  DateFormat.yMMMMd().format(currentTime),
                   style: TextStyle(
                       fontSize: 18,
                       color: Theme.of(context).textTheme.labelLarge!.color),

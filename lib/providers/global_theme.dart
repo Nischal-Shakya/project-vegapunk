@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const Color customBlue = Color(0xff0a81ff);
@@ -32,6 +33,7 @@ class GlobalTheme {
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
     ),
     fontFamily: GoogleFonts.poppins().fontFamily,
     textTheme: const TextTheme(

@@ -23,7 +23,7 @@ class AboutUsScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.displayLarge,
             ),
             Text(
-              "Company Overview",
+              "Team Overview",
               style: Theme.of(context).textTheme.labelSmall,
             ),
             const SizedBox(

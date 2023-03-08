@@ -191,11 +191,13 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                                   height: 24,
                                   width: 24,
                                   child: SvgPicture.asset(
-                                    ('assets/icons/scan-qrcode.svg'),
-                                  ),
+                                      ('assets/icons/scan-qrcode.svg'),
+                                      colorFilter: ColorFilter.mode(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                          BlendMode.srcIn)),
                                 ),
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
                               )
                             ]
                           : null,
