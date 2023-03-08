@@ -4,11 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 final userDataBox = Hive.box("userData");
-final userPreferencesBox = Hive.box("userPreferences");
-final authDataBox = Hive.box("authData");
 
 class DocumentsDataProvider with ChangeNotifier {
   Map<dynamic, dynamic>? documents = userDataBox.get('documents'); //null
+  String? lastUpdatedAt = userDataBox.get('lastUpdatedAt');
+
+  Future<void> setLastUpdatedAt(String lastUpdatedAt) async {
+    await userDataBox.put('lastUpdatedAt', lastUpdatedAt);
+    this.lastUpdatedAt = lastUpdatedAt;
+    notifyListeners();
+  }
 
   Future<void> setDocumentsData(Map documents) async {
     await userDataBox.put('documents', documents);

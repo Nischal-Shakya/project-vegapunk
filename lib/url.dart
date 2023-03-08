@@ -7,12 +7,13 @@
 
 // const url = 'http://192.168.100.54:8000';
 // const wsUrl = 'ws://192.168.100.54:8000';
-// const url = 'http://192.168.1.70:8000';
+// const url = 'https://1b30-103-163-182-130.in.ngrok.io';
 // const wsUrl = 'ws://192.168.1.70:8000';
 const String url = 'http://65.109.161.97:8000';
 const String wsUrl = 'ws://65.109.161.97:8000';
 const String getDataUrl = '$url/api/v1/identity/documents/';
 const String checkNin = '$url/api/v1/identity/check';
+const String checkLastUpdatedAt = '$url/api/v1/identity/last-updated-at';
 const String postMobileAndNinUrl = '$url/api/v1/auth/';
 const String postOtp = '$url/api/v1/auth/verify/';
 const String accessRequestUrl = '$url/api/v1/qr/request';

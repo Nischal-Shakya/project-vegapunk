@@ -72,8 +72,12 @@ class AuthDataProvider with ChangeNotifier {
 
   void logout() {
     log("Deleting data from box");
+    userDataBox.deleteAll(['documents', 'lastUpdatedAt']);
     userDataBox.clear();
+    authDataBox.deleteAll(
+        ['isBiometricEnabled', 'MPIN', 'token', 'NIN', 'mobileNumber']);
     authDataBox.clear();
+    userPreferencesBox.deleteAll(['userPreferences']);
     userPreferencesBox.clear();
 
     log("Deleting data from state");

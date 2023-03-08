@@ -1,6 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:parichaya_frontend/screens/login_screen.dart';
@@ -31,34 +32,59 @@ class DocumentsScreen extends StatefulWidget {
 class _DocumentsScreenState extends State<DocumentsScreen> {
   bool isFirstLoading = true;
   bool valueInitialized = false;
+  bool isUpdated = false;
   late AuthDataProvider authDataProvider;
   late DocumentsDataProvider documentsDataProvider;
 
   Future<void> updateDBData() async {
     String token = authDataProvider.token!;
-    var response = await http
-        .get(Uri.parse(getDataUrl), headers: {"Authorization": "Token $token"});
-    // TODO:Check if data has been updated since last fetch.
-    // If updated, fetch it.
-    // Else, skip it.
-    // log(response.statusCode.toString());
-    if (response.statusCode == 401) {
-      authDataProvider.logout();
-      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-        LoginScreen.routeName,
-        (route) => false,
-      );
+    String NIN = authDataProvider.NIN!;
+    String? storedLastUpdatedAt = documentsDataProvider.lastUpdatedAt;
+
+    if (storedLastUpdatedAt != null) {
+      var checkForUpdate =
+          await http.get(Uri.parse("$checkLastUpdatedAt/$NIN/"), headers: {
+        "Authorization": "Token $token",
+      });
+
+      log(checkForUpdate.statusCode.toString(),
+          name: "checkForUpdateStatusCode");
+      log(checkForUpdate.body.toString(), name: "checkForUpdateBody");
+
+      String lastUpdatedAt =
+          json.decode(checkForUpdate.body)['last_updated_at'];
+
+      setState(() {
+        isUpdated = DateTime.parse(lastUpdatedAt)
+            .isAfter(DateTime.parse(storedLastUpdatedAt));
+      });
     }
-    if (response.statusCode != 200) {
-      return;
-    }
-    if (response.statusCode == 200) {
-      Map fetchedDocuments = json.decode(response.body)["documents"] as Map;
-      fetchedDocuments.removeWhere((key, value) => value == null);
-      await documentsDataProvider.setDocumentsData(fetchedDocuments);
-    } else {
-      Navigator.of(context, rootNavigator: true)
-          .pushReplacementNamed(ErrorScreen.routeName);
+    if (storedLastUpdatedAt == null || isUpdated) {
+      var response = await http.get(Uri.parse(getDataUrl),
+          headers: {"Authorization": "Token $token"});
+
+      log(response.statusCode.toString(), name: "responseStatusCode");
+
+      if (response.statusCode == 401) {
+        authDataProvider.logout();
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          LoginScreen.routeName,
+          (route) => false,
+        );
+      }
+      if (response.statusCode != 200) {
+        return;
+      }
+      if (response.statusCode == 200) {
+        Map fetchedDocuments = json.decode(response.body)["documents"] as Map;
+        fetchedDocuments.removeWhere((key, value) => value == null);
+        await documentsDataProvider
+            .setLastUpdatedAt(DateTime.now().toIso8601String());
+        await documentsDataProvider.setDocumentsData(fetchedDocuments);
+      } else {
+        Navigator.of(context, rootNavigator: true)
+            .pushReplacementNamed(ErrorScreen.routeName);
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
 
 import 'dart:convert';
 
@@ -31,18 +31,21 @@ class DocumentDetailScreen extends StatefulWidget {
 
 class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   bool isLoading = true;
-
-  bool valueInitialized = true;
-
   @override
   Widget build(BuildContext context) {
+    bool valueInitialized = true;
+    bool isUpdated = false;
+    late Uint8List documentFrontImage;
+    late Uint8List documentBackImage;
+    late Map allDocumentData;
     final AuthDataProvider authDataProvider =
         Provider.of<AuthDataProvider>(context, listen: false);
     final DocumentsDataProvider documentsDataProvider =
         Provider.of<DocumentsDataProvider>(context);
-    late Uint8List documentFrontImage;
-    late Uint8List documentBackImage;
-    late Map allDocumentData;
+
+    String token = authDataProvider.token!;
+    String NIN = authDataProvider.NIN!;
+    String? storedLastUpdatedAt = documentsDataProvider.lastUpdatedAt;
 
     String docType = ModalRoute.of(context)!.settings.arguments as String;
     if (valueInitialized &&
@@ -91,31 +94,48 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        String token = authDataProvider.token!;
-        var response = await http.get(Uri.parse(getDataUrl),
-            headers: {"Authorization": "Token $token"});
-        // TODO:Check if data has been updated since last fetch.
-        // If updated, fetch it.
-        // Else, skip it.
-        // log(response.statusCode.toString());
-        if (response.statusCode == 401) {
-          authDataProvider.logout();
-          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-            LoginScreen.routeName,
-            (route) => false,
-          );
+        if (storedLastUpdatedAt != null) {
+          var checkForUpdate =
+              await http.get(Uri.parse("$checkLastUpdatedAt/$NIN/"), headers: {
+            "Authorization": "Token $token",
+          });
+
+          log(checkForUpdate.statusCode.toString(),
+              name: "checkForUpdateStatusCode");
+          log(checkForUpdate.body.toString(), name: "checkForUpdateBody");
+
+          String lastUpdatedAt =
+              json.decode(checkForUpdate.body)['last_updated_at'];
+
+          setState(() {
+            isUpdated = DateTime.parse(lastUpdatedAt)
+                .isAfter(DateTime.parse(storedLastUpdatedAt));
+          });
         }
-        if (response.statusCode != 200) {
-          log("Couldnt refresh data");
-          return;
-        }
-        if (response.statusCode == 200) {
-          Map fetchedDocuments = json.decode(response.body)["documents"] as Map;
-          fetchedDocuments.removeWhere((key, value) => value == null);
-          await documentsDataProvider.setDocumentsData(fetchedDocuments);
-        } else {
-          Navigator.of(context, rootNavigator: true)
-              .pushReplacementNamed(ErrorScreen.routeName);
+        if (storedLastUpdatedAt == null || isUpdated) {
+          var response = await http.get(Uri.parse(getDataUrl),
+              headers: {"Authorization": "Token $token"});
+          log(response.statusCode.toString(), name: "responseStatusCode");
+          if (response.statusCode == 401) {
+            authDataProvider.logout();
+            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+              LoginScreen.routeName,
+              (route) => false,
+            );
+          }
+          if (response.statusCode != 200) {
+            log("Couldnt refresh data");
+            return;
+          }
+          if (response.statusCode == 200) {
+            Map fetchedDocuments =
+                json.decode(response.body)["documents"] as Map;
+            fetchedDocuments.removeWhere((key, value) => value == null);
+            await documentsDataProvider.setDocumentsData(fetchedDocuments);
+          } else {
+            Navigator.of(context, rootNavigator: true)
+                .pushReplacementNamed(ErrorScreen.routeName);
+          }
         }
       },
       child: Scaffold(
@@ -127,7 +147,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                     const CircularProgressIndicator(),
                     const SizedBox(height: 10),
                     Text(
-                      "Fetching Driving License",
+                      "Fetching Document",
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ],
