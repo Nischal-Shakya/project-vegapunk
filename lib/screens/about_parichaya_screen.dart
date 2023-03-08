@@ -3,10 +3,10 @@ import 'package:parichaya_frontend/screens/about_us_screen.dart';
 import 'package:parichaya_frontend/widgets/more_screen_listtile.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AboutUs extends StatelessWidget {
-  const AboutUs({super.key});
+class AboutParichayaScreen extends StatelessWidget {
+  const AboutParichayaScreen({super.key});
 
-  static const routeName = '/about_us';
+  static const routeName = '/about_parichaya';
 
   @override
   Widget build(BuildContext context) {

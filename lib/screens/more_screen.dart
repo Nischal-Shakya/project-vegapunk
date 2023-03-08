@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/providers/preference_provider.dart';
-import 'package:parichaya_frontend/screens/about_us.dart';
+import 'package:parichaya_frontend/screens/about_parichaya_screen.dart';
 import 'package:parichaya_frontend/screens/change_pin_screen.dart';
 import 'package:parichaya_frontend/widgets/more_screen_listtile.dart';
 import 'package:provider/provider.dart';
@@ -149,7 +149,7 @@ class MoreScreen extends StatelessWidget {
                           BlendMode.srcIn)),
                   trailingIcon: null,
                   onTap: () => Navigator.of(context, rootNavigator: true)
-                      .pushNamed(AboutUs.routeName),
+                      .pushNamed(AboutParichayaScreen.routeName),
                 ),
                 MoreScreenListTile(
                   name: "Logout",

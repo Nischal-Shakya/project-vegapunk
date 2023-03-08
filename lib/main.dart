@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:parichaya_frontend/screens/about_us.dart';
+import 'package:parichaya_frontend/screens/about_parichaya_screen.dart';
 import 'package:parichaya_frontend/screens/qr_scan_screen.dart';
 import 'package:parichaya_frontend/screens/qr_share_screen.dart';
 import 'package:provider/provider.dart';
@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
         initialRoute:
             isLoggedIn ? MobilePinScreen.routeName : LoginScreen.routeName,
         routes: {
-          AboutUs.routeName: (ctx) => const AboutUs(),
+          AboutParichayaScreen.routeName: (ctx) => const AboutParichayaScreen(),
           ChangePinScreen.routeName: (ctx) => const ChangePinScreen(),
           DataPermissionScreen.routeName: (ctx) => const DataPermissionScreen(),
           DocumentDetailScreen.routeName: (ctx) => const DocumentDetailScreen(),
