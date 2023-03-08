@@ -103,13 +103,13 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
         titleSpacing: 0,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: SizedBox(
-          height: 24,
-          width: 24,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 15.0, right: 12),
           child: SvgPicture.asset(
             ('assets/icons/logo.svg'),
-            // colorFilter: ColorFilter.mode(
-            //     Theme.of(context).colorScheme.primary, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary, BlendMode.srcIn),
+            fit: BoxFit.fitWidth,
           ),
         ),
         actions: [
