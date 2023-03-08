@@ -163,6 +163,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                       setState(() {
                         resend = true;
                       });
+                      textEditingController.clear();
                       startTimer();
                       if (connectionStatus) {
                         http.post(Uri.parse(postMobileAndNinUrl), body: {

@@ -28,7 +28,7 @@ class DocumentsScreenList extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: customWidth * 0.05),
       itemBuilder: (BuildContext ctx, index) {
         return Card(
-          elevation: 2,
+          elevation: 1,
           shadowColor: Theme.of(context).colorScheme.shadow,
           child: InkWell(
             onTap: () {

@@ -115,20 +115,26 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 25,
+                  height: 18,
                 ),
-                Text(calculateAge(DateTime.parse(dob)).toString(),
+                Text("Over ${calculateAge(DateTime.parse(dob)).toString()}",
                     style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(
+                  height: 12,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 24,
-                      width: 24,
+                      height: 16,
+                      width: 16,
                       child: SvgPicture.asset(('assets/icons/verified.svg'),
                           colorFilter: ColorFilter.mode(
                               Theme.of(context).colorScheme.primary,
                               BlendMode.srcIn)),
+                    ),
+                    const SizedBox(
+                      width: 4,
                     ),
                     Text(
                       "Verified Age",
@@ -141,11 +147,16 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                 ),
                 Text(
                   DateFormat("h:mm:ss").format(DateTime.now()),
-                  style: Theme.of(context).textTheme.labelLarge,
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.labelLarge!.color),
                 ),
                 Text(
-                  DateFormat.yMMMd().format(DateTime.now()),
-                  style: Theme.of(context).textTheme.labelLarge,
+                  DateFormat.yMMMMd().format(DateTime.now()),
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).textTheme.labelLarge!.color),
                 ),
                 const SizedBox(
                   height: 20,
@@ -162,11 +173,14 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                                   Colors.white, BlendMode.srcIn)),
                         ),
                         style: ButtonStyle(
-                          backgroundColor:
-                              const MaterialStatePropertyAll(Colors.blue),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10)),
+                          backgroundColor: MaterialStatePropertyAll(
+                              Theme.of(context).colorScheme.primary),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                         ),
