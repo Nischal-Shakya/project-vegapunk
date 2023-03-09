@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -56,15 +57,16 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
       String token = Provider.of<AuthDataProvider>(context).token ?? "";
       var response = await http.get(Uri.parse("$getPidDataUrl/$permitId/"),
           headers: {"Authorization": "Token $token"});
-      setState(() {
-        isLoading = false;
-        isSharedData = true;
-      });
+      log(response.body.toString());
       final Map<String, dynamic> documentData =
           json.decode(response.body)["permitted_document"];
       faceImageByte64 = documentData['face_image'];
       faceImage = const Base64Decoder().convert(faceImageByte64);
       dob = documentData['date_of_birth'];
+      setState(() {
+        isLoading = false;
+        isSharedData = true;
+      });
     } else {
       faceImage = Provider.of<DocumentsDataProvider>(context).getFaceImage()!;
       dob = Provider.of<DocumentsDataProvider>(context).getDateOfbirth()!;
@@ -85,9 +87,11 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
   void _getTime() {
     final DateTime now = DateTime.now();
     final String formattedDateTime = _formatDateTime(now);
-    setState(() {
-      _timeString = formattedDateTime;
-    });
+    if (mounted) {
+      setState(() {
+        _timeString = formattedDateTime;
+      });
+    }
   }
 
   String _formatDateTime(DateTime dateTime) {
@@ -96,10 +100,6 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime currentTime = DateTime.now();
-    setState(() {
-      currentTime = DateTime.now();
-    });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -178,7 +178,7 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                       color: Theme.of(context).textTheme.labelLarge!.color),
                 ),
                 Text(
-                  DateFormat.yMMMMd().format(currentTime),
+                  DateFormat.yMMMMd().format(DateTime.now()),
                   style: TextStyle(
                       fontSize: 18,
                       color: Theme.of(context).textTheme.labelLarge!.color),

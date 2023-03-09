@@ -48,6 +48,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     String? storedLastUpdatedAt = documentsDataProvider.lastUpdatedAt;
 
     String docType = ModalRoute.of(context)!.settings.arguments as String;
+
     if (valueInitialized &&
         (docType == 'CTZ' || docType == 'DVL' || docType == 'NID')) {
       allDocumentData = documentsDataProvider.getFilteredDocumentData(docType)!;
@@ -61,8 +62,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
         valueInitialized = false;
       });
     } else if (valueInitialized) {
-      final Map allDocumentData = json.decode(docType)["permitted_document"];
-
+      allDocumentData = json.decode(docType)["permitted_document"];
       final String documentFrontImageBase64 = allDocumentData['card_front'];
       final String documentBackImageBase64 = allDocumentData['card_back'];
 

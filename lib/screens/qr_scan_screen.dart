@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/screens/document_detail_screen.dart';
 import 'package:parichaya_frontend/screens/verify_age_screen.dart';
@@ -170,28 +169,35 @@ class _QrScanScreenState extends State<QrScanScreen> {
         if (connectionStatus) {
           String requestId = scanData.code.toString();
           log(requestId, name: "Request Id");
-          Map decodedRequestId = json.decode(requestId);
-          log(decodedRequestId.toString(), name: "Decoded Request Id");
-          if (requestId.isNotEmpty) {
-            if (decodedRequestId.containsKey('permit_id')) {
-              if (decodedRequestId['doc_type'] == "DVL") {
-                setState(() {
-                  isLoading = true;
-                });
-                var response = await http.get(Uri.parse("$getPidDataUrl/DVL/"),
-                    headers: {"Authorization": "Token $token"});
-                setState(() {
-                  isLoading = false;
-                });
-                Navigator.of(context, rootNavigator: true).pushReplacementNamed(
-                    DocumentDetailScreen.routeName,
-                    arguments: response.body);
-              } else if (decodedRequestId['doc_type'] == "AGE") {
-                Navigator.of(context, rootNavigator: true).pushReplacementNamed(
-                    VerifyAgeScreen.routeName,
-                    arguments: decodedRequestId['permit_id']);
+          try {
+            Map decodedRequestId = json.decode(requestId);
+            log(decodedRequestId.toString(), name: "Decoded Request Id");
+            if (requestId.isNotEmpty) {
+              if (decodedRequestId.containsKey('permit_id')) {
+                if (decodedRequestId['doc_type'] == "DVL") {
+                  log("DVL");
+                  setState(() {
+                    isLoading = true;
+                  });
+                  var response = await http.get(
+                      Uri.parse(
+                          "$getPidDataUrl/${decodedRequestId['permit_id']}"),
+                      headers: {"Authorization": "Token $token"});
+                  setState(() {
+                    isLoading = false;
+                  });
+                  Navigator.of(context, rootNavigator: true)
+                      .pushReplacementNamed(DocumentDetailScreen.routeName,
+                          arguments: response.body);
+                } else if (decodedRequestId['doc_type'] == "AGE") {
+                  Navigator.of(context, rootNavigator: true)
+                      .pushReplacementNamed(VerifyAgeScreen.routeName,
+                          arguments: decodedRequestId['permit_id']);
+                }
               }
-            } else {
+            }
+          } catch (e) {
+            try {
               var response = await http.get(
                   Uri.parse('$accessRequestUrl/$requestId/'),
                   headers: {"Authorization": "Token $token"});
@@ -212,6 +218,9 @@ class _QrScanScreenState extends State<QrScanScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 controller.resumeCamera();
               }
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              controller.resumeCamera();
             }
           }
         } else {
