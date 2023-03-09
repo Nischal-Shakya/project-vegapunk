@@ -22,38 +22,32 @@ bool isLoading = true;
 
 class _HistoryScreenState extends State<HistoryScreen> {
   late List data;
-  bool isInitialized = false;
 
   @override
   void didChangeDependencies() async {
-    if (!isInitialized) {
-      isLoading = true;
-      String token =
-          Provider.of<AuthDataProvider>(context, listen: false).token ?? "";
-      log(token);
-      bool connectionStatus =
-          Provider.of<ConnectivityChangeNotifier>(context).connectivity();
+    isLoading = true;
+    String token =
+        Provider.of<AuthDataProvider>(context, listen: false).token ?? "";
+    log(token);
+    bool connectionStatus =
+        Provider.of<ConnectivityChangeNotifier>(context).connectivity();
 
-      if (connectionStatus) {
-        var response = await http.get(Uri.parse(getHistoryUrl),
-            headers: {"Authorization": "Token $token"});
-        data = json.decode(response.body);
-        if (mounted) {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } else {
-        if (mounted) {
-          setState(() {
-            isLoading = false;
-          });
-        }
+    if (connectionStatus) {
+      var response = await http.get(Uri.parse(getHistoryUrl),
+          headers: {"Authorization": "Token $token"});
+      data = json.decode(response.body);
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
       }
     }
-    setState(() {
-      isInitialized = true;
-    });
     super.didChangeDependencies();
   }
 

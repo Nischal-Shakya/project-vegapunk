@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/screens/document_detail_screen.dart';
 import 'package:parichaya_frontend/screens/verify_age_screen.dart';
@@ -160,21 +161,42 @@ class _QrScanScreenState extends State<QrScanScreen> {
       content: Text('Invalid Qr Code'),
       duration: Duration(seconds: 2),
     );
+    final String token =
+        Provider.of<AuthDataProvider>(context, listen: false).token!;
 
     controller.scannedDataStream.listen(
       (scanData) async {
         controller.pauseCamera();
         if (connectionStatus) {
-          try {
-            String requestId = scanData.code.toString();
-            // log(requestId);
-            if (requestId.isNotEmpty) {
-              final String token =
-                  Provider.of<AuthDataProvider>(context).token!;
+          String requestId = scanData.code.toString();
+          log(requestId, name: "Request Id");
+          Map decodedRequestId = json.decode(requestId);
+          log(decodedRequestId.toString(), name: "Decoded Request Id");
+          if (requestId.isNotEmpty) {
+            if (decodedRequestId.containsKey('permit_id')) {
+              if (decodedRequestId['doc_type'] == "DVL") {
+                setState(() {
+                  isLoading = true;
+                });
+                var response = await http.get(Uri.parse("$getPidDataUrl/DVL/"),
+                    headers: {"Authorization": "Token $token"});
+                setState(() {
+                  isLoading = false;
+                });
+                Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+                    DocumentDetailScreen.routeName,
+                    arguments: response.body);
+              } else if (decodedRequestId['doc_type'] == "AGE") {
+                Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+                    VerifyAgeScreen.routeName,
+                    arguments: decodedRequestId['permit_id']);
+              }
+            } else {
               var response = await http.get(
                   Uri.parse('$accessRequestUrl/$requestId/'),
                   headers: {"Authorization": "Token $token"});
               Map decodedData = json.decode(response.body);
+              log(response.statusCode.toString());
               // Map decodedData = json.decode(requestId);
               log(decodedData.toString());
               if (decodedData.containsKey('request_id') &&
@@ -186,39 +208,11 @@ class _QrScanScreenState extends State<QrScanScreen> {
                 Navigator.of(context, rootNavigator: true).pushReplacementNamed(
                     DataPermissionScreen.routeName,
                     arguments: decodedData);
-              } else if (decodedData.containsKey('permit_id')) {
-                if (decodedData['doc_type'] == "DVL") {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  var response = await http.get(
-                      Uri.parse("$getPidDataUrl/DVL/"),
-                      headers: {"Authorization": "Token $token"});
-                  setState(() {
-                    isLoading = false;
-                  });
-                  Navigator.of(context, rootNavigator: true)
-                      .pushReplacementNamed(DocumentDetailScreen.routeName,
-                          arguments: response.body);
-                } else if (decodedData['doc_type'] == "AGE") {
-                  Navigator.of(context, rootNavigator: true)
-                      .pushReplacementNamed(VerifyAgeScreen.routeName,
-                          arguments: decodedData['permit_id']);
-                }
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Invalid data'),
-                  duration: Duration(seconds: 2),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 controller.resumeCamera();
               }
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              controller.resumeCamera();
             }
-          } catch (error) {
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            controller.resumeCamera();
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

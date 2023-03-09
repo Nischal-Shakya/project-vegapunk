@@ -100,27 +100,27 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
     setState(() {
       currentTime = DateTime.now();
     });
-    return isLoading
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(height: 10),
-                Text(
-                  "Fetching Proof of Age",
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ],
-            ),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              automaticallyImplyLeading: true,
-            ),
-            body: Column(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        automaticallyImplyLeading: true,
+      ),
+      body: isLoading
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Fetching Proof of Age",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ],
+              ),
+            )
+          : Column(
               children: [
                 const SizedBox(
                   height: 30,
@@ -221,6 +221,6 @@ class _VerifyAgeScreenState extends State<VerifyAgeScreen> {
                       ),
               ],
             ),
-          );
+    );
   }
 }

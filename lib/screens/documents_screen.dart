@@ -140,11 +140,12 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
-            child: Icon(
-              Icons.notifications_none_outlined,
-              size: 30,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            child: SvgPicture.asset(('assets/icons/notification.svg'),
+                height: 20,
+                width: 20,
+                fit: BoxFit.fitWidth,
+                colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
           ),
         ],
       ),
