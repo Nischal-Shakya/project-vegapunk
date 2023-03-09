@@ -70,15 +70,11 @@ class AuthDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() {
+  Future<void> logout() async {
     log("Deleting data from box");
-    userDataBox.deleteAll(['documents', 'lastUpdatedAt']);
-    userDataBox.clear();
-    authDataBox.deleteAll(
-        ['isBiometricEnabled', 'MPIN', 'token', 'NIN', 'mobileNumber']);
-    authDataBox.clear();
-    userPreferencesBox.deleteAll(['userPreferences']);
-    userPreferencesBox.clear();
+    await Hive.box("userData").clear();
+    await Hive.box("userPreferences").clear();
+    await Hive.box("authData").clear();
 
     log("Deleting data from state");
     isBiometricEnabled = false;

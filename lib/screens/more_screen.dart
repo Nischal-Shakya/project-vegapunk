@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/providers/preference_provider.dart';
@@ -178,8 +180,8 @@ class MoreScreen extends StatelessWidget {
                                       Theme.of(context).textTheme.titleMedium),
                             ),
                             TextButton(
-                              onPressed: () {
-                                authDataProvider.logout();
+                              onPressed: () async {
+                                await authDataProvider.logout();
                                 indexProvider.selectedIndexList.removeRange(
                                     1, indexProvider.selectedIndexList.length);
                                 Navigator.of(context, rootNavigator: true)

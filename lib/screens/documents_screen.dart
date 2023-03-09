@@ -47,6 +47,17 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
         "Authorization": "Token $token",
       });
 
+      if (checkForUpdate.statusCode == 401) {
+        authDataProvider.logout();
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          LoginScreen.routeName,
+          (route) => false,
+        );
+      }
+      if (checkForUpdate.statusCode != 200) {
+        return;
+      }
+
       log(checkForUpdate.statusCode.toString(),
           name: "checkForUpdateStatusCode");
       log(checkForUpdate.body.toString(), name: "checkForUpdateBody");
