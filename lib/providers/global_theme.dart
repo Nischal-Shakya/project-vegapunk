@@ -33,7 +33,10 @@ class GlobalTheme {
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+      ),
     ),
     fontFamily: GoogleFonts.poppins().fontFamily,
     textTheme: const TextTheme(
@@ -133,7 +136,10 @@ class GlobalTheme {
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.white),
       elevation: 0,
-      systemOverlayStyle: SystemUiOverlayStyle.light,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+      ),
     ),
     iconTheme: const IconThemeData(
       color: Colors.white,
