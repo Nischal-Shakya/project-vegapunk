@@ -84,7 +84,7 @@ class SendDetailsButtons extends StatelessWidget {
                       duration: Duration(seconds: 2),
                       backgroundColor: Colors.grey,
                     ));
-                    await http.post(
+                    http.post(
                       Uri.parse('$accessRequestUrl/$requestId/approval/'),
                       headers: {
                         "Authorization": "Token $token",
@@ -112,6 +112,7 @@ class SendDetailsButtons extends StatelessWidget {
                   title: const Text(
                     'Approve',
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
                   ),
                   tileColor: Theme.of(context).colorScheme.primary,
                   textColor: Theme.of(context).colorScheme.background,

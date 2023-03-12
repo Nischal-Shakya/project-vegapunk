@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:parichaya_frontend/providers/auth_provider.dart';
 import 'package:parichaya_frontend/screens/document_detail_screen.dart';
 import 'package:parichaya_frontend/screens/verify_age_screen.dart';
@@ -72,6 +73,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
         automaticallyImplyLeading: true,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.blue),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       extendBodyBehindAppBar: true,
       body: isLoading

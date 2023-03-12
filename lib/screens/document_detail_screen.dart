@@ -94,7 +94,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        if (storedLastUpdatedAt != null) {
+        if (storedLastUpdatedAt != null && storedLastUpdatedAt.isNotEmpty) {
           var checkForUpdate =
               await http.get(Uri.parse("$checkLastUpdatedAt/$NIN/"), headers: {
             "Authorization": "Token $token",
@@ -112,7 +112,9 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                 .isAfter(DateTime.parse(storedLastUpdatedAt));
           });
         }
-        if (storedLastUpdatedAt == null || isUpdated) {
+        if (storedLastUpdatedAt == null ||
+            storedLastUpdatedAt.isEmpty ||
+            isUpdated) {
           var response = await http.get(Uri.parse(getDataUrl),
               headers: {"Authorization": "Token $token"});
           log(response.statusCode.toString(), name: "responseStatusCode");

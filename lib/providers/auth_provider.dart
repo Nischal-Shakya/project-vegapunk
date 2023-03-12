@@ -72,6 +72,7 @@ class AuthDataProvider with ChangeNotifier {
 
   Future<void> logout() async {
     log("Deleting data from box");
+    await Hive.box("userData").put('lastUpdatedAt', "");
     await Hive.box("userData").clear();
     await Hive.box("userPreferences").clear();
     await Hive.box("authData").clear();

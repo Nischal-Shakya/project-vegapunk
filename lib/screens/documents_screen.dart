@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:parichaya_frontend/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -41,7 +40,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
     String NIN = authDataProvider.NIN!;
     String? storedLastUpdatedAt = documentsDataProvider.lastUpdatedAt;
 
-    if (storedLastUpdatedAt != null) {
+    if (storedLastUpdatedAt != null && storedLastUpdatedAt.isNotEmpty) {
       var checkForUpdate =
           await http.get(Uri.parse("$checkLastUpdatedAt/$NIN/"), headers: {
         "Authorization": "Token $token",
@@ -49,10 +48,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
 
       if (checkForUpdate.statusCode == 401) {
         authDataProvider.logout();
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-          LoginScreen.routeName,
-          (route) => false,
-        );
+        SystemNavigator.pop();
       }
       if (checkForUpdate.statusCode != 200) {
         return;
@@ -70,7 +66,9 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
             .isAfter(DateTime.parse(storedLastUpdatedAt));
       });
     }
-    if (storedLastUpdatedAt == null || isUpdated) {
+    if (storedLastUpdatedAt == null ||
+        storedLastUpdatedAt.isEmpty ||
+        isUpdated) {
       var response = await http.get(Uri.parse(getDataUrl),
           headers: {"Authorization": "Token $token"});
 
@@ -78,10 +76,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
 
       if (response.statusCode == 401) {
         authDataProvider.logout();
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-          LoginScreen.routeName,
-          (route) => false,
-        );
+        SystemNavigator.pop();
       }
       if (response.statusCode != 200) {
         return;
@@ -132,8 +127,6 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
     // final data = Provider.of<AllData>(context);
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle:
-            const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
         title:
             Text('PARICHAYA', style: Theme.of(context).textTheme.headlineLarge),
         titleSpacing: 0,
