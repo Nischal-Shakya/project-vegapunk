@@ -119,7 +119,9 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
               headers: {"Authorization": "Token $token"});
           log(response.statusCode.toString(), name: "responseStatusCode");
           if (response.statusCode == 401) {
+            documentsDataProvider.lastUpdatedAt = null;
             authDataProvider.logout();
+
             Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
               LoginScreen.routeName,
               (route) => false,

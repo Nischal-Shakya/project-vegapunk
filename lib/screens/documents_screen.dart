@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:parichaya_frontend/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -47,8 +48,12 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
       });
 
       if (checkForUpdate.statusCode == 401) {
+        documentsDataProvider.lastUpdatedAt = null;
         authDataProvider.logout();
-        SystemNavigator.pop();
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          LoginScreen.routeName,
+          (route) => false,
+        );
       }
       if (checkForUpdate.statusCode != 200) {
         return;
@@ -75,8 +80,12 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
       log(response.statusCode.toString(), name: "responseStatusCode");
 
       if (response.statusCode == 401) {
+        documentsDataProvider.lastUpdatedAt = null;
         authDataProvider.logout();
-        SystemNavigator.pop();
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          LoginScreen.routeName,
+          (route) => false,
+        );
       }
       if (response.statusCode != 200) {
         return;

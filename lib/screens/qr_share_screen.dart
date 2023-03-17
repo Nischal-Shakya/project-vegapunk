@@ -124,6 +124,7 @@ class _QrShareScreenState extends State<QrShareScreen> {
                               color: Theme.of(context).colorScheme.primary,
                               width: 5,
                             ),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
                         child: QrImage(
                           data: json.encode(

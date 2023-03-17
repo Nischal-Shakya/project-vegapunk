@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:parichaya_frontend/providers/auth_provider.dart';
+import 'package:parichaya_frontend/providers/documents_provider.dart';
 import 'package:parichaya_frontend/providers/preference_provider.dart';
 import 'package:parichaya_frontend/screens/about_parichaya_screen.dart';
 import 'package:parichaya_frontend/screens/change_pin_screen.dart';
@@ -23,6 +24,7 @@ class MoreScreen extends StatelessWidget {
     final indexProvider = Provider.of<HomeScreenIndexProvider>(context);
     final preferencesProvider = Provider.of<PreferencesProvider>(context);
     final authDataProvider = Provider.of<AuthDataProvider>(context);
+    final documentsDataProvider = Provider.of<DocumentsDataProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -181,6 +183,7 @@ class MoreScreen extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () async {
+                                documentsDataProvider.lastUpdatedAt = null;
                                 await authDataProvider.logout();
                                 indexProvider.selectedIndexList.removeRange(
                                     1, indexProvider.selectedIndexList.length);

@@ -27,17 +27,15 @@ class GlobalTheme {
       TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
     }),
     appBarTheme: const AppBarTheme(
-      foregroundColor: Colors.transparent,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      iconTheme: IconThemeData(
-        color: Colors.black,
-      ),
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: Brightness.light,
-      ),
-    ),
+        foregroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            systemStatusBarContrastEnforced: true)),
     fontFamily: GoogleFonts.poppins().fontFamily,
     textTheme: const TextTheme(
       displayLarge: TextStyle(
