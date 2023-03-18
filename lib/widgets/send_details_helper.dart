@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../models/conversion.dart';
@@ -21,7 +23,7 @@ class SendDetailsWidget extends StatelessWidget {
         return convertedField(element);
       }).toList()
     ];
-
+    log(requestedFields.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

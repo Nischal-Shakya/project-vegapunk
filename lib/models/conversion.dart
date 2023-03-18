@@ -26,7 +26,8 @@ const Map<String, Map> fieldMapping = {
     "fieldName": "Driving License",
   },
   "face_image": {
-    "fieldName": "Image",
+    "category": "National Identity",
+    "fieldName": "Face Image",
   },
   "card_front": {
     "fieldName": "Driving License Card",
