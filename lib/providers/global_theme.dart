@@ -34,8 +34,11 @@ class GlobalTheme {
           color: Colors.black,
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            systemStatusBarContrastEnforced: true)),
+          statusBarColor: Colors.transparent,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        )),
     fontFamily: GoogleFonts.poppins().fontFamily,
     textTheme: const TextTheme(
       displayLarge: TextStyle(
@@ -136,7 +139,9 @@ class GlobalTheme {
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
       ),
     ),
     iconTheme: const IconThemeData(
