@@ -12,4 +12,6 @@ Few resources are needed to use the app:
 
 All required installations, along with the guides, are provided in each of the respective github links. 
 
-## Demo Video : https://www.youtube.com/watch?v=XpLMAH2d9dI&ab_channel=NischalShakya
+## Demo Video 
+
+- https://www.youtube.com/watch?v=XpLMAH2d9dI&ab_channel=NischalShakya
